@@ -1,0 +1,373 @@
+{% extends "layout.html" %}
+{% load static %}
+{% block content %}
+
+<!--header-->
+<!--section-->
+<section class="home" id="home">
+    <div class="image">
+   	<img src="{% static "photos/1.jpg" %}" alt="logo">
+  	</div>
+  	
+  
+   <div class="content">
+   	<h3>Empowering healthcare through the precision of AI</h3>
+   	<p>
+			<p>  Welcome to MediGen, where cutting-edge artificial intelligence meets compassionate healthcare. Our mission is to revolutionize the medical field by providing innovative AI-driven solutions that enhance diagnostic accuracy, streamline doctor-patient interactions, and improve overall health outcomes.
+       </p>
+   	<a href="{% url "know_more" %}" class="btn">Know more <span class="fas fa-chevron-right"></span></a>
+	</div>
+   
+</section>
+
+<!--services section-->
+<section class="Services" id="Services">
+
+	<h1 class="heading">Our <span>Services</span></h1>
+		<div class="box-container">
+
+			<div class="box">
+				<i class="fas fa-notes-medical"></i>
+				<h3>Free Checkups</h3>
+				<p>Not oly online checkup but also finalize offline available.</p>
+				<a href="#" class="btn"> learn more <span class="fas fa-chevron-right"></span></a>
+			</div>
+
+			<div class="box">
+				<i class="fas fa-video"></i>
+				<h3>online Consultation</h3>
+				<p>You don't need to go anywhere.Just take online consultation.</p>
+				<a href="#" class="btn"> learn more <span class="fas fa-chevron-right"></span></a>
+			</div>
+
+			<div class="box">
+				<i class="fas fa-user-md"></i>
+				<h3>Expert Doctors</h3>
+				<p>You can get Higher qualified doctors in respective their domain</p>
+				<a href="#" class="btn"> learn more <span class="fas fa-chevron-right"></span></a>
+			</div>
+
+			<div class="box">
+				<i class="fa fa-calendar"></i>
+				<h3>Book Your Appointment</h3>
+				<p>Talk and book your appointment as per your convenience.</p>
+				<a href="#" class="btn"> learn more <span class="fas fa-chevron-right"></span></a>
+			</div>
+
+			<div class="box">
+				<i class="fa fa-check-circle"></i>
+				<h3>Check your disease</h3>
+				<p>Yes, Now you can get to know about disease.</p>
+				<a href="#" class="btn"> learn more <span class="fas fa-chevron-right"></span></a>
+			</div>
+
+
+		</div>
+
+</section>
+
+
+<!--model section-->
+
+
+	<section class="Models" id="Models">
+
+
+	<h1 class="heading">Our <span>Models</span></h1>
+
+		<div class="box-container">
+			<div class="box2">
+				<i class="fas fa-brain"></i>
+				<h3>Model1</h3>
+				<h2>Multiple Diseases</h2>
+				<p>Check which type of disease do you have?</p>
+				<a href="#" class="btn"> learn more <span class="fas fa-chevron-right"></span></a>
+			</div>
+
+			<div class="box2">
+				<i class="fas fa-brain"></i>
+				<h3>Model2</h3>
+				<h2>Dermatology</h2>
+				<p>Check your skin to what type of skin disease do you have?</p>
+				<a href="#" class="btn"> learn more <span class="fas fa-chevron-right"></span></a>
+			</div>
+
+
+</section>
+
+<!--about sec-->
+<section class="About" id="About">
+	<h1 class="heading"><span>About </span>us</h1>
+	<div class="row">
+
+		<div class="image">
+			<img src="{% static "photos/4.svg" %}" alt="">
+		</div>
+		<div class="content">
+
+			  <h3>"Transforming healthcare through the power of AI—where technology meets care."</h3>
+
+			<!--<p>  Welcome to MediGen, where cutting-edge artificial intelligence meets compassionate healthcare. Our mission is to revolutionize the medical field by providing innovative AI-driven solutions that enhance diagnostic accuracy, streamline doctor-patient interactions, and improve overall health outcomes.</p>-->
+			<p>
+      At MediGen, we believe in the power of technology to make healthcare more accessible, efficient, and personalized. Our team of experts in AI, data science, and medicine work tirelessly to develop tools that support both patients and healthcare providers, ensuring that every decision is informed by the latest advancements in AI.
+    </p>
+    <p>
+      Join us on our journey to create a smarter, healthier world—one algorithm at a time.
+    </p>
+
+			<a href="#" class="btn">Learn more<span class="fas fa-chevron-right"></span></a>
+
+
+		</div>
+		
+	</div>
+	
+
+
+</section>
+
+<!--doctor section-->
+
+<section class="Doctors" id="Doctors">
+	<h1 class="heading">our <span>Doctors</span></h1>
+		<div class="box-container">
+			<div class="box">
+				<img src="YJ.png" alt="">
+				<h3>Dr.YATIN JADHAV</h3>
+				<span>Dermatologist</span>
+				<div class="share">
+					<a href="#" class="fab fa-facebook-f"></a>
+					<a href="#" class="fab fa-instagram"></a>
+					<a href="#" class="fas fa-pen open-modal"></a>
+					<a href="#" class="fas fa-phone"></a>
+				</div>
+			</div>
+
+			<div class="box">
+				<img src="AS.jpg" alt="">
+				<h3>Dr.Abhijeet Sawant.</h3>
+				<span>proctologist</span>
+				<div class="share">
+					<a href="#" class="fab fa-facebook-f"></a>
+					<a href="#" class="fab fa-instagram"></a>
+					<a href="#" class="fas fa-pen open-modal"></a>
+					<a href="#" class="fas fa-phone"></a>
+				</div>
+			</div>
+
+			<div class="box">
+				<img src="Dr.AP.jpg" alt="">
+				<h3>Dr.AMARSINH PATANKAR</h3>
+				<span>Pediatrician</span>
+				<div class="share">
+					<a href="#" class="fab fa-facebook-f"></a>
+					<a href="#" class="fab fa-instagram"></a>
+					<a href="#" class="fas fa-pen open-modal"></a>
+					<a href="#" class="fas fa-phone"></a>
+				</div>
+			</div>
+
+			<div class="box">
+				<img src="Dr.VJ.jpg" alt="">
+				<h3>Dr.VAIBHAV JADHAV</h3>
+				<span>Gynecologist</span>
+				<div class="share">
+					<a href="#" class="fab fa-facebook-f"></a>
+					<a href="#" class="fab fa-instagram"></a>
+					<a href="#" class="fas fa-pen open-modal"></a>
+					<a href="#" class="fas fa-phone"></a>
+				</div>
+			</div>
+
+			<div class="box">
+				<img src="SJ.jpeg" alt="">
+				<h3>Dr.SAYALI MADHAV</h3>
+				<span>IVF consultant</span>
+				<div class="share">
+					<a href="#" class="fab fa-facebook-f"></a>
+					<a href="#" class="fab fa-instagram"></a>
+					<a href="#" class="fas fa-pen open-modal"></a>
+					<a href="#" class="fas fa-phone"></a>
+				</div>
+			</div>
+
+			<div class="box">
+				<img src="RY.jpg" alt="">
+				<h3>Dr.RUPESH YADAV.</h3>
+				<span>Physican</span>
+				<div class="share">
+					<a href="#" class="fab fa-facebook-f"></a>
+					<a href="#" class="fab fa-instagram"></a>
+					<a href="#" class="fas fa-pen open-modal"></a>
+					<a href="#" class="fas fa-phone"></a>
+				</div>
+			</div>
+
+			<div class="box">
+				<img src="RS.jpg" alt="">
+				<h3>Dr.RASHMI SAWANT</h3>
+				<span>Streerog-Prasooti</span>
+				<div class="share">
+				<a href="#" class="fab fa-facebook-f"></a>
+				<a href="#" class="fab fa-instagram"></a>
+				<a href="#" class="fas fa-pen open-modal"></a>
+				<a href="#" class="fas fa-phone"></a>
+				</div>
+			</div>
+
+
+
+			<div class="box">
+				<img src="VG.jpg" alt="">
+				<h3>Dr.VIKRAM GHANEKAR</h3>
+				<span>Surgeon Oncology</span>
+				<div class="share">
+					<a href="#" class="fab fa-facebook-f"></a>
+					<a href="#" class="fab fa-instagram"></a>
+					<a href="#" class="fas fa-pen open-modal"></a>
+					<a href="#" class="fas fa-phone"></a>
+				</div>
+			</div>
+
+			<!-- Modal Structure -->
+<div id="appointmentModal" class="modal">
+    <div class="modal-content">
+        <span class="close">&times;</span>
+        <h2>Book an Appointment</h2>
+        <form>
+            <label for="name">Name:</label>
+            <input type="text" id="name" name="name" required>
+
+            <label for="email">Email:</label>
+            <input type="email" id="email" name="email" required>
+
+            <label for="date">Appointment Date:</label>
+            <input type="date" id="date" name="date" required>
+
+            <label for="time">Appointment Time:</label>
+            <input type="time" id="time" name="time" required>
+
+            <label for="message">Message:</label>
+            <textarea id="message" name="message" rows="4"></textarea>
+
+            <button type="submit">Book Appointment</button>
+        </form>
+    </div>
+</div>
+
+			<!--
+			<div class="box">
+				<img src="MP.jpg" alt="">
+				<h3>Dr.MRUNAL PARAB.</h3>
+				<span>Oncologist</span>
+				<div class="share">
+					<a href="#" class="fab fa-facebook-f"></a>
+					<a href="#" class="fab fa-instagram"></a>
+					<a href="#" class="fas fa-phone"></a>
+				</div>
+			</div>
+
+			<div class="box">
+				<img src="gw.jpg" alt="">
+				<h3>Dr.GOPICHANDRA WAGHMARE</h3>
+				<span>Orthopedist</span>
+				<div class="share">
+					<a href="#" class="fab fa-facebook-f"></a>
+					<a href="#" class="fab fa-instagram"></a>
+					<a href="#" class="fas fa-phone"></a>
+				</div>
+			</div>-->
+
+		</div>
+	   <button id="load-more" class="load-more">Load More<span class="fas fa-chevron-right"></span></button>
+
+		<!--<a href="#" class="btn"> Load More... <span class="fas fa-chevron-right"></span></a>-->
+		  <div class="box hidden">
+		  	<div class="box-container">
+			<div class="box">
+				<img src="MP.jpg" alt="">
+				<h3>Dr.MRUNAL PARAB.</h3>
+				<span>Oncologist</span>
+				<div class="share">
+					<a href="#" class="fab fa-facebook-f"></a>
+					<a href="#" class="fab fa-instagram"></a>
+					<a href="#" class="fas fa-pen open-modal"></a>
+					<a href="#" class="fas fa-phone"></a>
+				</div>
+			</div>
+
+			<div class="box">
+				<img src="gw.jpg" alt="">
+				<h3>Dr.GOPICHANDRA WAGHMARE</h3>
+				<span>Orthopedist</span>
+				<div class="share">
+					<a href="#" class="fab fa-facebook-f"></a>
+					<a href="#" class="fab fa-instagram"></a>
+					<a href="#" class="fas fa-pen open-modal"></a>
+					<a href="#" class="fas fa-phone"></a>
+				</div>
+			</div>
+			</div>
+		</div>
+	</section>
+</section>
+<!--signup and login-->
+
+<section class="Login" id="Login">
+		<h1 class="heading">First <span>Login</span></h1>
+
+
+		<div id="signupModal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h2>Sign Up</h2>
+            <form id="signupForm">
+                <label for="username">Username:</label>
+                <input type="text" id="username" name="username" required>
+
+                <label for="email">Email:</label>
+                <input type="email" id="email" name="email" required>
+
+                <label for="password">Password:</label>
+                <input type="password" id="password" name="password" required>
+
+                <label for="role">Sign Up as:</label>
+                <select id="role" name="role" required>
+                    <option value="patient">Patient</option>
+                    <option value="doctor">Doctor</option>
+                    <option value="admin">Admin</option>
+                </select>
+
+                <button type="submit">Sign Up</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Login Modal -->
+    <div id="loginModal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h2>Login</h2>
+            <form id="loginForm">
+                <label for="loginUsername">Username:</label>
+                <input type="text" id="loginUsername" name="loginUsername" required>
+
+                <label for="loginPassword">Password:</label>
+                <input type="password" id="loginPassword" name="loginPassword" required>
+
+                <button type="submit">Login</button>
+            </form>
+        </div>
+    </div>
+
+    {% comment %} <button id="signupBtn">Sign Up</button>
+    <button id="loginBtn">Login</button> {% endcomment %}
+    <script src="script.js"></script>
+</section>
+
+
+
+
+
+
+{% endblock %}
