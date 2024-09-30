@@ -1,1 +1,163 @@
-html
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="{% static 'signup.css' %}">
+    <link rel="stylesheet" href="https://unpkg.com/bootstrap@5.3.3/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://unpkg.com/bs-brain@2.0.4/components/registrations/registration-3/assets/css/registration-3.css">
+    
+    <script>
+        function toggleDoctorFields() {
+            const roleSelect = document.getElementById('role');
+            const doctorFields = document.getElementById('doctorFields');
+
+            // Show the doctor fields if "Doctor" is selected
+            if (roleSelect.value === '2') {  // value 2 corresponds to "Doctor"
+                doctorFields.style.display = 'block';
+            } else {
+                doctorFields.style.display = 'none';
+            }
+        }
+
+        // Add event listener to execute the function when the role is changed
+        window.onload = function() {
+            document.getElementById('role').addEventListener('change', toggleDoctorFields);
+            toggleDoctorFields();  // Call it once on page load to ensure correct state
+        }
+    </script>
+</head>
+<body>
+    {% if messages %}
+<ul class="messages">
+    {% for message in messages %}
+    <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+    {% endfor %}
+</ul>
+{% endif %}
+    <form class="p-3 p-md-4 p-xl-5" method="POST" action = "{% url "meds:register" %}" >
+        {% csrf_token %}
+        <div class="container">
+            <div class="row">
+                <div class="col-12 col-md-6 bsb-tpl-bg-white">
+                    <div class="d-flex flex-column justify-content-between h-100 p-3 p-md-4 p-xl-5">
+                        <h3 class="m-0">Welcome!</h3>
+                        <img class="img-fluid rounded mx-auto my-4" loading="lazy" src="{% static 'photos/registration_page.jpg' %}" alt="BootstrapBrain Logo">
+                        <p class="mb-0">Not a member yet? <a href="#!" class="link-secondary text-decoration-none">Register now</a></p>
+                    </div>
+                </div>
+                <div class="col-12 col-md-6 bsb-tpl-bg-lotion">
+                    <div class="p-3 p-md-4 p-xl-5">
+                        <div class="row">
+                            <div class="col-12">
+                                <div class="mb-5">
+                                    <h2 class="h3">Registration</h2>
+                                    <h3 class="fs-6 fw-normal text-secondary m-0">Enter your details to register</h3>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row gy-3 gy-md-4 overflow-hidden">
+                            <div class="col-12">
+                                <label for="fullName" class="form-label">Full Name<span class="text-danger">*</span></label>
+                                <input type="text" class="form-control" name="fullName" id="fullName" placeholder="Full Name" required>
+                            </div>
+
+
+                            <div class="col-12">
+                                <label for="email" class="form-label">Email <span class="text-danger">*</span></label>
+                                <input type="email" class="form-control" name="email" id="email" placeholder="name@example.com" required>
+                            </div>
+
+                            <div class="col-12">
+                                <label for="phone" class="form-label">Phone <span class="text-danger">*</span></label>
+                                <input type="text" class="form-control" name="phone" id="phone" placeholder="+91" required>
+                            </div>
+                            
+                            <div class="col-12">
+                                <label for="gender" class="form-label">Gender<span class="text-danger">*</span></label>
+                                <select class="form-select" aria-label="Default select example" id="gender" name="gender">
+                                    <option selected>Not Specified</option>
+                                    <option value="1">Male</option>
+                                    <option value="2">Female</option>
+                                </select>
+                            </div>
+
+                            <div class="col-12">
+                                <label for="dob" class="form-label">Date of Birth<span class="text-danger">*</span></label>
+                                <input type="date" class="form-control" name="dob" id="dob" placeholder="" required>
+                            </div>
+
+                            <div class="col-12">
+                                <label for="role" class="form-label">Sign up as <span class="text-danger">*</span></label>
+                                <select class="form-select" aria-label="Default select example" id="role" name="role">
+                                    <option selected>Select Category</option>
+                                    <option value="1">Patient</option>
+                                    <option value="2">Doctor</option>
+                                </select>
+                            </div>
+
+                            <!-- Additional fields for Doctor, hidden initially -->
+                            <div id="doctorFields" style="display: none;">
+                                <div class="col-12">
+                                    <label for="degree" class="form-label">Degree <span class="text-danger">*</span></label>
+                                    <input type="text" class="form-control" name="degree" id="degree" placeholder="Degree">
+                                </div>
+
+                                <div class="col-12">
+                                    <label for="specialization" class="form-label">Specialization <span class="text-danger">*</span></label>
+                                    <input type="text" class="form-control" name="specialization" id="specialization" placeholder="Specialization">
+                                </div>
+{% comment %} 
+                                <div class="col-12">
+                                    <label for="field" class="form-label">Field <span class="text-danger">*</span></label>
+                                    <input type="text" class="form-control" name="field" id="field" placeholder="Field">
+                                </div> {% endcomment %}
+
+                                <div class="col-12">
+                                    <label for="address" class="form-label">Address <span class="text-danger">*</span></label>
+                                    <input type="text" class="form-control" name="address" id="address" placeholder="Address">
+                                </div>
+
+                                <div class="col-12">
+                                    <label for="image_upload" class="form-label">Upload Image <span class="text-danger">*</span></label>
+                                    <input type="file" class="form-control" name="image_upload" id="image_upload">
+                                </div>
+                            </div>
+
+                            <div class="col-12">
+                                <label for="password" class="form-label">Password <span class="text-danger">*</span></label>
+                                <input type="password" class="form-control" name="password" id="password" required>
+                            </div>
+
+                            <div class="col-12">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" value="" name="iAgree" id="iAgree" required>
+                                    <label class="form-check-label text-secondary" for="iAgree">
+                                        I agree to the <a href="#!" class="link-primary text-decoration-none">terms and conditions</a>
+                                    </label>
+                                </div>
+                            </div>
+
+                            <div class="col-12">
+                                <div class="d-grid">
+                                    <button class="btn bsb-btn-xl btn-primary" type="submit">Sign up</button>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="row">
+                            <div class="col-12">
+                                <hr class="mt-5 mb-4 border-secondary-subtle">
+                                <p class="m-0 text-secondary text-end">Already have an account? <a href="#!" class="link-primary text-decoration-none">Sign in</a></p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+</body>
+</html>

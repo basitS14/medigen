@@ -10,7 +10,7 @@
 	<link rel="stylesheet"  href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
 	<link rel="stylesheet" href="{% static 'style.css' %}">
-
+    
 
 </head>
 <body>
@@ -23,7 +23,9 @@
             <a href="#Models">Models</a>
             <a href="#About">About</a>
             <a href="#Doctors">Doctors</a>
-            <button id="loginBtn" class = 'btn btn-outline-primary'>Login</button>
+            {% comment %} <button id="loginBtn" class = 'btn btn-outline-primary' href>Login</button> {% endcomment %}
+            <a href="meds/register" class = 'btn btn-outline-primary'>LogIn</a>
+
             <script src="script.js"></script>
 
             {% comment %} <a href="#" class = 'btn btn-outline-primary' id = "loginBtn">Login</a> {% endcomment %}

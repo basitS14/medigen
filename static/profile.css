@@ -1,0 +1,55 @@
+/* General Styling */
+.role-selection-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 80vh; /* Center vertically */
+    text-align: center;
+}
+
+.heading {
+    font-size: 3rem; /* Increase font size */
+    color: #333; /* Make the text more visible */
+    margin-bottom: 40px; /* Add spacing between heading and buttons */
+}
+
+.heading span {
+    color: #007bff; /* Change the color of the "Role" text */
+}
+
+/* Button Styling */
+.button-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px; /* Add space between the buttons */
+}
+
+.btn {
+    font-size: 1.5rem; /* Make the buttons bigger */
+    padding: 15px 40px; /* Increase padding for a larger button feel */
+    text-decoration: none;
+    border-radius: 8px;
+    transition: background-color 0.3s ease; /* Smooth hover effect */
+}
+
+.btn-primary {
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+}
+
+.btn-primary:hover {
+    background-color: #0056b3; /* Darken on hover */
+}
+
+.btn-secondary {
+    background-color: #6c757d;
+    color: #fff;
+    border: none;
+}
+
+.btn-secondary:hover {
+    background-color: #5a6268; /* Darken on hover */
+}
