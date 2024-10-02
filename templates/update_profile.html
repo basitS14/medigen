@@ -1,4 +1,6 @@
-{% load static %}
+{% extends "layout.html" %}
+
+{% comment %} {% load static %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -20,4 +22,12 @@
 </div>
 
 </body>
-</html>
+</html> {% endcomment %}
+
+
+{% block content %}
+    <h1>User Profile</h1>
+    <!-- Your existing profile content here -->
+
+    <a href="{% url 'meds:logout' %}" class="btn btn-danger">Logout</a>
+{% endblock %}

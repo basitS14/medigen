@@ -30,14 +30,8 @@
     </script>
 </head>
 <body>
-    {% if messages %}
-<ul class="messages">
-    {% for message in messages %}
-    <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
-    {% endfor %}
-</ul>
-{% endif %}
-    <form class="p-3 p-md-4 p-xl-5" method="POST" action = "{% url "meds:register" %}" >
+
+    <form class="p-3 p-md-4 p-xl-5" method="POST" action = "{% url "meds:register" %}" enctype="multipart/form-data" >
         {% csrf_token %}
         <div class="container">
             <div class="row">
@@ -72,16 +66,16 @@
                             </div>
 
                             <div class="col-12">
-                                <label for="phone" class="form-label">Phone <span class="text-danger">*</span></label>
-                                <input type="text" class="form-control" name="phone" id="phone" placeholder="+91" required>
+                                <label for="phone" class="form-label" >Phone <span class="text-danger">*</span></label>
+                                <input type="text" class="form-control"  name="phone" id="phone" placeholder="+91" required>
                             </div>
                             
                             <div class="col-12">
                                 <label for="gender" class="form-label">Gender<span class="text-danger">*</span></label>
                                 <select class="form-select" aria-label="Default select example" id="gender" name="gender">
                                     <option selected>Not Specified</option>
-                                    <option value="1">Male</option>
-                                    <option value="2">Female</option>
+                                    <option value="Male">Male</option>
+                                    <option value="Female">Female</option>
                                 </select>
                             </div>
 
@@ -146,12 +140,32 @@
                                     <button class="btn bsb-btn-xl btn-primary" type="submit">Sign up</button>
                                 </div>
                             </div>
+                            {% if user_form.errors %}
+                            <div class="error-messages">
+                                {% for field, errors in user_form.errors.items %}
+                                    {% for error in errors %}
+                                        <p class="text-danger">{{ field }}: {{ error }}</p>
+                                    {% endfor %}
+                                {% endfor %}
+                            </div>
+                        {% endif %}
+                
+                        {% if doctor_form.errors %}
+                            <div class="error-messages">
+                                {% for field, errors in doctor_form.errors.items %}
+                                    {% for error in errors %}
+                                        <p class="text-danger">{{ field }}: {{ error }}</p>
+                                    {% endfor %}
+                                {% endfor %}
+                            </div>
+                        {% endif %}
+                
                         </div>
                         
                         <div class="row">
                             <div class="col-12">
                                 <hr class="mt-5 mb-4 border-secondary-subtle">
-                                <p class="m-0 text-secondary text-end">Already have an account? <a href="#!" class="link-primary text-decoration-none">Sign in</a></p>
+                                <p class="m-0 text-secondary text-end">Already have an account? <a href="{% url "meds:login" %}" class="link-primary text-decoration-none">Sign in</a></p>
                             </div>
                         </div>
                     </div>

@@ -9,7 +9,8 @@
 	<!-- cdn-->
 	<link rel="stylesheet"  href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
-	<link rel="stylesheet" href="{% static 'style.css' %}">
+	{% comment %} <link rel="stylesheet" href="{% static 'style.css' %}"> {% endcomment %}
+	<link rel="stylesheet" href="{% static 'newstyle.css' %}">
     
 
 </head>
@@ -23,8 +24,15 @@
             <a href="#Models">Models</a>
             <a href="#About">About</a>
             <a href="#Doctors">Doctors</a>
-            {% comment %} <button id="loginBtn" class = 'btn btn-outline-primary' href>Login</button> {% endcomment %}
-            <a href="meds/register" class = 'btn btn-outline-primary'>LogIn</a>
+            {% if user.is_authenticated %}
+                <a href="{% url 'meds:profile' %}" class='btn btn-outline-primary'>{{ user.full_name }}</a>
+                <a href="{% url 'meds:logout' %}" class='btn btn-outline-danger'>Logout</a>
+            {% else %}
+                <a href="{% url 'meds:login' %}" class='btn btn-outline-primary'>Login</a>
+                <a href="{% url 'meds:profile' %}" class='btn btn-outline-primary'>Profile</a>
+            {% endif %}
+        </nav>
+
 
             <script src="script.js"></script>
 

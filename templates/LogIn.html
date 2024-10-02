@@ -1,19 +1,23 @@
 {% extends "layout.html" %}
-
 {% block content %}
-   {% comment %} <div id="loginModal" class="modal"> {% endcomment %}
-        <div class="modal-content">
-            <span class="close">&times;</span>
-            <h2>Login</h2>
-            <form id="loginForm">
-                <label for="loginEmail">Email:</label>
-                <input type="text" id="loginEmail" name="loginEmail" required>
-
-                <label for="loginPassword">Password:</label>
-                <input type="password" id="loginPassword" name="loginPassword" required>
-
-                <button type="submit">Login</button>
-            </form>
-        </div>
-    {% comment %} </div> {% endcomment %}
+    <div class="modal-content">
+        <span class="close">&times;</span>
+        <h2>Login</h2>
+        <form id="loginForm" method="POST" action="{% url 'meds:login' %}">
+            {% csrf_token %}
+            <label for="loginEmail">Email:</label>
+            <input type="email" id="loginEmail" name="loginEmail" required>
+            <label for="loginPassword">Password:</label>
+            <input type="password" id="loginPassword" name="loginPassword" required>
+            <button type="submit">Login</button>
+            
+            {% if messages %}
+                <div class="error-messages">
+                    {% for message in messages %}
+                        <p class="{% if message.tags %}{{ message.tags }}{% endif %}">{{ message }}</p>
+                    {% endfor %}
+                </div>
+            {% endif %}
+        </form>
+    </div>
 {% endblock %}
