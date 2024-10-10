@@ -67,6 +67,15 @@ def login(request):
         password = request.POST.get('loginPassword')
 
         user = authenticate(request, username=email, password=password)
+        
+        # user_list = CustomUser.objects.values_list('email')
+        
+        # print(user)
+        
+
+        # if user in doctors_list:
+        #     doctor = Doctors.objects.filter(user=user).values()
+
         if user is not None:
             auth_login(request, user)
             messages.success(request, "Successfully logged in.")
@@ -79,12 +88,28 @@ def login(request):
 # @login_required
 def profile(request):
     user  = request.user
+    doctor = None
+    # doctor = request.doctor
+    if hasattr(user , 'doctors'):
+        doctor = user.doctors
+
+
     context = {
         'user': user,
+        'doctor':doctor,
+        # 'asmer' : 'ajh'
+        
     }
-    return render(request, 'update_profile.html')
+    return render(request,'profile.html' , context)
 
 def logout(request):
     auth_logout(request)
     messages.success(request, "Successfully logged out.")
     return redirect('home')  # Redirect to home page after logout
+
+
+    # return HttpResponse("hello")
+
+def test(request):
+    return render(request , 'update_profile.html')
+

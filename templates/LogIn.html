@@ -2,6 +2,8 @@
 {% block content %}
     <div class="modal-content">
         <span class="close">&times;</span>
+
+
         <h2>Login</h2>
         <form id="loginForm" method="POST" action="{% url 'meds:login' %}">
             {% csrf_token %}

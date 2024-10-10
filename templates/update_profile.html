@@ -1,33 +1,21 @@
-{% extends "layout.html" %}
-
-{% comment %} {% load static %}
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Registration</title>
-	<link rel="stylesheet" href="{% static 'profile.css' %}">
-    <link rel="stylesheet"  href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+    <title>Load More Test</title>
 </head>
 <body>
-
-<div class="role-selection-container">
-    <h1 class="heading">Choose <span>Role</span></h1>
-    <div class="button-container">
-        <a href="#" class="btn btn-xl btn-primary">Doctor</a>
-        <a href="#" class="btn btn-xl btn-secondary">Patient</a>
-    </div>
-</div>
-
+    {{symptoms }}
+    {{disease}}
+    <h1>Selected Symptoms</h1>
+    <ol>
+        {% for symptom in symptoms %}
+            <li>{{ symptom }}</li>
+        {% empty %}
+            <li>No symptoms selected</li>
+        {% endfor %}
+    </ol>
 </body>
-</html> {% endcomment %}
-
-
-{% block content %}
-    <h1>User Profile</h1>
-    <!-- Your existing profile content here -->
-
-    <a href="{% url 'meds:logout' %}" class="btn btn-danger">Logout</a>
-{% endblock %}
+</html>

@@ -28,7 +28,7 @@
                 <a href="{% url 'meds:profile' %}" class='btn btn-outline-primary'>{{ user.full_name }}</a>
                 <a href="{% url 'meds:logout' %}" class='btn btn-outline-danger'>Logout</a>
             {% else %}
-                <a href="{% url 'meds:login' %}" class='btn btn-outline-primary'>Login</a>
+                <a href="{% url 'meds:register' %}" class='btn btn-outline-primary'>Register</a>
                 <a href="{% url 'meds:profile' %}" class='btn btn-outline-primary'>Profile</a>
             {% endif %}
         </nav>

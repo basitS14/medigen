@@ -9,7 +9,8 @@ urlpatterns = [
     path("login/" , views.login , name = "login"),
     path("profile/" , views.profile , name = "profile"),
     path('logout/', views.logout, name='logout'),
-
+    # path("disease_prediction/" ,views.multidisease , name = 'disease_prediction' ),                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       
+    path("test/" , views.test , name = 'test'),
     path('__reload__' , include('django_browser_reload.urls')),
 
 ]

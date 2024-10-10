@@ -1,0 +1,233 @@
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background-image: url('bM1.jpg'); /* Replace with your image URL */
+}
+
+.title {
+    background-color: #16a085; /* Pink background */
+    padding: 20px; /* Padding for the navbar */
+    text-align: center; /* Center the text */
+}
+
+.title1 {
+    font-size: 2.5em; /* Font size */
+    color: white; /* Text color */
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.708); /* Shadow effect */
+    margin: 0; /* Remove default margin */
+}
+
+body1 {
+    margin: 0;
+    padding: 0;
+    height: 500px;
+    background-image: url('bM1.jpg'); /* Replace with your image URL */
+    background-size: cover;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+
+.overlay {
+    position: relative;
+    color:  #16a085;
+    font-size: 3.5em;
+    text-align: center;
+    top: 30px;
+    z-index: 1; /* Ensures the text is above the boxes */
+    
+}
+
+.box-container {
+    display: flex;
+    justify-content: center;
+    gap: 40px;
+    margin-top: 60px;
+    z-index: 1; /* Ensures boxes are above the background */
+}
+.box {
+    position: relative;
+    border: 2px solid black;
+    border-radius: 10px;
+    width:350px;
+    border-radius: 30px;
+    height: 200px;
+    padding: 30px 10px 10px;
+    text-align: center;
+    background-color: rgba(255, 255, 255, 0.8); 
+    box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.502); /* Semi-transparent white background */
+}
+.box h2{
+    color: #16a085;
+}
+.circle {
+    position: absolute;
+    top: -15px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 30px;
+    height: 30px;
+    border: 2px solid black;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: white;
+    font-weight: bold;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+}
+
+.container {
+    background-image: url('photos/bM1.jpg'); /* Add your image URL here */
+    background-size: cover;
+    background-position: center;
+    padding: 50px;
+    color: white;
+    text-align: center;
+    height: 800px;
+}
+
+.content h1 {
+    margin: 0;
+    font-size: 2.5em;
+    color: black;
+    font-weight: bold;
+
+}
+
+.content p {
+    margin: 10px 0 30px;
+    font-size: 1.2em;
+    color: #16a085;
+    font-weight: bold;
+}
+
+.input-container {
+    display: flex;
+    justify-content: center;
+    gap: 60px; /* Space between input boxes */
+    margin-top: 20px;
+}
+
+.input-group {
+    text-align: left;
+    position: relative; /* For suggestions positioning */
+}
+
+label {
+    display: block;
+    margin: 5px 0;
+    color: black;
+}
+
+select {
+    width: 200px; /* Fixed width for input boxes */
+    padding: 10px;
+}
+
+.results {
+    background: #f0f0f0;
+    border: 1px solid #ccc;
+    display: none;
+    position: absolute;
+    z-index: 1;
+    max-height: 100px;
+    overflow-y: auto;
+    width: 100%; /* Match input width */
+    color: black;
+}
+
+.results{
+    padding: 10px;
+    cursor: pointer;
+}
+
+.suggestion-item:hover {
+    background: #ddd;
+}
+
+.required {
+    color: red;
+}
+.button-container {
+    display: flex;
+    justify-content: center;
+    margin-top: 20px; /* Space between input and button */
+}
+
+.load-more {
+    background-color: #16a085; /* Same color as navbar */
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    font-size: 1.2em;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.load-more:hover {
+    background-color: #148f77; /* Darker shade on hover */
+}
+.button-container {
+    display: flex;
+    justify-content: center;
+    margin-top: 20px; /* Space between buttons */
+}
+
+.predict-disease {
+    background-color: #16a085; /* Same color as navbar */
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    font-size: 1.2em;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    margin: 5px; /* Space between the two buttons */
+}
+
+ .predict-disease:hover {
+    background-color: #148f77; /* Darker shade on hover */
+}
+
+
+
+.prediction-container {
+    display: flex;
+    align-items: center; /* Center the label and box vertically */
+    margin-top: 20px;
+}
+
+label2 {
+    font-size: 1.2em; /* Label font size */
+    color: #333; /* Label text color */
+    margin-right: 26px; /* Space between label and box */
+    margin-left: 245px;
+}
+
+.predicted-box {
+    padding: 10px;
+    font-size: 1em; /* Box font size */
+    border: 2px solid #16a085; /* Border color */
+    border-radius: 5px; /* Rounded corners */
+    width: 200px; /* Fixed width for the box */
+    background-color: #fff; /* Background color of the box */
+    color: #333; /* Text color */
+    min-height: 30px; /* Minimum height for the box */
+}
+label3 {
+    font-size: 1.2em; /* Label font size */
+    color: #333; /* Label text color */
+    margin-right: 10px; /* Space between label and box */
+    margin-left: 245px;
+}
+
+
+
