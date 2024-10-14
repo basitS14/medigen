@@ -1,0 +1,173 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="{% static 'signup.css' %}">
+    <link rel="stylesheet" href="https://unpkg.com/bootstrap@5.3.3/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://unpkg.com/bs-brain@2.0.4/components/registrations/registration-3/assets/css/registration-3.css">
+    
+    <script>
+        function toggleDoctorFields() {
+            const roleSelect = document.getElementById('role');
+            const doctorFields = document.getElementById('doctorFields');
+
+            // Show the doctor fields if "Doctor" is selected
+            if (roleSelect.value === '2') {  // value 2 corresponds to "Doctor"
+                doctorFields.style.display = 'block';
+            } else {
+                doctorFields.style.display = 'none';
+            }
+        }
+
+        // Add event listener to execute the function when the role is changed
+        window.onload = function() {
+            document.getElementById('role').addEventListener('change', toggleDoctorFields);
+            toggleDoctorFields();  // Call it once on page load to ensure correct state
+        }
+    </script>
+</head>
+<body>
+
+    <form class="p-3 p-md-4 p-xl-5" method="POST" action = "{% url "meds:available" %}" enctype="multipart/form-data" >
+        {% csrf_token %}
+        <div class="container">
+            <div class="row">
+                <div class="col-12 col-md-6 bsb-tpl-bg-white">
+                    <div class="d-flex flex-column justify-content-between h-100 p-3 p-md-4 p-xl-5">
+                        <h3 class="m-0">Welcome!</h3>
+                        <img class="img-fluid rounded mx-auto my-4" loading="lazy" src="{% static 'photos/registration_page.jpg' %}" alt="BootstrapBrain Logo">
+                        {% comment %} <p class="mb-0">Not a member yet? <a href="#!" class="link-secondary text-decoration-none">Register now</a></p> {% endcomment %}
+                    </div>
+                </div>
+                <div class="col-12 col-md-6 bsb-tpl-bg-lotion">
+                    <div class="p-3 p-md-4 p-xl-5">
+                        <div class="row">
+                            <div class="col-12">
+                                <div class="mb-5">
+                                    <h2 class="h3">Availability</h2>
+                                    <h3 class="fs-6 fw-normal text-secondary m-0">How many days you're available ?</h3>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row gy-3 gy-md-4 overflow-hidden">
+                           
+                                <label for="Availability" class="form-label">Enter your availability<span class="text-danger">*</span></label>
+                                <div class="form-check">
+                                    <input type="checkbox" name="days" value="Monday" class="form-check-input" id="monday">
+                                    <label class="form-check-label" for="monday">Monday</label>
+                                    <div class="time-inputs">
+                                        <label for="monday_from">Available From:</label>
+                                        <input type="time" name="monday_from" class="form-control" id="monday_from">
+                                        <label for="monday_to">Available To:</label>
+                                        <input type="time" name="monday_to" class="form-control" id="monday_to">
+                                    </div>
+                                </div>
+                                <div class="form-check">
+                                    <input type="checkbox" name="days" value="Tuesday" class="form-check-input" id="tuesday">
+                                    <label class="form-check-label" for="tuesday">Tuesday</label>
+                                    <div class="time-inputs">
+                                        <label for="tuesday_from">Available From:</label>
+                                        <input type="time" name="tuesday_from" class="form-control" id="tuesday_from">
+                                        <label for="tuesday_to">Available To:</label>
+                                        <input type="time" name="tuesday_to" class="form-control" id="tuesday_to">
+                                    </div>
+                                </div>
+                                <div class="form-check">
+                                    <input type="checkbox" name="days" value="Wednesday" class="form-check-input" id="wednesday">
+                                    <label class="form-check-label" for="wednesday">Wednesday</label>
+                                    <div class="time-inputs">
+                                        <label for="wednesday_from">Available From:</label>
+                                        <input type="time" name="wednesday_from" class="form-control" id="wednesday_from">
+                                        <label for="wednesday_to">Available To:</label>
+                                        <input type="time" name="wednesday_to" class="form-control" id="wednesday_to">
+                                    </div>
+                                </div>
+                                <div class="form-check">
+                                    <input type="checkbox" name="days" value="Thursday" class="form-check-input" id="thursday">
+                                    <label class="form-check-label" for="thursday">Thursday</label>
+                                    <div class="time-inputs">
+                                        <label for="thursday_from">Available From:</label>
+                                        <input type="time" name="thursday_from" class="form-control" id="thursday_from">
+                                        <label for="thursday_to">Available To:</label>
+                                        <input type="time" name="thursday_to" class="form-control" id="thursday_to">
+                                    </div>
+                                </div>
+                                <div class="form-check">
+                                    <input type="checkbox" name="days" value="Friday" class="form-check-input" id="friday">
+                                    <label class="form-check-label" for="friday">Friday</label>
+                                    <div class="time-inputs">
+                                        <label for="friday_from">Available From:</label>
+                                        <input type="time" name="friday_from" class="form-control" id="friday_from">
+                                        <label for="friday_to">Available To:</label>
+                                        <input type="time" name="friday_to" class="form-control" id="friday_to">
+                                    </div>
+                                </div>
+                                <div class="form-check">
+                                    <input type="checkbox" name="days" value="Saturday" class="form-check-input" id="saturday">
+                                    <label class="form-check-label" for="saturday">Saturday</label>
+                                    <div class="time-inputs">
+                                        <label for="saturday_from">Available From:</label>
+                                        <input type="time" name="saturday_from" class="form-control" id="saturday_from">
+                                        <label for="saturday_to">Available To:</label>
+                                        <input type="time" name="saturday_to" class="form-control" id="saturday_to">
+                                    </div>
+                                </div>
+                                <div class="form-check">
+                                    <input type="checkbox" name="days" value="Sunday" class="form-check-input" id="sunday">
+                                    <label class="form-check-label" for="sunday">Sunday</label>
+                                    <div class="time-inputs">
+                                        <label for="sunday_from">Available From:</label>
+                                        <input type="time" name="sunday_from" class="form-control" id="sunday_from">
+                                        <label for="sunday_to">Available To:</label>
+                                        <input type="time" name="sunday_to" class="form-control" id="sunday_to">
+                                    </div>
+                                </div>
+                            </div>
+
+
+
+                            
+
+                            <div class="col-12">
+                                <div class="d-grid">
+                                    <button class="btn bsb-btn-xl btn-primary" type="submit">Add</button>
+                                </div>
+                            </div>
+                            {% if user_form.errors %}
+                            <div class="error-messages">
+                                {% for field, errors in user_form.errors.items %}
+                                    {% for error in errors %}
+                                        <p class="text-danger">{{ field }}: {{ error }}</p>
+                                    {% endfor %}
+                                {% endfor %}
+                            </div>
+                        {% endif %}
+                        
+                        {% if doctor_form.errors %}
+                            <div class="error-messages">
+                                {% for field, errors in doctor_form.errors.items %}
+                                    {% for error in errors %}
+                                        <p class="text-danger">{{ field }}: {{ error }}</p>
+                                    {% endfor %}
+                                {% endfor %}
+                            </div>
+                        {% endif %}
+                        </div>
+                        
+                        <div class="row">
+                            <div class="col-12">
+                                <hr class="mt-5 mb-4 border-secondary-subtle">
+                                <p class="m-0 text-secondary text-end">Already have an account? <a href="{% url "meds:login" %}" class="link-primary text-decoration-none">Sign in</a></p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+</body>
+</html>

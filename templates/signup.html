@@ -39,7 +39,7 @@
                     <div class="d-flex flex-column justify-content-between h-100 p-3 p-md-4 p-xl-5">
                         <h3 class="m-0">Welcome!</h3>
                         <img class="img-fluid rounded mx-auto my-4" loading="lazy" src="{% static 'photos/registration_page.jpg' %}" alt="BootstrapBrain Logo">
-                        <p class="mb-0">Not a member yet? <a href="#!" class="link-secondary text-decoration-none">Register now</a></p>
+                        {% comment %} <p class="mb-0">Not a member yet? <a href="#!" class="link-secondary text-decoration-none">Register now</a></p> {% endcomment %}
                     </div>
                 </div>
                 <div class="col-12 col-md-6 bsb-tpl-bg-lotion">
@@ -109,16 +109,21 @@
                                     <label for="field" class="form-label">Field <span class="text-danger">*</span></label>
                                     <input type="text" class="form-control" name="field" id="field" placeholder="Field">
                                 </div> {% endcomment %}
-
+                                <div class="col-12">
+                                    <label for="experience" class="form-label">Experience <span class="text-danger">*</span></label>
+                                    <input type="text" class="form-control" name="experience" id="experience"  placeholder="Experience" required>
+                                </div>
                                 <div class="col-12">
                                     <label for="address" class="form-label">Address <span class="text-danger">*</span></label>
                                     <input type="text" class="form-control" name="address" id="address" placeholder="Address">
                                 </div>
 
                                 <div class="col-12">
-                                    <label for="image_upload" class="form-label">Upload Image <span class="text-danger">*</span></label>
-                                    <input type="file" class="form-control" name="image_upload" id="image_upload">
+                                    <label for="photo" class="form-label">Upload Profile Photo <span class="text-danger">*</span></label>
+                                    <input type="file" class="form-control" name="photo" id="photo" required>
                                 </div>
+
+                                
                             </div>
 
                             <div class="col-12">
@@ -149,7 +154,7 @@
                                 {% endfor %}
                             </div>
                         {% endif %}
-                
+                        
                         {% if doctor_form.errors %}
                             <div class="error-messages">
                                 {% for field, errors in doctor_form.errors.items %}
@@ -159,7 +164,6 @@
                                 {% endfor %}
                             </div>
                         {% endif %}
-                
                         </div>
                         
                         <div class="row">

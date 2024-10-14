@@ -19,7 +19,17 @@ class UserRegistrationForm(forms.ModelForm):
         return phone     
 
 class DoctorRegistrationForm(forms.ModelForm):
+    photo = forms.ImageField(
+        required=True,
+        error_messages={'required': "A profile photo is required for doctor registration."}
+    )
+
     class Meta:
         model = Doctors
-        fields = ['degree' , 'specialization' , 'address' , 'photo'] 
+        fields = ['degree', 'specialization', 'address', 'photo' , 'experience']
 
+    def clean_photo(self):
+        photo = self.cleaned_data.get('photo')
+        if not photo:
+            raise forms.ValidationError("A profile photo is required for doctor registration.")
+        return photo

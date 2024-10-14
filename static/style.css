@@ -693,3 +693,77 @@ button:hover {
 }
 
 
+/* Profile Page Specific Styles */
+.profile-page .container {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 2rem;
+    background: #fff;
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+    border-radius: 10px;
+}
+
+.profile-header {
+    display: flex;
+    align-items: center;
+    gap: 2rem;
+    margin-bottom: 2rem;
+}
+
+.profile-photo {
+    position: relative;
+}
+
+.profile-photo img {
+    border-radius: 50%;
+    border: 2px solid var(--green);
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.edit-photo-btn {
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    background-color: var(--green);
+    color: #fff;
+    border: none;
+    padding: 0.5rem;
+    border-radius: 50%;
+    cursor: pointer;
+}
+
+.edit-photo-btn:hover {
+    background-color: darkgreen;
+}
+
+.profile-info {
+    flex: 1;
+}
+
+.profile-info h2 {
+    color: var(--black);
+    font-size: 2.5rem;
+}
+
+.profile-info p {
+    font-size: 1.6rem;
+    color: var(--black);
+}
+
+.profile-info p strong {
+    color: var(--green);
+}
+
+.edit-profile-btn {
+    background-color: var(--green);
+    color: #fff;
+    padding: 0.8rem 1.5rem;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-top: 1rem;
+}
+
+.edit-profile-btn:hover {
+    background-color: darkgreen;
+}
