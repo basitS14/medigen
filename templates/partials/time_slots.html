@@ -1,0 +1,20 @@
+{# templates/partials/time_slots.html #}
+{% if available_slots %}
+    {% for slot in available_slots %}
+        <div class="flex items-center">
+            <input 
+                type="radio" 
+                name="slot_start" 
+                value="{{ slot.start_time|time:'H:i' }}"
+                id="slot_{{ forloop.counter }}"
+                class="mr-2"
+                required
+            >
+            <label for="slot_{{ forloop.counter }}" class="text-sm">
+                {{ slot.formatted_time }}
+            </label>
+        </div>
+    {% endfor %}
+{% else %}
+    <p class="col-span-full text-red-500">No available slots for the selected date.</p>
+{% endif %}

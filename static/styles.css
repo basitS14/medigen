@@ -1,0 +1,105 @@
+/* Basic Reset */
+body, h1, h2, p, ul {
+    margin: 0;
+    padding: 0;
+    font-family: Arial, sans-serif;
+}
+
+/* Header Styling */
+header {
+    display: flex;
+    flex-direction: column; /* Center image and text vertically */
+    align-items: center;
+    background-color: #16a286; /* Header background color */
+    color: white;
+    padding: 50px;
+    position: relative;
+}
+
+header img {
+    width: 150px; /* Increased width for a bigger image */
+    height: auto;
+    border-radius: 100%; /* Make the image circular */
+    margin-bottom: 20px; /* Spacing between image and text */
+}
+
+h1 {
+    font-size: 2.5em; /* Adjust the header size */
+    margin-bottom: 5px;
+    text-align: center; /* Center the header text */
+}
+
+p {
+    font-size: 1.2em; /* Adjust the subheader size */
+    text-align: center; /* Center the subheader text */
+}
+
+/* Doctor's Details Section */
+.doctor-details {
+    padding: 20px;
+}
+
+/* Container for the boxes */
+.container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-around; /* Space out the boxes */
+}
+
+.doctor-info {
+    padding: 20px;
+    display: flex;
+    flex-wrap: wrap; /* Allows boxes to wrap to the next line */
+}
+
+/* Individual Info Boxes */
+.info-box {
+    background-color: #f9f9f9; /* Box background color */
+    border: 1px solid #ddd; /* Box border */
+    border-radius: 5px; /* Rounded corners */
+    padding: 15px; /* Padding inside the box */
+    margin: 10px; /* Spacing between boxes */
+    flex: 1 1 300px; /* Flex-grow and basis for responsiveness */
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1); /* Shadow for depth */
+}
+
+.info-box h2 {
+    color: #16a286; /* Highlighted color for headings */
+    margin-top: 0;
+}
+
+.highlight {
+    color: black; /* Highlighted text color */
+}
+
+/* Contact Details */
+.contact-details {
+    margin-top: 20px;
+}
+
+.contact-item {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.contact-item a {
+    color: #16a286;
+    margin-right: 10px; /* Spacing between icon and text */
+    font-size: 1.5em; /* Icon size */
+}
+
+.btn {
+    display: inline-block;
+    padding: 10px 20px;
+    background-color: #16a286;
+    color: white;
+    text-decoration: none;
+    border-radius: 5px;
+    margin-top: 20px;
+}
+
+.btn:hover {
+    background-color: #148f77; /* Darker shade on hover */
+}
+

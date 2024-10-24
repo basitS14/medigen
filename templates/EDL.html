@@ -1,0 +1,69 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="{% static "EDL.css" %}">
+</head>
+<body>
+    <nav class="navbar">
+        <h1 class="navbar-title">Expert Doctors</h1>
+    </nav>
+    
+    <div class="content">
+        <div class="text-content">
+            <h1 class="title"> We always ensure best treatment for your health.</h1>
+            <p>At Medigen, we are committed to providing exceptional medical care tailored to your unique health needs. Our innovative platform leverages advanced predictive analytics to assess potential diseases, empowering patients with accurate insights into their health. With our user-friendly system, you can easily book appointments with top healthcare professionals, ensuring that you receive the best possible treatment. Your well-being is our top priority, and we strive to support you every step of the way on your journey to optimal health.</p>
+        </div>
+        <div class="image-slider">
+            <div class="slides">
+                <div class="slide"><img src="{% static "photos/ED4.jfif" %}" alt="Image 1"></div>
+                <div class="slide"><img src="{% static "photos/ED2.jpg" %}" alt="Image 2"></div>
+                <div class="slide"><img src="{% static "photos/ED3.jfif" %}" alt="Image 3"></div>
+            </div>
+            <button class="prev" onclick="changeSlide(-1)">&#10094;</button>
+            <button class="next" onclick="changeSlide(1)">&#10095;</button>
+        </div>
+    </div>
+
+    <div class="image-container">
+        <img src="{% static "photos/m5.jpg" %}" alt="Descriptive Alt Text">
+        <div class="overlay-text">
+            <h2>
+<pre>Different types of Department
+   we have for your healthcare.</pre>
+            </h2>
+        </div>
+    </div>
+    <div class="box-container">
+        <div class="box">
+            <h3>Dermatology</h3>
+            <p>Dermatology is the medical specialty focused on the diagnosis and treatment of skin, hair, and nail disorders. Dermatologists address a wide range of conditions, from common issues like acne, eczema, and psoriasis to more serious diseases such as skin cancer. </p>
+        </div>
+        <div class="box">
+            <h3>Oncology</h3>
+            <p>Oncology is the branch of medicine that specializes in the diagnosis, treatment, and management of cancer. Oncologists are trained to understand the complexities of various cancer types, including their development, progression, and response to treatment.</p>
+        </div>
+    </div>
+    <div class="box-container">
+        <div class="box">
+            <h3>Pediatrics</h3>
+            <p>Pediatrics is the branch of medicine dedicated to the health and medical care of infants, children, and adolescents. Pediatricians specialize in diagnosing and treating a wide range of childhood illnesses, from common conditions like colds and allergies to more serious diseases and developmental issues. </p>
+        </div>
+        <div class="box">
+            <h3> Gynecology </h3>
+            <p>
+                Gynecology is the branch of medicine that specializes in the health care of women, particularly concerning the female reproductive system. Gynecologists are trained to diagnose and treat a variety of conditions, including menstrual disorders, hormonal imbalances, and reproductive health issues. </p>
+        </div>
+    </div>
+    
+   
+
+    <script src="{% static "EDL.js" %}"></script>
+</body>
+</html>
+
+</body>
+</html>

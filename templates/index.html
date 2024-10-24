@@ -40,7 +40,7 @@
 				<i class="fas fa-user-md"></i>
 				<h3>Expert Doctors</h3>
 				<p>You can get Higher qualified doctors in respective their domain</p>
-				<a href="#" class="btn"> learn more <span class="fas fa-chevron-right"></span></a>
+				<a href="{% url "expert_doctors" %}" class="btn"> learn more <span class="fas fa-chevron-right"></span></a>
 			</div>
 
 			<div class="box">
@@ -112,7 +112,7 @@
       Join us on our journey to create a smarter, healthier world—one algorithm at a time.
     </p>
 
-			<a href="#" class="btn">Learn more<span class="fas fa-chevron-right"></span></a>
+			<a href="{% url "learn_more" %}" class="btn">Learn more<span class="fas fa-chevron-right"></span></a>
 
 
 		</div>
@@ -128,19 +128,20 @@
 <section class="Doctors" id="Doctors">
 	<h1 class="heading">our <span>Doctors</span></h1>
 		<div class="box-container">
+			{% for doctor in doctors  %}
 			<div class="box">
-				<img src="YJ.png" alt="">
-				<h3>Dr.YATIN JADHAV</h3>
-				<span>Dermatologist</span>
+				<img src="{{doctor.photo.url}}" alt="">
+				<a href="{% url "doc_profile" doctor.id%}"><h3>{{doctor.user.full_name}}</h3></a>
+				<span>{{doctor.specialization}}</span>
 				<div class="share">
-					<a href="#" class="fab fa-facebook-f"></a>
-					<a href="#" class="fab fa-instagram"></a>
-					<a href="#" class="fas fa-pen open-modal"></a>
-					<a href="#" class="fas fa-phone"></a>
+					<a href="mailto:{{doctor.user.email}}" class="fa fa-envelope"></a>
+					<a href="{% url 'meds:book_appointment' doctor_id=doctor.id %}" class="fas fa-pen"></a>
+					<a href="tel:{{doctor.phone}}" class="fas fa-phone"></a>
 				</div>
 			</div>
+			{% endfor %}
 
-			<div class="box">
+			{% comment %} <div class="box">
 				<img src="AS.jpg" alt="">
 				<h3>Dr.Abhijeet Sawant.</h3>
 				<span>proctologist</span>
@@ -224,10 +225,10 @@
 					<a href="#" class="fas fa-pen open-modal"></a>
 					<a href="#" class="fas fa-phone"></a>
 				</div>
-			</div>
+			</div> {% endcomment %}
 
 			<!-- Modal Structure -->
-<div id="appointmentModal" class="modal">
+{% comment %} <div id="appointmentModal" class="modal">
     <div class="modal-content">
         <span class="close">&times;</span>
         <h2>Book an Appointment</h2>
@@ -250,10 +251,9 @@
             <button type="submit">Book Appointment</button>
         </form>
     </div>
-	</div>
+	</div> {% endcomment %}
 
-			<!--
-			<div class="box">
+		{% comment %} <div class="box">
 				<img src="MP.jpg" alt="">
 				<h3>Dr.MRUNAL PARAB.</h3>
 				<span>Oncologist</span>
@@ -273,13 +273,13 @@
 					<a href="#" class="fab fa-instagram"></a>
 					<a href="#" class="fas fa-phone"></a>
 				</div>
-			</div>-->
+			</div> {% endcomment %}
 
 		</div>
-	   <button id="load-more" class="load-more">Load More<span class="fas fa-chevron-right"></span></button>
+	   {% comment %} <button id="load-more" class="load-more">Load More<span class="fas fa-chevron-right"></span></button> {% endcomment %}
 
 		<!--<a href="#" class="btn"> Load More... <span class="fas fa-chevron-right"></span></a>-->
-		  <div class="box hidden">
+		  {% comment %} <div class="box hidden">
 		  	<div class="box-container">
 			<div class="box">
 				<img src="MP.jpg" alt="">
@@ -305,12 +305,12 @@
 				</div>
 			</div>
 			</div>
-		</div>
+		</div> {% endcomment %}
 	</section>
 </section>
 <!--signup and login-->
 <section class="Login" id="Login">
-		<h1 class="heading">First <span>Login</span></h1>
+		{% comment %} <h1 class="heading">First <span>Login</span></h1> {% endcomment %}
 
 
 		<div id="signupModal" class="modal">

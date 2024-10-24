@@ -1,0 +1,269 @@
+{% comment %} {% extends 'layout.html' %} {% endcomment %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Book Appointment</title>
+    <link rel="stylesheet" href="styles.css"> <!-- Link to your CSS file -->
+    <script>
+        // Function to get query parameters and populate doctor details
+        function populateDoctorDetails() {
+            const params = new URLSearchParams(window.location.search);
+            const doctorName = params.get("doctor");
+            const specialization = params.get("specialization");
+
+            if (doctorName && specialization) {
+                document.getElementById("doctor-name").innerText = doctorName;
+                document.getElementById("doctor-specialization").innerText = specialization;
+            }
+        }
+
+        window.onload = populateDoctorDetails; // Populate details when the page loads
+    </script>
+    <style>
+        /* Styles for Appointment Page */
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            color: #333;
+            margin: 0;
+            padding: 0;
+        }
+        header {
+            background-color: #16a286;         
+            color: white;
+            text-align: center;
+            padding: 20px 0;
+        }
+        header h1 {
+            margin: 0;
+            font-size: 2.5em;
+        }
+        header p {
+            margin: 0;
+            font-size: 1.2em;
+        }
+        .appointment-form {
+            max-width: 600px;
+            margin: 50px auto;
+            padding: 20px;
+            background-color: white;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            border-radius: 10px;
+        }
+        .appointment-form h2 {
+            text-align: center;
+            margin-bottom: 20px;
+            color: #16a286;
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        .form-group label {
+            display: block;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+        .form-group input,
+        .form-group textarea {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 1em;
+        }
+        .form-group textarea {
+            resize: vertical;
+        }
+        .btn {
+            display: block;
+            width: 100%;
+            padding: 10px;
+            background-color: #16a286;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            font-size: 1.2em;
+            cursor: pointer;
+        }
+        .btn:hover {
+            background-color: #16a287;
+        }
+        footer {
+            text-align: center;
+            padding: 10px;
+            background-color: #f1f1f1;
+            margin-top: 20px;
+        }
+        footer p {
+            margin: 0;
+        }
+        /* Responsive design */
+        @media (max-width: 768px) {
+            .appointment-form {
+                padding: 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Header Section -->
+    <header>
+        <h1>Book Appointment</h1>
+        <p>With <span id="doctor-name">Doctor</span> - <span id="doctor-specialization">Specialization</span></p>
+    </header>
+
+    <!-- Appointment Form Section -->
+    <section class="appointment-form">
+        <h2>Appointment Form</h2>
+        <div class="container mx-auto px-4 py-8">
+            <h1 class="text-2xl font-bold mb-6">Book Appointment with {{ doctor.user.full_name }}</h1>
+            
+            <div class="bg-white rounded-lg shadow p-6">
+                <form id="appointmentForm" method="POST" action="{% url 'meds:book_appointment' doctor.id %}">
+                    {% csrf_token %}
+                    
+                    <div class="mb-6">
+                        <label class="block text-gray-700 text-sm font-bold mb-2" for="date">
+                            Select Date
+                        </label>
+                        <input 
+                            type="date" 
+                            name="date" 
+                            id="date"
+                            min="{{ min_date|date:'Y-m-d' }}"
+                            value="{{ selected_date|date:'Y-m-d' }}"
+                            class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                            required
+                        >
+                    </div>
+        
+                    <div id="time-slots-container" class="mb-6">
+                        <label class="block text-gray-700 text-sm font-bold mb-2">
+                            Available Time Slots
+                        </label>
+                        <div id="slots-grid" class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+                            {% include 'partials/time_slots.html' %}
+                        </div>
+                    </div>
+        
+                    <div class="mb-6">
+                        <label class="block text-gray-700 text-sm font-bold mb-2" for="notes">
+                            Notes (Optional)
+                        </label>
+                        <textarea 
+                            name="notes" 
+                            id="notes"
+                            class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                            rows="3"
+                        ></textarea>
+                    </div>
+        
+                    <div class="flex items-center justify-end">
+                        <button 
+                            type="submit"
+                            class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+                        >
+                            Book Appointment
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+        
+        <!-- Loading spinner template -->
+        <template id="loading-spinner">
+            <div class="flex justify-center items-center py-4">
+                <div class="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-500"></div>
+            </div>
+        </template>
+        
+        
+
+        <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const dateInput = document.getElementById('date');
+            const slotsGrid = document.getElementById('slots-grid');
+            const loadingSpinner = document.getElementById('loading-spinner').content;
+            const csrfToken = document.querySelector('[name=csrfmiddlewaretoken]').value;
+        
+            dateInput.addEventListener('change', async function() {
+                // Show loading spinner
+                slotsGrid.innerHTML = '';
+                slotsGrid.appendChild(loadingSpinner.cloneNode(true));
+        
+                try {
+                    const response = await fetch(
+                        `{% url 'meds:get_doctor_availability' doctor.id %}?date=${this.value}`,
+                        {
+                            headers: {
+                                'X-Requested-With': 'XMLHttpRequest',
+                                'X-CSRFToken': csrfToken
+                            }
+                        }
+                    );
+        
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok');
+                    }
+        
+                    const data = await response.json();
+                    
+                    // Clear loading spinner
+                    slotsGrid.innerHTML = '';
+        
+                    if (data.slots.length === 0) {
+                        slotsGrid.innerHTML = '<p class="col-span-full text-red-500">No available slots for the selected date.</p>';
+                        return;
+                    }
+        
+                    // Generate time slots HTML
+                    data.slots.forEach((slot, index) => {
+                        const slotDiv = document.createElement('div');
+                        slotDiv.className = 'flex items-center';
+                        slotDiv.innerHTML = `
+                            <input 
+                                type="radio" 
+                                name="slot_start" 
+                                value="${slot.start_time}"
+                                id="slot_${index}"
+                                class="mr-2"
+                                required
+                            >
+                            <label for="slot_${index}" class="text-sm">
+                                ${slot.formatted_time}
+                            </label>
+                        `;
+                        slotsGrid.appendChild(slotDiv);
+                    });
+        
+                } catch (error) {
+                    console.error('Error:', error);
+                    slotsGrid.innerHTML = '<p class="col-span-full text-red-500">Error loading time slots. Please try again.</p>';
+                }
+            });
+        });
+        </script>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <p>&copy; 2024 Medigen Healthcare</p>
+    </footer>
+
+</body>
+<script>
+    function updateTimeSlots() {
+        const dateInput = document.getElementById('date');
+        const selectedDate = dateInput.value;
+        
+        // Reload page with selected date
+        if (selectedDate) {
+            window.location.href = `?date=${selectedDate}`;
+        }
+    }
+    </script>
+</html>

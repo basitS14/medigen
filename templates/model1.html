@@ -104,10 +104,11 @@
             {% endif %}
         </div>
         
-        <div class="prediction-container">
-            <label3 for="predictedDisease"><h3>Predicted Accuracy:</h3></label3>
-            <div class="predicted-box" id="predictedDisease"></div>
-        </div>
+       <div class="prediction-container">
+            <label3 for="predictedDisease"><h3>About Disease:</h3></label3>
+
+            <div class="about-box" id="predictedDisease">{{description}}</div>
+        </div> 
     </div>
     
     </div>
@@ -116,6 +117,84 @@
     
     <script src="{% static 'model1.js' %}"></script>
     <script src="{% static 'modelScript.js' %}"></script>
-    
+    <script>
+        // Keep track of selected symptoms
+        let selectedSymptoms = new Set();
+
+        // Function to check for duplicates and show warning
+        function handleSymptomSelection(event) {
+            const select = event.target;
+            const selectedValue = select.value;
+            
+            // If nothing is selected, just return
+            if (!selectedValue) return;
+            
+            // Check if symptom was already selected
+            if (selectedSymptoms.has(selectedValue)) {
+                // Reset the select to empty option
+                select.value = '';
+                
+                // Create warning message if it doesn't exist
+                let warningMsg = document.getElementById('warning-message');
+                if (!warningMsg) {
+                    warningMsg = document.createElement('div');
+                    warningMsg.id = 'warning-message';
+                    warningMsg.style.cssText = `
+                        color: #dc3545;
+                        background-color: #ffe6e6;
+                        padding: 10px;
+                        margin: 10px 0;
+                        border-radius: 4px;
+                        border: 1px solid #dc3545;
+                        display: none;
+                        position: fixed;
+                        top: 20px;
+                        left: 50%;
+                        transform: translateX(-50%);
+                        z-index: 1000;
+                        box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+                    `;
+                    document.body.appendChild(warningMsg);
+                }
+                
+                // Show warning message
+                warningMsg.textContent = `"${selectedValue.replace(/_/g, ' ').replace(/\b\w/g, c => c.toUpperCase())}" is already selected. Please choose a different symptom.`;
+                warningMsg.style.display = 'block';
+                
+                // Hide warning message after 3 seconds
+                setTimeout(() => {
+                    warningMsg.style.display = 'none';
+                }, 3000);
+                
+                return;
+            }
+            
+            // Remove previous selection for this dropdown if it exists
+            const previousValue = select.dataset.previousValue;
+            if (previousValue) {
+                selectedSymptoms.delete(previousValue);
+            }
+            
+            // Add new selection
+            selectedSymptoms.add(selectedValue);
+            select.dataset.previousValue = selectedValue;
+        }
+
+        // Add event listeners to all symptom select elements
+        document.addEventListener('DOMContentLoaded', () => {
+            const symptomSelects = document.querySelectorAll('.symptom-select');
+            symptomSelects.forEach(select => {
+                select.addEventListener('change', handleSymptomSelection);
+            });
+        });
+
+        // Clear warning message when clicking outside
+        document.addEventListener('click', (event) => {
+            const warningMsg = document.getElementById('warning-message');
+            if (warningMsg && !event.target.classList.contains('symptom-select')) {
+                warningMsg.style.display = 'none';
+            }
+        });
+    </script>
 </body>
 </html>

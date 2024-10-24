@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+{% load static %}
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dr.{{doctor.user.full_name}}</title>
+
+    <!-- Font Awesome CDN -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="stylesheet" href="{% static "styles.css" %}"> <!-- Ensure the correct path to styles.css -->
+</head>
+
+<body>
+
+    <!-- Header Section -->
+    <header>
+        <img src="{{doctor.photo.url}}" alt="{{doctor.user.full_name}}"> <!-- Ensure the image path is correct -->
+        <div>
+            <h1>{{doctor.user.full_name}}</h1>
+            <p>{{doctor.specialization}}</p>
+        </div>
+    </header>
+
+    <!-- Doctor's Details Section -->
+    <section class="doctor-details">
+        <div class="container">
+
+            <div class="doctor-info">
+                <div class="info-box">
+                    <h2><i class="fas fa-graduation-cap"></i> Education</h2>
+                    <ul>
+                        <li>{{doctor.degree}}</li>
+                    </ul>
+                </div>
+
+                <div class="info-box">
+                    <h2><i class="fas fa-star"></i> Specialization</h2>
+                    <ul class="highlight">
+                        <li>{{doctor.specialization}}</li>
+                    </ul>
+                </div>
+
+                <div class="info-box">
+                    <h2><i class="fas fa-user-md"></i> Experience</h2>
+                    <p class="highlight">{{doctor.experience}}+ years of experience.</p>
+                </div>
+
+        
+
+                <div class="info-box">
+                    <h2><i class="fas fa-clock"></i> Availability</h2>
+                    <ul>
+                        {% for slot in availability %}
+                        <li class="list-group-item">
+                            <strong>{{ slot.day_of_week }}:</strong> {{ slot.available_from|time:"h:i A" }} - {{ slot.available_to|time:"h:i A" }}
+                        </li>
+                    {% endfor %}
+                </ul>
+                    </ul>
+                </div>
+
+                <!-- Contact Details Section -->
+                <div class="info-box">
+                    <h2><i class="fas fa-address-card"></i> Contact Details</h2>
+                    <div class="contact-details">
+                        <div class="contact-item">
+                            <a href="#" class="fas fa-map-marker-alt"></a>
+                            <p>HeartCare Clinic<br>Main Road, CityName, State - 123456, INDIA</p>
+                        </div>
+
+                        <div class="contact-item">
+                            <a href="tel:+919876543210" class="fas fa-phone"></a>
+                            <p>Phone No: +91-9876543210</p>
+                        </div>
+
+                        <div class="contact-item">
+                            <a href="mailto:dr.amarsinh@example.com" class="fas fa-envelope"></a>
+                            <p>Email: dr.amarsinh@example.com</p>
+                        </div>
+                    </div>
+                    <a href ="{% url "meds:book_appointment" doctor.id %}" class="btn">Book Appointment</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+</body>
+
+</html>

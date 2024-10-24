@@ -24,10 +24,13 @@ def multidisease(request):
         if symptoms:
             clean_symptoms = tool.preprocessing(symptoms=symptoms)
             predicted_disease = tool.predict(input_symptoms=clean_symptoms)
+            description = tool.disease_description[predicted_disease]
+            # description = tool.description_dict[predicted_disease]
 
             context = {
                 'symptoms': clean_symptoms,
-                'disease': predicted_disease
+                'disease': predicted_disease,
+                'description':description
             }
         
 
@@ -39,6 +42,7 @@ def results(request):
     symptoms = request.GET.get('symptoms', '').split(',')
     clean_symtomps = tool.preprocessing(symptoms=symptoms)
     predicted_disease = tool.predict(input_symptoms=clean_symtomps)
+
 
     # prediction = pickle.load(open('pipe.pkl' , 'rb'))
 

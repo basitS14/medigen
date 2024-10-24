@@ -193,6 +193,8 @@ select {
     margin: 5px; /* Space between the two buttons */
 }
 
+
+
  .predict-disease:hover {
     background-color: #148f77; /* Darker shade on hover */
 }
@@ -222,6 +224,21 @@ label2 {
     color: #333; /* Text color */
     min-height: 30px; /* Minimum height for the box */
 }
+
+.about-box {
+    padding: 10px;
+    font-size: 1em; /* Box font size */
+    border: 2px solid #16a085; /* Border color */
+    border-radius: 5px; /* Rounded corners */
+    height: 200px;
+    width: 300px; /* Fixed width for the box */
+    background-color: #fff; /* Background color of the box */
+    color: #333; /* Text color */
+    min-height: 30px; /* Minimum height for the box */
+}
+
+
+
 label3 {
     font-size: 1.2em; /* Label font size */
     color: #333; /* Label text color */

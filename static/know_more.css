@@ -1,0 +1,62 @@
+body {
+    margin: 0;
+    padding: 0;
+}
+
+
+.overlay-text {
+    position: absolute;
+    top: 27%;
+    right: 3%; /* Adjust left position as needed */
+    transform: translateY(-50%); /* Vertically center the text */
+   
+    text-align: left; /* Align text to the left */
+    
+    z-index: 2; /* Ensure text is above the image */
+}
+.overlay-text  {
+    color: #16a085; /* Change text color to green */
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.388); /* Add shadow to the text */
+    font-size:  1.27rem; /* Increase the font size */
+    line-height: 1.2; /* Adjust line height to increase spacing */
+    font-family: "Poppins", sans-serif;
+
+}
+.image-container2 {
+    position: relative;
+    width: 100%;
+    height: auto; /* Adjust height based on the content */
+}
+
+.image-container2 img {
+    width: 1396px;
+    height: auto; /* Maintain aspect ratio */
+    display: block;
+}
+
+.overlay2 {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 1396px;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.422); /* Very transparent green color */
+    z-index: 1; /* Ensure overlay is on top of the image */
+}
+
+.overlay-text2 {
+    position: absolute;
+    top: 40%;
+    right: 5%; /* Adjust the left position as needed */
+    transform: translateY(-50%); /* Vertically center the text */
+    text-align: left; /* Align text to the left */
+    z-index: 2; /* Ensure text is above the image */
+    color: white; /* Change text color to white */
+     /* Add shadow to the text */
+    font-size: 1.5rem; /* Increase the font size */
+    line-height: 1.2; /* Adjust line height to increase spacing */
+    font-style: serif;
+}
+
+
+

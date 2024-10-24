@@ -55,7 +55,8 @@
             <div class="col-md-4 mb-3">
                 <div class="card">
                     <div class="profile-header">
-                        <img src="{{ doctor.photo.url }}" alt="Profile Photo" class="rounded-circle" width="100">                        <h4 class="mt-2">{{ user.full_name }}</h4>
+                        <img src="{{ doctor.photo.url }}" alt="Profile Photo" class="rounded-circle" width="100">                       
+                         <h4 class="mt-2">Dr.{{ user.full_name }}</h4>
                         <p>{{ doctor.degree }}</p>
                         <p>{{ doctor.specialization }}</p>
                     </div>
@@ -80,7 +81,7 @@
                         <h5 class="mb-3">Profile Details</h5>
                         <div class="row">
                             <div class="col-sm-4"><strong>Full Name</strong></div>
-                            <div class="col-sm-8 text-secondary">{{ user.full_name }}</div>
+                            <div class="col-sm-8 text-secondary">Dr.{{ user.full_name }}</div>
                         </div>
                         <hr>
                         <div class="row">
@@ -114,6 +115,25 @@
                             {% endif %}
                             </div>
                         </div>
+                    </div>
+                </div>
+                <div class="card mb-3">
+                    <div class="card-body">
+                        <h5 class="mb-3">Your Appointments</h5>
+                        {% if appointments %}
+                            <ul class="list-group">
+                            {% for appointment in appointments %}
+                                <li class="list-group-item">
+                                    <strong>Patient:</strong> {{ appointment.patient.full_name }}<br>
+                                    <strong>Date:</strong> {{ appointment.date }}<br>
+                                    <strong>Time:</strong> {{ appointment.start_time }} to {{appointment.end_time}}<br>
+                                    {% comment %} <strong>Status:</strong> {{ appointment.get_status_display }} {% endcomment %}
+                                </li>
+                            {% endfor %}
+                            </ul>
+                        {% else %}
+                            <p>You have no appointments scheduled.</p>
+                        {% endif %}
                     </div>
                 </div>
             </div>

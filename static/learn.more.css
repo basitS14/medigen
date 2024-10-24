@@ -1,0 +1,210 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@100;200;300;400;500;600;700;800;900&display=swap');
+
+
+body {
+    margin: 0;
+    padding: 0;
+}
+
+.image-container {
+    position: relative;
+    width: 1396.3px;
+    height: 80vh; /* Image covers 80% of the viewport height */
+   
+}
+
+.image-container img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover; /* Ensures image covers the container without distortion */
+}
+
+.overlay-text {
+    position: absolute;
+    top: 70%;
+    left: 7%; /* Adjust left position as needed */
+    transform: translateY(-50%); /* Vertically center the text */
+   
+    text-align: left; /* Align text to the left */
+    
+    z-index: 1; /* Ensure text is above the image */
+}
+
+.overlay-text h1 {
+    color: #16a085; /* Change text color to green */
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.811); /* Add shadow to the text */
+    font-size: 5rem; /* Increase the font size */
+    line-height: 1.2; /* Adjust line height to increase spacing */
+
+}
+
+
+.image-container1 {
+    position: relative;
+    width: 1396px;
+ /* Full viewport height */
+   
+}
+
+.image-container1 img {
+    width: 1413.32px;
+    height: 750px;
+    
+    opacity: 750px; /* Ensure image covers the container without distortion */
+}
+
+.overlay1 {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 1413.32px;
+    height: 100%;
+    background: rgba(0, 101, 81, 0.429);  /* Very transparent green color */
+    z-index: 1; /* Ensure overlay is on top of the image */
+}
+.overlay-text1 {
+    position: absolute;
+    top: 50%;
+    left: 7%; /* Adjust left position as needed */
+    transform: translateY(-50%); /* Vertically center the text */
+   
+    text-align: left; /* Align text to the left */
+    
+    z-index: 1; /* Ensure text is above the image */
+    color: white; /* Change text color to green */
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.947); /* Add shadow to the text */
+    font-size: 2.8rem; /* Increase the font size */
+    line-height: 1.2; /* Adjust line height to increase spacing */
+
+}
+
+.image-container1 {
+    position: relative;
+    width: 1396px;
+    height: auto; /* Adjust height based on the content */
+}
+
+.image-container1 img {
+    width: 100%;
+    height: auto; /* Maintain aspect ratio */
+    display: block;
+}
+
+.overlay1 {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 101, 81, 0.67); /* Very transparent green color */
+    z-index: 1; /* Ensure overlay is on top of the image */
+}
+
+.overlay-text1 {
+    position: absolute;
+    top: 50%;
+    left: 7%; /* Adjust the left position as needed */
+    transform: translateY(-50%); /* Vertically center the text */
+    text-align: left; /* Align text to the left */
+    z-index: 1; /* Ensure text is above the image */
+    color: white; /* Change text color to white */
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.947); /* Add shadow to the text */
+    font-size: 2.8rem; /* Increase the font size */
+    line-height: 1.2; /* Adjust line height to increase spacing */
+}
+
+.boxes-container {
+    position: absolute;
+    top: 2px; /* Adjust as needed */
+    right: 10%; /* Adjust as needed */
+    width: 180px; /* Ensure container width is the same as box width */
+    height: 300px; /* Adjust container height to match the total height of boxes */
+    z-index: 2; /* Ensure boxes are above the image */
+}
+
+.box {
+    position: absolute; /* Use absolute positioning for individual boxes */
+    width: 210px; /* Set width to 150px */
+    height:280px; /* Set height to 300px */
+    background: #fff; /* Background color for the boxes */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Shadow for the boxes */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 30%;
+    box-sizing: border-box;
+}
+
+.box1 {
+    background: white; /* Light background for box 1 */
+    top: 50%; /* Adjust as needed */
+    right: 100%; /* Align to the left */
+    border-radius: 30px;
+    
+}
+
+.box2 {
+    background: white; /* Slightly darker background for box 2 */
+    top: 450px; /* Position box 2 below box 1 */
+    right: 100%; /* Align to the left */
+    border-radius: 30px;
+   
+}
+
+.box3 {
+    background: white; /* Even darker background for box 3 */
+    top: 70%; /* Position box 3 below box 1 */
+    left: 20%; /* Position box 3 to the right of box 2 */
+    border-radius: 30px;
+}
+
+.box4 {
+    background: white; /* Darkest background for box 4 */
+    top: 510px; /* Position box 4 below box 3 */
+    left: 20%; /* Align with box 3 */
+    border-radius: 30px;
+}
+p{
+    text-emphasis: none;
+}
+
+
+.image-container2 {
+    position: relative;
+    width: 1396px;
+    height: auto; /* Adjust height based on the content */
+}
+
+.image-container2 img {
+    width: 100%;
+    height: auto; /* Maintain aspect ratio */
+    display: block;
+}
+
+.overlay2 {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(239, 239, 235, 0.388); /* Very transparent green color */
+    z-index: 1; /* Ensure overlay is on top of the image */
+}
+
+.overlay-text2 {
+    position: absolute;
+    top: 40%;
+    left: 5%; /* Adjust the left position as needed */
+    transform: translateY(-50%); /* Vertically center the text */
+    text-align: left; /* Align text to the left */
+    z-index: 2; /* Ensure text is above the image */
+    color: white; /* Change text color to white */
+     /* Add shadow to the text */
+    font-size: 1.5rem; /* Increase the font size */
+    line-height: 1.2; /* Adjust line height to increase spacing */
+    font-style: serif;
+}
+
+
+

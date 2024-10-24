@@ -170,7 +170,7 @@ section:nth-child(even){
 
 .home .content p{
 	font-size: 1.7rem;
-	color:var(--light-color);
+	color:#000;
 	line-height: 1.8;
     padding: 1rem 0;
 } 
