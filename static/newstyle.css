@@ -129,7 +129,7 @@ section:nth-child(even){
 
 .header .navbar a{
 	font-size: 1.7rem;
-	color: var(--light-color);
+	color: var(--black);
 	margin-left: 2rem;
 	
 }

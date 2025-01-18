@@ -3,6 +3,9 @@ from django.http import HttpResponse
 import pickle
 from .customtools import ModelTools
 import re
+from transformers import pipeline
+from PIL import Image
+import io
 
 tool = ModelTools()
 
@@ -47,3 +50,39 @@ def results(request):
     # prediction = pickle.load(open('pipe.pkl' , 'rb'))
 
     return render(request, "update_profile.html", context)
+
+
+def skin_disease(request):
+    predictions = []
+    
+    if request.method == 'POST' and request.FILES.get('skin_image'):
+        # Get the uploaded image
+        image_file = request.FILES['skin_image']
+        
+        try:
+            # Convert the uploaded file to PIL Image
+            image = Image.open(io.BytesIO(image_file.read()))
+            
+            # Initialize the pipeline
+            pipe = pipeline("image-classification", 
+                          model="kaanyvvz/ky-finetuned-skindiseaseicthuawei32")
+            
+            # Get predictions
+            results = pipe(image)
+            
+            # Extract top 5 predictions
+            predictions = [
+                {
+                    'label': result['label'],
+                    'score': f"{result['score']*100:.2f}%"
+                }
+                for result in results[:5]
+            ]
+            
+        except Exception as e:
+            predictions = [{'label': f'Error: {str(e)}', 'score': ''}]
+    
+    context = {
+        "disease": predictions
+    }
+    return render(request, "skin_disease.html", context)

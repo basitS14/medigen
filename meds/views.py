@@ -109,7 +109,6 @@ def login(request):
 
     return render(request, 'LogIn.html')
 
-# @login_required
 def profile(request):
     user = request.user
     doctor = None
