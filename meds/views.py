@@ -48,10 +48,13 @@ def register(request):
                     doctor = doctor_form.save(commit=False)
                     doctor.user = user
                     doctor.save()
-                    return redirect(reverse("meds:login"))
+                    auth_login(request=request , user=user)
+                    return redirect(reverse("home"))
                 else:
                     user.delete()  # Delete the user if doctor form is invalid
-                    return render(request, 'signup.html', {'user_form': user_form, 'doctor_form': doctor_form})
+                    return render(request, 'index.html', {'user_form': user_form, 'doctor_form': doctor_form})
+            else:
+                auth_login(request=request , user=user)
 
             messages.success(request, 'Registration successful. Please log in.')
             return redirect(reverse('meds:login'))
@@ -61,7 +64,7 @@ def register(request):
                 return render(request, 'signup.html', {'user_form': user_form, 'doctor_form': doctor_form})
             return render(request, 'signup.html', {'user_form': user_form})
     
-    return render(request, 'signup.html')
+    return render(request, 'index.html')
 
 def doc_availability(request):
     if request.method == 'POST':
@@ -91,14 +94,6 @@ def login(request):
         password = request.POST.get('loginPassword')
 
         user = authenticate(request, username=email, password=password)
-        
-        # user_list = CustomUser.objects.values_list('email')
-        
-        # print(user)
-        
-
-        # if user in doctors_list:
-        #     doctor = Doctors.objects.filter(user=user).values()
 
         if user is not None:
             auth_login(request, user)
@@ -107,7 +102,7 @@ def login(request):
         else:
             messages.error(request, "Invalid email or password.")
 
-    return render(request, 'LogIn.html')
+    return render(request, 'index.html')
 
 def profile(request):
     user = request.user

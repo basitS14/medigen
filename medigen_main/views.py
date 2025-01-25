@@ -45,4 +45,4 @@ def expert_doctors(request):
     return render(request , 'EDL.html')
 
 def sign_up(request):
-    return render(request , "")
+    return render(request , "login_modal.html")
