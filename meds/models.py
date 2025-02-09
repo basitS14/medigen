@@ -2,6 +2,7 @@ from django.contrib.auth.models import AbstractUser
 from django.db import models
 from .manager import CustomUserManager
 import datetime as dt
+from datetime import datetime, timedelta, time
 
 GENDER = [
     ("Male" , "Male"),
@@ -56,9 +57,51 @@ class Availability(models.Model):
     available_from = models.TimeField()
     available_to = models.TimeField()
     max_appointments = models.IntegerField( default=8)
+    break_from = models.TimeField( auto_now=False, auto_now_add=False, default=time(13,0))
+    break_to = models.TimeField(auto_now=False, auto_now_add=False , default=time(14,0))
 
     def __str__(self):
-        return f"{self.day_of_week}: {self.available_from} - {self.available_to}"
+        return f"{self.doctor} - Available: {self.day_of_week}: {self.available_from} - {self.available_to} - Break: {self.break_from} - {self.break_to}"
+
+class OnlineAvailability(models.Model):
+    doctor = models.ForeignKey(Doctors, on_delete=models.CASCADE, related_name='online_availabilities_fulltime')
+    day_of_week = models.CharField(max_length=10, choices=[
+        ('Monday', 'Monday'),
+        ('Tuesday', 'Tuesday'),
+        ('Wednesday', 'Wednesday'),
+        ('Thursday', 'Thursday'),
+        ('Friday', 'Friday'),
+        ('Saturday', 'Saturday'),
+        ('Sunday', 'Sunday')
+    ])
+    available_from = models.TimeField()
+    available_to = models.TimeField()
+    max_appointments = models.IntegerField( default=8)
+    break_from = models.TimeField( auto_now=False, auto_now_add=False)
+    break_to = models.TimeField(auto_now=False, auto_now_add=False)
+
+    def __str__(self):
+        return f"{self.doctor} - Available: {self.day_of_week}: {self.available_from} - {self.available_to} - Break: {self.break_from} - {self.break_to}"
+
+class OnlineAvailabilityPartime(models.Model):
+    doctor = models.ForeignKey(Doctors, on_delete=models.CASCADE, related_name='online_availabilities_partime')
+    day_of_week = models.CharField(max_length=10, choices=[
+        ('Monday', 'Monday'),
+        ('Tuesday', 'Tuesday'),
+        ('Wednesday', 'Wednesday'),
+        ('Thursday', 'Thursday'),
+        ('Friday', 'Friday'),
+        ('Saturday', 'Saturday'),
+        ('Sunday', 'Sunday')
+    ])
+    available_from = models.TimeField()
+    available_to = models.TimeField()
+    max_appointments = models.IntegerField( default=8)
+  
+    def __str__(self):
+        return f"{self.doctor} - Available: {self.day_of_week}: {self.available_from} - {self.available_to}"
+
+
 
 
 class Appointment(models.Model):
@@ -69,6 +112,11 @@ class Appointment(models.Model):
     end_time = models.TimeField()
     notes = models.TextField(blank=True, null=True)
     created_at = models.DateTimeField(default=dt.datetime.now())
+    appointment_mode = models.CharField(
+        max_length=10,
+        choices=[('offline', 'Offline'), ('online', 'Online')],
+        default='offline'
+    )
     
     class Meta:
         ordering = ['date', 'start_time']

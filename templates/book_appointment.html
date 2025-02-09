@@ -1,0 +1,52 @@
+{% extends "layout.html" %}
+
+{% block content %}
+
+<main>
+    <div class="shadow container-fluid container-sm rounded-lg bg-body p-5 mb-5">
+        <h1 class="text-center">
+            Book Appointment
+        </h1>
+        <form action="">
+            <div class="mb-3">
+                <label for="patient-name">Patient Name</label>
+                <input type="text" name="patient-name" id="patient-name" class="form-control">
+            </div>
+            <div class="mb-3">
+                <label for="date">Select Date</label>
+                <input 
+                            type="date" 
+                            name="date" 
+                            id="date"
+                            min="{{ min_date|date:'Y-m-d' }}"
+                            value="{{ selected_date|date:'Y-m-d' }}"
+                            class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                            required
+                        >
+            </div>
+            <div class="mb-3">
+                <label for="slots-grid">Select Date</label>
+                <div id="slots-grid" class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+                    {% include 'partials/time_slots.html' %}
+                </div>
+            </div>
+            <label for="mode">Mode</label>
+            <div class="mb-3" id="mode">
+                <div class="form-check form-check-inline">
+                    <input type="radio" name="offline" id="offline" class="form-check-input" value="offline">
+                    <label for="offline">Offline</label>
+                </div>
+                <div class="form-check form-check-inline">
+                    <input type="radio" name="online" id="online" class="form-check-input" value="online">
+                    <label for="online">Online</label>
+                </div>
+            </div>
+            <div class="mb-3">
+                <label for="notes">Notes</label>
+                <textarea name="notes" id="notes" class="form-control"></textarea>
+            </div>
+        </form>
+    </div>
+    
+</main>
+{% endblock  %}

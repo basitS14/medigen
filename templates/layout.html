@@ -18,11 +18,11 @@
 
 </head>
 <body>
-    <header class="header">
+    <header class="header mb-4">
 
-        <a href="#" class="logo"><i class="fa-solid fa-heart-pulse" style="color: #63E6BE;"></i>MediGen.</a>
+        {% comment %} <a href="#" class="logo"><i class="fa-solid fa-heart-pulse" style="color: #63E6BE;"></i>MediGen.</a> {% endcomment %}
     
-        <nav class="navbar">
+        {% comment %} <nav class="navbar">
             <a href="{% url "home" %}">Home</a>
             <a href="#Services">Services</a>
             <a href="#Models">Models</a>
@@ -35,7 +35,66 @@
                 <a id="login" class='btn btn-outline-primary' data-bs-toggle="modal" data-bs-target="#login_modal">Register</a>
                 <a href="{% url 'meds:profile' %}" class='btn btn-outline-primary'>Profile</a>
          {% endif %}
-        </nav>
+        </nav> {% endcomment %}
+
+        <nav class="navbar navbar-expand-lg">
+            <div class="container-fluid">
+              <a class="navbar-brand logo" href="#" ><i class="fa-solid fa-heart-pulse"></i>Medigen</a>
+              <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+              </button>
+              <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                  <li class="nav-item">
+                    <a class="nav-link active" aria-current="page" href="#">Home</a>
+                  </li>
+                  <li class="nav-item">
+                    <a class="nav-link active" href="#">Services</a>
+                  </li>
+                  <li class="nav-item">
+                    <a class="nav-link active" href="#">Models</a>
+                  </li>
+                  <li class="nav-item">
+                    <a class="nav-link active" href="#">About</a>
+                  </li>
+                  <li class="nav-item">
+                    <a class="nav-link active" href="#">Doctors</a>
+                  </li>
+                 
+                </ul>
+                {% if user.is_authenticated %}
+                <a href="{% url 'meds:profile' %}" class='btn btn-outline-primary '>{{ user.full_name }}</a>
+                <a href="{% url 'meds:logout' %}" class='btn btn-outline-danger'>Logout</a>
+                {% else %} 
+                <a id="login" class='btn btn-outline-primary' data-bs-toggle="modal" data-bs-target="#login_modal">Register</a>
+                <a href="{% url 'meds:profile' %}" class='btn btn-outline-primary'>Profile</a>
+                {% endif %}
+              </div>
+            </div>
+          </nav>
+                    {% comment %} <ul>
+                        {% if user.is_authenticated %}
+                        <li class="nav-item">
+                        <a href="{% url 'meds:profile' %}" class='btn btn-outline-primary' class="nav-link active">{{ user.full_name }}</a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="{% url 'meds:logout' %}" class='btn btn-outline-danger'>Logout</a>
+                        </li>
+                        {% else %} 
+                        <li class="nav-item">
+                            <a id="login" class='btn btn-outline-primary' data-bs-toggle="modal" data-bs-target="#login_modal">Register</a>
+
+                        </li>
+                        <li class="nav-item">
+                            <a href="{% url 'meds:profile' %}" class='btn btn-outline-primary'>Profile</a>
+
+                        </li>
+                         {% endif %}
+                    </ul> {% endcomment %}
+
+                </div>
+            </div>
+        </nav> 
             
             {% comment %} <a href="#" class = 'btn btn-outline-primary' id = "loginBtn">Login</a> {% endcomment %}
             {% comment %} <a href="#Contact">Contact</a> {% endcomment %}
@@ -66,13 +125,28 @@
                     <div class="mb-3">
                      <p class="blockquote">Don't have an account? <a class="" role="button" data-bs-target="#signup_modal" data-bs-toggle="modal" data-bs-dismiss="modal" >Create an account</a></p>
                     </div>
-                    <div id="errorMessage" class="alert alert-danger" style="display: none;"></div>
+                    {% if messages %}
+                    {% for message in messages %}
+                        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                            {{ message }}
+                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                        </div>
+                    {% endfor %}
+                    {% endif %}
 
                    </div>
                   </div>
                 </div>
               </div>
 
+              <script>
+                {% if messages %}
+                    // Trigger modal to open if error message exists
+                    var loginModal = new bootstrap.Modal(document.getElementById('login_modal'));
+                    loginModal.show();
+                {% endif %}
+            </script>
+            
               {% comment %} Register Modal {% endcomment %}
 
               <div class="modal fade " id="signup_modal" tabindex="-1" >
@@ -86,37 +160,43 @@
                             <form action="{% url "meds:register" %}" method="POST" enctype="multipart/form-data">
                                 {% csrf_token %}
                                <div class="mb-3">
-                                    <label for="full_name">Name</label>
-                                    <input type="text" id="full_name" class="form-control" name="fullName" >
+                                    <label for="fullName">Name</label>
+                                    <input type="text" id="fullName" class="form-control" name="fullName" >
+                                    <p class="error-message"></p>
                                </div>
                                <div class="row mb-3">
                                 <div class="col">
                                     <label for="phone">Phone</label>
                                     <input type="phone" id="phone" class="form-control" name="phone"  >
+                                    <p class="error-message"></p>
                                 </div>
                                 <div class="col">
                                     <label for="email">Email</label>
                                     <input type="email" id="email" class="form-control" name="email">
+                                    <p class="error-message"></p>
                                 </div>
                                </div>
                                <div class="row mb-3">
                                 <div class="col">
                                     <label for="gender">Gender</label>
                                     <select  class="form-select" name="gender" id="gender" >
+                                        <option >Not Specified</option>
                                         <option value="Male">Male</option>
                                         <option value="Female">Female</option>
-                                        <option selected>Not Specified</option>
                                     </select>
+                                    <p class="error-message"></p>
                                 </div>
                                 <div class="col">
                                     <label for="dob">Date of Birth</label>
                                     <input type="date" id="dob" class="form-control" name="dob">
+                                    <p class="error-message"></p>
                                 </div>
                                </div>
                                <div class="row mb-3">
                                 <div class="col">
                                     <label for="password">Password</label>
                                     <input type="password" id="password" class="form-control" name="password">
+                                    <p class="error-message"></p>
                                 </div>
                                 <div class="col">
                                     <label for="role">Sign Up as</label>
@@ -125,6 +205,7 @@
                                         <option value="2">Doctor</option>
 
                                     </select>
+                                    <p class="error-message"></p>
                                 </div>
 
                                </div>
@@ -134,11 +215,13 @@
                                     <div class="col-12">
                                         <label for="degree" class="form-label">Degree <span class="text-danger">*</span></label>
                                         <input type="text" class="form-control" name="degree" id="degree" placeholder="Degree">
+                                        <p class="error-message"></p>
                                     </div>
     
                                     <div class="col-12">
                                         <label for="specialization" class="form-label">Specialization <span class="text-danger">*</span></label>
                                         <input type="text" class="form-control" name="specialization" id="specialization" placeholder="Specialization">
+                                        <p class="error-message"></p>
                                     </div>
                                 </div>
 
@@ -146,16 +229,19 @@
                                     <div class="col-12">
                                         <label for="experience" class="form-label">Experience <span class="text-danger">*</span></label>
                                         <input type="text" class="form-control" name="experience" id="experience"  placeholder="Experience" >
+                                        <p class="error-message"></p>
                                     </div>
                                     <div class="col-12">
                                         <label for="photo" class="form-label">Upload Profile Photo <span class="text-danger">*</span></label>
                                         <input type="file" class="form-control" name="photo" id="photo" >
+                                        <p class="error-message"></p>
                                     </div>
                                 </div>
 
                                 <div class="mb-3">
                                     <label for="address" class="form-label">Address <span class="text-danger">*</span></label>
                                     <input type="text" class="form-control" name="address" id="address" placeholder="Address">
+                                    <p class="error-message"></p>
                                 </div>
 
                             </div>
@@ -169,66 +255,69 @@
                             <div class="mb-3">
                                 <p class="blockquote">Already have an account? <a  role="button" data-bs-target="#login_modal" data-bs-toggle="modal" data-bs-dismiss="modal" >sign in</a></p>
                             </div>
+                           
                         </div>
                     </div>
                
                 </div>
               </div>
     </header>
+            
+    {% block content %}
 
-    {% block content %}{% endblock %}
-    <section class="footer">
-        <!-- Footer -->
-           <div class="box-container">
-              <div class="box">
-                <h3>quick links</h3>
-                   <a href="#"> <i class="fas fa-chevron-right"></i> Home </a>
-                   <a href="#"> <i class="fas fa-chevron-right"></i> Services </a>
-                   <a href="#"> <i class="fas fa-chevron-right"></i> About </a>
-                   <a href="#"> <i class="fas fa-chevron-right"></i> Models</a>
-                   <a href="#"> <i class="fas fa-chevron-right"></i> Doctors </a>
-                   <a href="#"> <i class="fas fa-chevron-right"></i> Login </a>
-                   <a href="#"> <i class="fas fa-chevron-right"></i> Contact </a>
-              </div>
-        
-              <div class="box">
-                <h3>our services</h3>
-                   <a href="#"> <i class="fas fa-chevron-right"></i> dental care </a>
-                   <a href="#"> <i class="fas fa-chevron-right"></i> disease prediction</a>
-                   {% comment %} <a href="#"> <i class="fas fa-chevron-right"></i> cardioloty </a> {% endcomment %}
-                   <a href="#"> <i class="fas fa-chevron-right"></i> online consultation  </a>
-                   {% comment %} <a href="#"> <i class="fas fa-chevron-right"></i> ambulance service </a> {% endcomment %}
-              </div>
-        
-              <div class="box">
-                <h3>contact info</h3>
-                   <a href="#"> <i class="fas fa-phone"></i> +123-456-7890 </a>
-                   <a href="#"> <i class="fas fa-phone"></i> +111-222-3333 </a>
-                   <a href="#"> <i class="fas fa-envelope"></i> samruddhi@gmail.com </a>
-                   <a href="#"> <i class="fas fa-envelope"></i> samruddhi@gmail.com </a>
-                   <a href="#"> <i class="fas fa-map-marker-alt"></i> chiplun, india 400104</a>
-              </div>
-        
-             <div class="box">
-              <h3>follow us</h3>
-                <a href="#"> <i class="fab fa-facebook-f"></i> facebook </a>
-                <a href="#"> <i class="fab fa-pinterest"></i> pinterest </a>
-                <a href="https://www.instagram.com/medi_gen_/"> <i class="fab fa-instagram"></i> instagram </a>
-                <a href="#"> <i class="fab fa-linkedin"></i> linkedin </a>
-                <a href="#"> <i class="fab fa-twitter"></i> twitter </a>
-             </div>
-          </div>
-         <div class="credit">
-                    <p>&copy; 2024 MediGen. <span>All rights reserved.</span></p>
-                </div>
+    {% endblock %}
+
+    <footer class="footer container">
+        <div class="row py-5 my-5">
+            <div class="col mb-3">
+                <h3>Quick Links</h3>
+                <ul class="nav flex-column">
+                    <li class="nav-item mb-2"><a href="#"><i class="fas fa-chevron-right"></i> Home</a></li>
+                    <li class="nav-item mb-2"><a href="#"><i class="fas fa-chevron-right"></i> Services</a></li>
+                    <li class="nav-item mb-2"><a href="#"><i class="fas fa-chevron-right"></i> About</a></li>
+                    <li class="nav-item mb-2"><a href="#"><i class="fas fa-chevron-right"></i> Models</a></li>
+                    <li class="nav-item mb-2"><a href="#"><i class="fas fa-chevron-right"></i> Doctors</a></li>
+                    <li class="nav-item mb-2"><a href="#"><i class="fas fa-chevron-right"></i> Login</a></li>
+                    <li class="nav-item mb-2"><a href="#"><i class="fas fa-chevron-right"></i> Contact</a></li>
+                </ul>
+            </div>
+    
+            <div class="col mb-3">
+                <h3>Our Services</h3>
+                <ul class="nav flex-column">
+                    <li class="nav-item mb-2"><a href="#"><i class="fas fa-chevron-right"></i> Dental Care</a></li>
+                    <li class="nav-item mb-2"><a href="#"><i class="fas fa-chevron-right"></i> Disease Prediction</a></li>
+                    <li class="nav-item mb-2"><a href="#"><i class="fas fa-chevron-right"></i> Online Consultation</a></li>
+                </ul>
+            </div>
+    
+            <div class="col mb-3">
+                <h3>Contact Info</h3>
+                <ul class="nav flex-column">
+                    <li class="nav-item mb-2"><a href="#"><i class="fas fa-phone"></i> +123-456-7890</a></li>
+                    <li class="nav-item mb-2"><a href="#"><i class="fas fa-phone"></i> +111-222-3333</a></li>
+                    <li class="nav-item mb-2"><a href="#"><i class="fas fa-envelope"></i> basitsolkar6@gmail.com</a></li>
+                    <li class="nav-item mb-2"><a href="#"><i class="fas fa-map-marker-alt"></i> Chiplun, India 400104</a></li>
+                </ul>
+            </div>
+    
+            <div class="col mb-3">
+                <h3>Follow Us</h3>
+                <ul class="nav flex-column">
+                    <li class="nav-item mb-2"><a href="#"><i class="fab fa-facebook-f"></i> Facebook</a></li>
+                    <li class="nav-item mb-2"><a href="#"><i class="fab fa-pinterest"></i> Pinterest</a></li>
+                    <li class="nav-item mb-2"><a href="https://www.instagram.com/medi_gen/"><i class="fab fa-instagram"></i> Instagram</a></li>
+                    <li class="nav-item mb-2"><a href="#"><i class="fab fa-linkedin"></i> LinkedIn</a></li>
+                    <li class="nav-item mb-2"><a href="#"><i class="fab fa-twitter"></i> Twitter</a></li>
+                </ul>
+            </div>
         </div>
-        </section>
-        <!--section-->
-        <script src={% static "script.js" %}></script>
-        <!-- jQuery library -->
-        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
-        <!-- Latest compiled JavaScript -->
-        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
-        <script src="http://127.0.0.1:8000/__reload__/reload.js"></script>
+    
+        <div class="credit">
+            <p>&copy; 2024 MediGen. <span>All rights reserved.</span></p>
+        </div>
+    </footer>
+    
+        
 </body>
 </html>

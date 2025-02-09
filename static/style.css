@@ -33,6 +33,10 @@ html{
 
 }
 
+main{
+	background-color: #f4f4f4;
+}
+
 section{
 	padding:2rem 9%;
 	
@@ -61,7 +65,8 @@ section:nth-child(even){
 	display: inline-block;
 	margin-top: 1rem;
 	padding: .5rem;
-	padding-left: 1rem;
+	/* padding-left: 1rem; */
+	padding-inline:2rem ;
 	border:var(--border);
 	border-radius: .5rem;
 	box-shadow: var(--box-shadow);
@@ -98,7 +103,7 @@ section:nth-child(even){
     z-index: 1;
 }
 
-.header{
+ /* .header{
 	padding:2rem 9%;
 	position: fixed;
 	top:0; left: 0; right: 0;
@@ -111,7 +116,7 @@ section:nth-child(even){
 
 
 
-}
+} */
 
 .header .logo{
 	font-size: 2.5rem;
@@ -122,7 +127,7 @@ section:nth-child(even){
 .header .logo i{
 	color: var(--green);
 	
-}
+} 
 
 
 
@@ -137,7 +142,7 @@ section:nth-child(even){
 .header .navbar a:hover{
     color: var(--green);
 
-}
+}  
  
 .home{
 	display: flex;
@@ -527,6 +532,12 @@ section:nth-child(even){
     display: none !important;
 }
 
+/* Modal Title */
+/* .modal-title{
+	text-align: center;
+	font-size: small;
+} */
+
 /* Close button */
 .close {
     color: #aaa;
@@ -552,7 +563,7 @@ section:nth-child(even){
     margin-top: 10px;
 }
 
-.modal-content form input, 
+.modal-content form input:not([type="radio"]):not([type="checkbox"]),
 .modal-content form textarea,
 .modal-content form select {
     padding: 10px;
@@ -579,34 +590,6 @@ section:nth-child(even){
 
 
 /* Modal Style */
-.modal {
-    display: none;
-    position: fixed;
-    z-index: 1;
-    left: 0;
-    top: 0;
-    width: 100%;
-    height: 100%;
-    overflow: auto;
-    background-color: rgb(0,0,0);
-    background-color: rgba(0,0,0,0.4);
-}
-
-
-
-.close {
-    color: #aaa;
-    float: right;
-    font-size: 28px;
-    font-weight: bold;
-}
-
-.close:hover,
-.close:focus {
-    color: black;
-    text-decoration: none;
-    cursor: pointer;
-}
 
 /* Button Style */
 /* button {
@@ -643,12 +626,12 @@ button:hover {
 
 /* Footer Styles */
 
-.footer .box-container{
+/* .footer .box-container{
 	display: grid;
 	grid-template-columns: repeat(auto-fit,minmax(22rem, 1fr));
 	gap:2rem;
 }
-.footer .box-container .box h3{
+.footer .col h3{
 	font-size: 2.5rem;
 	color:var(--black);
 	padding: 1rem 0;
@@ -691,4 +674,83 @@ button:hover {
 .footer .credit span{
 	color:var(--green);
 }
+ */
 
+ /* Footer Styling */
+/* .footer .row {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(22rem, 1fr));
+    gap: 2rem;
+} */
+
+/* Footer Base Styles */
+.footer {
+    padding: 2rem 0;
+}
+
+/* Heading Styles */
+.footer h3 {
+    font-size: 2.5rem;
+    color: var(--black);
+    padding: 1rem 0;
+    margin-bottom: 1rem;
+}
+
+/* Link Styles */
+.footer .nav-item a {
+    display: block;
+    font-size: 1.5rem;
+    color: var(--light-color);
+    padding: 0.5rem 0;
+    text-decoration: none;
+    transition: padding-right 0.3s ease;
+}
+
+/* Icon Styles */
+.footer .nav-item a i {
+    padding-right: 0.5rem;
+    color: var(--green);
+    transition: padding-right 0.3s ease;
+}
+
+/* Hover Effects */
+.footer .nav-item a:hover i {
+    padding-right: 2rem;
+}
+
+/* Fix for incorrect class attribute */
+.footer li[clas="nav-item mb-2"] {
+    margin-bottom: 0.5rem;
+}
+
+/* Credit Section */
+.footer .credit {
+    padding: 1rem;
+    padding-top: 2rem;
+    margin-top: 2rem;
+    text-align: center;
+    font-size: 2rem;
+    color: var(--light-color);
+    border-top: 0.1rem solid rgba(0, 0, 0, 0.1);
+}
+
+.footer .credit span {
+    color: var(--green);
+}
+
+
+
+/* Responsive Adjustments */
+@media (max-width: 768px) {
+    .footer h3 {
+        font-size: 2rem;
+    }
+    
+    .footer .nav-item a {
+        font-size: 1.3rem;
+    }
+    
+    .footer .credit {
+        font-size: 1.5rem;
+    }
+}

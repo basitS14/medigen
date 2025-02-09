@@ -6,13 +6,17 @@ app_name = "meds"
 urlpatterns = [
     path("" , views.meds , name = "meds"),
     path("register/" , views.register , name="register"),
-    path("available/" , views.doc_availability , name = "available"),
+    path("available/" , views.doc_availability_offline , name = "available"),
+    path("online_available_fulltime/", views.doc_availability_online_fulltime , name="online_available_fulltime"),
+    path("online_available_partime/", views.doc_availability_online_partime , name="online_available_partime"),
     path("login/" , views.login , name = "login"),
     path("profile/" , views.profile , name = "profile"),
     path('logout/', views.logout, name='logout'),
     path('p_profile' , views.p_profile , name = 'p_profile'),
+    path('test/' , views.test , name="test"),
     path('book-appointment/<int:doctor_id>/', views.book_appointment, name='book_appointment'),
-    path('doctor/<int:doctor_id>/availability/', views.get_doctor_availability, name='get_doctor_availability'),
+    path("get-time-slots/<int:doctor_id>/", views.get_time_slots, name="get_time_slots"),
+
 
 
     path('__reload__' , include('django_browser_reload.urls')),

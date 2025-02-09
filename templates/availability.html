@@ -1,0 +1,510 @@
+{% extends "layout.html" %}
+{% load static %}
+
+{% block content %}
+<main>
+    <div class="container-fluid container-md shadow rounded my-4 p-4">
+        <h1 class="text-center">
+            Set Your Availabilty
+        </h1>
+        <ul class="nav nav-tabs" role="tablist">
+            <li class="nav-item" role="presentation">
+                <a  class="nav-link active" data-bs-toggle="tab" role="tab" data-bs-target="#offline" type="button" id="offline-tab" aria-controls="offline" aria-selected="true">Offline</a>
+            </li>
+            <li class="nav-item">
+               <a class="nav-link" data-bs-toggle="tab" role="tab" data-bs-target="#online" type="button" id="online-tab" aria-controls="online" aria-selected='false'>Online</a>
+            </li>
+        </ul>
+        <div class="tab-content" >
+            <div class="tab-pane fade show active" id="offline" role="tabpanel" aria-labelledby="offline-tab">
+                <form action="{% url "meds:available" %}" id="avail_form" method="POST" class="pt-4">
+                    {% csrf_token %}
+                    <div class="col-4 d-flex mb-4">
+                        <label for="patientCapacity" class="me-4 fw-bold">How many patients you can take in an hour ?</label>
+                        <input type="number" class="" id="patientCapacity" class="form-control mse-4" name="patientCapacity">
+                    </div>
+                    <div class="row mb-2 fw-bold">
+                        {% comment %} <div class="col-2">Select</div> {% endcomment %}
+                        <div class="col-3">Day</div>
+                        <div class="col-3">Available</div>
+                        <div class="col-4">Break</div>
+                    </div>
+            
+                    <!-- Repeat this row for each day -->
+                    <div class="row mb-2">
+                        {% comment %} <div class="col-2">
+                        </div> {% endcomment %}
+                        <div class="col-3">
+                            <input class="form-check-input" name="days" value="Monday" type="checkbox" id="mondayCheck">
+                            <label for="mondayCheck">Monday</label>
+                        </div>
+                        <div class="col-3 d-flex">
+                            <input type="time" class="form-control me-2" name="available_from_monday">
+                            <span class="fw-bold">to</span>
+                            <input type="time" class="form-control ms-2" name="available_to_monday">
+                        </div>
+                        <div class="col-4 d-flex">
+                            <input type="time" class="form-control me-2" name="break_from_monday">
+                            <span class="fw-bold">to</span>
+                            <input type="time" class="form-control ms-2" name="break_to_monday">
+                        </div>
+                    </div>
+            
+                    <div class="row mb-2">
+                        {% comment %} <div class="col-2">
+                        </div> {% endcomment %}
+                        <div class="col-3">
+                            <input class="form-check-input" name="days" value="Tuesday" type="checkbox" id="tuesdayCheck">
+                            <label for="tuesdayCheck">Tuesday</label>
+                        </div>
+                        <div class="col-3 d-flex">
+                            <input type="time" class="form-control me-2" name="available_from_tuesday">
+                            <span class="fw-bold">to</span>
+                            <input type="time" class="form-control ms-2" name="available_to_tuesday">
+                        </div>
+                        <div class="col-4 d-flex">
+                            <input type="time" class="form-control me-2" name="break_from_tuesday">
+                            <span class="fw-bold">to</span>
+                            <input type="time" class="form-control ms-2" name="break_to_tuesday">
+                        </div>
+                    </div>
+                    <div class="row mb-2">
+                        {% comment %} <div class="col-2">
+                        </div> {% endcomment %}
+                        <div class="col-3">
+                            <input class="form-check-input" name="days" value="Wednesday" type="checkbox" id="wednesdayCheck">
+                            <label for="wednesdayCheck">Wednesday</label>
+                        </div>
+                        <div class="col-3 d-flex">
+                            <input type="time" class="form-control me-2" name="available_from_wednesday">
+                            <span class="fw-bold">to</span>
+                            <input type="time" class="form-control ms-2" name="available_to_wednesday">
+                        </div>
+                        <div class="col-4 d-flex">
+                            <input type="time" class="form-control me-2" name="break_from_wednesday">
+                            <span class="fw-bold">to</span>
+                            <input type="time" class="form-control ms-2" name="break_to_wednesday">
+                        </div>
+                    </div>
+                    <div class="row mb-2">
+                        {% comment %} <div class="col-2">
+                        </div> {% endcomment %}
+                        <div class="col-3">
+                            <input class="form-check-input" name="days" value="Thursday" type="checkbox" id="thursdayCheck">
+                            <label for="thursdayCheck">Thursday</label>
+                        </div>
+                        <div class="col-3 d-flex">
+                            <input type="time" class="form-control me-2" name="available_from_thursday">
+                            <span class="fw-bold">to</span>
+                            <input type="time" class="form-control ms-2" name="available_to_thursday">
+                        </div>
+                        <div class="col-4 d-flex">
+                            <input type="time" class="form-control me-2" name="break_from_thursday">
+                            <span class="fw-bold">to</span>
+                            <input type="time" class="form-control ms-2" name="break_to_thursday">
+                        </div>
+                    </div>
+                    <div class="row mb-2">
+                        {% comment %} <div class="col-2">
+                        </div> {% endcomment %}
+                        <div class="col-3">
+                            <input class="form-check-input" name="days" value="Friday" type="checkbox" id="fridayCheck">
+                            <label for="fridayCheck">Friday</label>
+                        </div>
+                        <div class="col-3 d-flex">
+                            <input type="time" class="form-control me-2" name="available_from_friday">
+                            <span class="fw-bold">to</span>
+                            <input type="time" class="form-control ms-2" name="available_to_friday">
+                        </div>
+                        <div class="col-4 d-flex">
+                            <input type="time" class="form-control me-2" name="break_from_friday">
+                            <span class="fw-bold">to</span>
+                            <input type="time" class="form-control ms-2" name="break_to_friday">
+                        </div>
+                    </div>
+                    <div class="row mb-2">
+                        {% comment %} <div class="col-2">
+                        </div> {% endcomment %}
+                        <div class="col-3">
+                            <input class="form-check-input" name="days" value="Saturday" type="checkbox" id="saturdayCheck">
+                            <label for="saturdayCheck">Saturday</label>
+                        </div>
+                        <div class="col-3 d-flex">
+                            <input type="time" class="form-control me-2" name="available_from_saturday">
+                            <span class="fw-bold">to</span>
+                            <input type="time" class="form-control ms-2" name="available_to_saturday">
+                        </div>
+                        <div class="col-4 d-flex">
+                            <input type="time" class="form-control me-2" name="break_from_saturday">
+                            <span class="fw-bold">to</span>
+                            <input type="time" class="form-control ms-2" name="break_to_saturday">
+                        </div>
+                    </div>
+                    <div class="row mb-5">
+                        {% comment %} <div class="col-2">
+                        </div> {% endcomment %}
+                        <div class="col-3">
+                            <input class="form-check-input" name="days" value="Sunday" type="checkbox" id="sundayCheck">
+                            <label for="sundayCheck">Sunday</label>
+                        </div>
+                        <div class="col-3 d-flex">
+                            <input type="time" class="form-control me-2" name="available_from_sunday">
+                            <span class="fw-bold">to</span>
+                            <input type="time" class="form-control ms-2" name="available_to_sunday">
+                        </div>
+                        <div class="col-4 d-flex">
+                            <input type="time" class="form-control me-2" name="break_from_sunday">
+                            <span class="fw-bold">to</span>
+                            <input type="time" class="form-control ms-2" name="break_to_sunday">
+                        </div>
+                    </div>
+                    <div class="row-justify-content-start">
+                        <div class="col-3">
+                            <input type="checkbox" class="form-check-input" name="online_consent" id="online_consent">
+                            <label for="online_consent">I am available to take offline appointments</label>
+                        </div>
+                    </div>
+                    <div class='row justify-content-end'>
+                        <div class="col-3">
+                            <button class="btn btn-default" type="submit">
+                                Submit
+                            </button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+              
+        
+    
+            {% comment %} online availabilty form {% endcomment %}
+    
+            <div class="tab-pane fade" id="online" role="tabpanel" arai-labelledby="online-tab">
+                <h3 class="text-center my-3">
+                    Do you wish to take Fulltime / Partime online appointments ?
+                </h3>
+                <p class="text-center ">
+                    (Fill only one form)
+                </p>
+                    {% comment %} <div class="row">
+                        <div class="col">
+                            <a class="btn btn-default" data-bs-toggle="collapse" href="#online_form_partime" role="button" aria-controls="online_form_partime" aria-expanded="false">Partime</a>
+                        </div>
+                        <div class="col">
+                            <a class="btn btn-default" data-bs-toggle="collapse" href="#online_form_fulltime" role="button" aria-controls="online_form_fulltime" aria-expanded="false">Fulltime</a>
+                        </div>
+                    </div> {% endcomment %}
+                    <div class="accordion" id="online_forms" >
+                        <div class="accordion-item">
+                            <h2 class="accordion-header" id="headingOne">
+                                <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                                  Full Time
+                                </button>
+                            </h2>
+                            <div id="collapseOne" class="accordion-collapse collapse" aria-labelledby="headingOne" data-bs-parent="#online_forms">
+                                <div class="accordion-body">
+                                    <form action="{% url "meds:online_available_fulltime" %}" id="online_avail_form_fulltime" method="POST" class="pt-4">
+                                        {% csrf_token %}
+                                        <div class="col-4 d-flex mb-4">
+                                            <label for="patientCapacity" class="me-4 fw-bold">How many patients you can take in an hour ?</label>
+                                            <input type="number" class="" id="patientCapacity" class="form-control mse-4" name="patientCapacity">
+                                        </div>
+                                        <div class="row mb-2 fw-bold">
+                                            {% comment %} <div class="col-2">Select</div> {% endcomment %}
+                                            <div class="col-3">Day</div>
+                                            <div class="col-3">Available</div>
+                                            <div class="col-4">Break</div>
+                                        </div>
+                                
+                                        <!-- Repeat this row for each day -->
+                                        <div class="row mb-2">
+                                            {% comment %} <div class="col-2">
+                                            </div> {% endcomment %}
+                                            <div class="col-3">
+                                                <input class="form-check-input" name="online_days" value="Monday" type="checkbox" id="mondayCheck">
+                                                <label for="mondayCheck">Monday</label>
+                                            </div>
+                                            <div class="col-3 d-flex">
+                                                <input type="time" class="form-control me-2" name="available_from_monday">
+                                                <span class="fw-bold">to</span>
+                                                <input type="time" class="form-control ms-2" name="available_to_monday">
+                                            </div>
+                                            <div class="col-4 d-flex">
+                                                <input type="time" class="form-control me-2" name="break_from_monday">
+                                                <span class="fw-bold">to</span>
+                                                <input type="time" class="form-control ms-2" name="break_to_monday">
+                                            </div>
+                                        </div>
+                                
+                                        <div class="row mb-2">
+                                            {% comment %} <div class="col-2">
+                                            </div> {% endcomment %}
+                                            <div class="col-3">
+                                                <input class="form-check-input" name="online_days" value="Tuesday" type="checkbox" id="tuesdayCheck">
+                                                <label for="tuesdayCheck">Tuesday</label>
+                                            </div>
+                                            <div class="col-3 d-flex">
+                                                <input type="time" class="form-control me-2" name="available_from_tuesday">
+                                                <span class="fw-bold">to</span>
+                                                <input type="time" class="form-control ms-2" name="available_to_tuesday">
+                                            </div>
+                                            <div class="col-4 d-flex">
+                                                <input type="time" class="form-control me-2" name="break_from_tuesday">
+                                                <span class="fw-bold">to</span>
+                                                <input type="time" class="form-control ms-2" name="break_to_tuesday">
+                                            </div>
+                                        </div>
+                                        <div class="row mb-2">
+                                            {% comment %} <div class="col-2">
+                                            </div> {% endcomment %}
+                                            <div class="col-3">
+                                                <input class="form-check-input" name="online_days" value="Wednesday" type="checkbox" id="wednesdayCheck">
+                                                <label for="wednesdayCheck">Wednesday</label>
+                                            </div>
+                                            <div class="col-3 d-flex">
+                                                <input type="time" class="form-control me-2" name="available_from_wednesday">
+                                                <span class="fw-bold">to</span>
+                                                <input type="time" class="form-control ms-2" name="available_to_wednesday">
+                                            </div>
+                                            <div class="col-4 d-flex">
+                                                <input type="time" class="form-control me-2" name="break_from_wednesday">
+                                                <span class="fw-bold">to</span>
+                                                <input type="time" class="form-control ms-2" name="break_to_wednesday">
+                                            </div>
+                                        </div>
+                                        <div class="row mb-2">
+                                            {% comment %} <div class="col-2">
+                                            </div> {% endcomment %}
+                                            <div class="col-3">
+                                                <input class="form-check-input" name="online_days" value="Thursday" type="checkbox" id="thursdayCheck">
+                                                <label for="thursdayCheck">Thursday</label>
+                                            </div>
+                                            <div class="col-3 d-flex">
+                                                <input type="time" class="form-control me-2" name="available_from_thursday">
+                                                <span class="fw-bold">to</span>
+                                                <input type="time" class="form-control ms-2" name="available_to_thursday">
+                                            </div>
+                                            <div class="col-4 d-flex">
+                                                <input type="time" class="form-control me-2" name="break_from_thursday">
+                                                <span class="fw-bold">to</span>
+                                                <input type="time" class="form-control ms-2" name="break_to_thursday">
+                                            </div>
+                                        </div>
+                                        <div class="row mb-2">
+                                            {% comment %} <div class="col-2">
+                                            </div> {% endcomment %}
+                                            <div class="col-3">
+                                                <input class="form-check-input" name="online_days" value="Friday" type="checkbox" id="fridayCheck">
+                                                <label for="fridayCheck">Friday</label>
+                                            </div>
+                                            <div class="col-3 d-flex">
+                                                <input type="time" class="form-control me-2" name="available_from_friday">
+                                                <span class="fw-bold">to</span>
+                                                <input type="time" class="form-control ms-2" name="available_to_friday">
+                                            </div>
+                                            <div class="col-4 d-flex">
+                                                <input type="time" class="form-control me-2" name="break_from_friday">
+                                                <span class="fw-bold">to</span>
+                                                <input type="time" class="form-control ms-2" name="break_to_friday">
+                                            </div>
+                                        </div>
+                                        <div class="row mb-2">
+                                            {% comment %} <div class="col-2">
+                                            </div> {% endcomment %}
+                                            <div class="col-3">
+                                                <input class="form-check-input" name="online_days" value="Saturday" type="checkbox" id="saturdayCheck">
+                                                <label for="saturdayCheck">Saturday</label>
+                                            </div>
+                                            <div class="col-3 d-flex">
+                                                <input type="time" class="form-control me-2" name="available_from_saturday">
+                                                <span class="fw-bold">to</span>
+                                                <input type="time" class="form-control ms-2" name="available_to_saturday">
+                                            </div>
+                                            <div class="col-4 d-flex">
+                                                <input type="time" class="form-control me-2" name="break_from_saturday">
+                                                <span class="fw-bold">to</span>
+                                                <input type="time" class="form-control ms-2" name="break_to_saturday">
+                                            </div>
+                                        </div>
+                                        <div class="row mb-5">
+                                            {% comment %} <div class="col-2">
+                                            </div> {% endcomment %}
+                                            <div class="col-3">
+                                                <input class="form-check-input" name="online_days" value="Sunday" type="checkbox" id="sundayCheck">
+                                                <label for="sundayCheck">Sunday</label>
+                                            </div>
+                                            <div class="col-3 d-flex">
+                                                <input type="time" class="form-control me-2" name="available_from_sunday">
+                                                <span class="fw-bold">to</span>
+                                                <input type="time" class="form-control ms-2" name="available_to_sunday">
+                                            </div>
+                                            <div class="col-4 d-flex">
+                                                <input type="time" class="form-control me-2" name="break_from_sunday">
+                                                <span class="fw-bold">to</span> 
+                                                <input type="time" class="form-control ms-2" name="break_to_sunday">
+                                            </div>
+                                        </div>
+                                        <div class="row-justify-content-start">
+                                            <div class="col-3">
+                                                <input type="checkbox" class="form-check-input" name="offline_consent" id="offline_consent">
+                                                <label for="online_consent">I am available to take online appointments</label>
+                                            </div>
+                                        </div>
+                                        <div class='row justify-content-end'>
+                                            <div class="col-3">
+                                                <button class="btn btn-default">
+                                                    Submit
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="accordion-item">
+                            <h2 class="accordion-header" id="headingTwo">
+                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+                                  Part Time
+                                </button>
+                            </h2>
+                            <div id="collapseTwo" class="accordion-collapse collapse" aria-labelledby="headingTwo" data-bs-parent="#online_forms">
+                                <div class="accordion-body">
+                                    <form action="{% url "meds:online_available_partime" %}" id="online_avail_form_partime" method="POST" class="pt-4">
+                                        {% csrf_token %}
+                                        <div class="col-4 d-flex mb-4">
+                                            <label for="patientCapacity" class="me-4 fw-bold">How many patients you can take in an hour ?</label>
+                                            <input type="number" class="" id="patientCapacity" class="form-control mse-4" name="patientCapacity">
+                                        </div>
+                                        <div class="row mb-2 fw-bold">
+                                            {% comment %} <div class="col-2">Select</div> {% endcomment %}
+                                            <div class="col-3">Day</div>
+                                            <div class="col-3">Available</div>
+                                        </div>
+                                
+                                        <!-- Repeat this row for each day -->
+                                        <div class="row mb-2">
+                                            {% comment %} <div class="col-2">
+                                            </div> {% endcomment %}
+                                            <div class="col-3">
+                                                <input class="form-check-input" name="online_days_partime" value="Monday" type="checkbox" id="mondayCheck">
+                                                <label for="mondayCheck">Monday</label>
+                                            </div>
+                                            <div class="col-3 d-flex">
+                                                <input type="time" class="form-control me-2" name="available_from_monday">
+                                                <span class="fw-bold">to</span>
+                                                <input type="time" class="form-control ms-2" name="available_to_monday">
+                                            </div>
+                                           
+                                        </div>
+                                
+                                        <div class="row mb-2">
+                                            {% comment %} <div class="col-2">
+                                            </div> {% endcomment %}
+                                            <div class="col-3">
+                                                <input class="form-check-input" name="online_days_partime" value="Tuesday" type="checkbox" id="tuesdayCheck">
+                                                <label for="tuesdayCheck">Tuesday</label>
+                                            </div>
+                                            <div class="col-3 d-flex">
+                                                <input type="time" class="form-control me-2" name="available_from_tuesday">
+                                                <span class="fw-bold">to</span>
+                                                <input type="time" class="form-control ms-2" name="available_to_tuesday">
+                                            </div>
+                                         
+                                        </div>
+                                        <div class="row mb-2">
+                                            {% comment %} <div class="col-2">
+                                            </div> {% endcomment %}
+                                            <div class="col-3">
+                                                <input class="form-check-input" name="online_days_partime" value="Wednesday" type="checkbox" id="wednesdayCheck">
+                                                <label for="wednesdayCheck">Wednesday</label>
+                                            </div>
+                                            <div class="col-3 d-flex">
+                                                <input type="time" class="form-control me-2" name="available_from_wednesday">
+                                                <span class="fw-bold">to</span>
+                                                <input type="time" class="form-control ms-2" name="available_to_wednesday">
+                                            </div>
+                                          
+                                        </div>
+                                        <div class="row mb-2">
+                                            {% comment %} <div class="col-2">
+                                            </div> {% endcomment %}
+                                            <div class="col-3">
+                                                <input class="form-check-input" name="online_days_partime" value="Thursday" type="checkbox" id="thursdayCheck">
+                                                <label for="thursdayCheck">Thursday</label>
+                                            </div>
+                                            <div class="col-3 d-flex">
+                                                <input type="time" class="form-control me-2" name="available_from_thursday">
+                                                <span class="fw-bold">to</span>
+                                                <input type="time" class="form-control ms-2" name="available_to_thursday">
+                                            </div>
+                                           
+                                        </div>
+                                        <div class="row mb-2">
+                                            {% comment %} <div class="col-2">
+                                            </div> {% endcomment %}
+                                            <div class="col-3">
+                                                <input class="form-check-input" name="online_days_partime" value="Friday" type="checkbox" id="fridayCheck">
+                                                <label for="fridayCheck">Friday</label>
+                                            </div>
+                                            <div class="col-3 d-flex">
+                                                <input type="time" class="form-control me-2" name="available_from_friday">
+                                                <span class="fw-bold">to</span>
+                                                <input type="time" class="form-control ms-2" name="available_to_friday">
+                                            </div>
+        
+                                        </div>
+                                        <div class="row mb-2">
+                                            {% comment %} <div class="col-2">
+                                            </div> {% endcomment %}
+                                            <div class="col-3">
+                                                <input class="form-check-input" name="online_days_partime" value="Saturday" type="checkbox" id="saturdayCheck">
+                                                <label for="saturdayCheck">Saturday</label>
+                                            </div>
+                                            <div class="col-3 d-flex">
+                                                <input type="time" class="form-control me-2" name="available_from_saturday">
+                                                <span class="fw-bold">to</span>
+                                                <input type="time" class="form-control ms-2" name="available_to_saturday">
+                                            </div>
+                                          
+                                        </div>
+                                        <div class="row mb-5">
+                                            {% comment %} <div class="col-2">
+                                            </div> {% endcomment %}
+                                            <div class="col-3">
+                                                <input class="form-check-input" name="online_days_partime" value="Sunday" type="checkbox" id="sundayCheck">
+                                                <label for="sundayCheck">Sunday</label>
+                                            </div>
+                                            <div class="col-3 d-flex">
+                                                <input type="time" class="form-control me-2" name="available_from_sunday">
+                                                <span class="fw-bold">to</span>
+                                                <input type="time" class="form-control ms-2" name="available_to_sunday">
+                                            </div>
+                                            
+                                        </div>
+                                        <div class="row-justify-content-start">
+                                            <div class="col-3">
+                                                <input type="checkbox" class="form-check-input" name="online_consent" id="online_consent">
+                                                <label for="online_consent">I am available to take online appointments</label>
+                                            </div>
+                                        </div>
+                                        <div class='row justify-content-end'>
+                                            <div class="col-3">
+                                                <button class="btn btn-default">
+                                                    Submit
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+    
+                   
+            </div> 
+        </div>
+    </div>
+</main>
+
+{% endblock %}
+
+

@@ -2,6 +2,11 @@
 {% load static %}
 {% block content %}
 
+<!--Modals-->
+{% comment %} appointment booking modal {% endcomment %}
+
+
+
 <!--header-->
 <!--section-->
 <section class="home" id="home">
@@ -135,234 +140,151 @@
 				<span>{{doctor.specialization}}</span>
 				<div class="share">
 					<a href="mailto:{{doctor.user.email}}" class="fa fa-envelope"></a>
-					<a href="{% url 'meds:book_appointment' doctor_id=doctor.id %}" class="fas fa-pen"></a>
+					{% comment %} <a href="{% url 'meds:book_appointment' doctor.id %}" data-bs-toggle="modal" data-bs-target="#appointment_modal" class="fas fa-pen"></a> {% endcomment %}
+					<a href="#" data-bs-toggle="modal" data-bs-target="#appointment_modal" data-doctor-id="{{doctor.id}}" class="fas fa-pen"></a>
+
+					
 					<a href="tel:{{doctor.phone}}" class="fas fa-phone"></a>
 				</div>
 			</div>
 			{% endfor %}
 
-			{% comment %} <div class="box">
-				<img src="AS.jpg" alt="">
-				<h3>Dr.Abhijeet Sawant.</h3>
-				<span>proctologist</span>
-				<div class="share">
-					<a href="#" class="fab fa-facebook-f"></a>
-					<a href="#" class="fab fa-instagram"></a>
-					<a href="#" class="fas fa-pen open-modal"></a>
-					<a href="#" class="fas fa-phone"></a>
-				</div>
-			</div>
-
-			<div class="box">
-				<img src="Dr.AP.jpg" alt="">
-				<h3>Dr.AMARSINH PATANKAR</h3>
-				<span>Pediatrician</span>
-				<div class="share">
-					<a href="#" class="fab fa-facebook-f"></a>
-					<a href="#" class="fab fa-instagram"></a>
-					<a href="#" class="fas fa-pen open-modal"></a>
-					<a href="#" class="fas fa-phone"></a>
-				</div>
-			</div>
-
-			<div class="box">
-				<img src="Dr.VJ.jpg" alt="">
-				<h3>Dr.VAIBHAV JADHAV</h3>
-				<span>Gynecologist</span>
-				<div class="share">
-					<a href="#" class="fab fa-facebook-f"></a>
-					<a href="#" class="fab fa-instagram"></a>
-					<a href="#" class="fas fa-pen open-modal"></a>
-					<a href="#" class="fas fa-phone"></a>
-				</div>
-			</div>
-
-			<div class="box">
-				<img src="SJ.jpeg" alt="">
-				<h3>Dr.SAYALI MADHAV</h3>
-				<span>IVF consultant</span>
-				<div class="share">
-					<a href="#" class="fab fa-facebook-f"></a>
-					<a href="#" class="fab fa-instagram"></a>
-					<a href="#" class="fas fa-pen open-modal"></a>
-					<a href="#" class="fas fa-phone"></a>
-				</div>
-			</div>
-
-			<div class="box">
-				<img src="RY.jpg" alt="">
-				<h3>Dr.RUPESH YADAV.</h3>
-				<span>Physican</span>
-				<div class="share">
-					<a href="#" class="fab fa-facebook-f"></a>
-					<a href="#" class="fab fa-instagram"></a>
-					<a href="#" class="fas fa-pen open-modal"></a>
-					<a href="#" class="fas fa-phone"></a>
-				</div>
-			</div>
-
-			<div class="box">
-				<img src="RS.jpg" alt="">
-				<h3>Dr.RASHMI SAWANT</h3>
-				<span>Streerog-Prasooti</span>
-				<div class="share">
-				<a href="#" class="fab fa-facebook-f"></a>
-				<a href="#" class="fab fa-instagram"></a>
-				<a href="#" class="fas fa-pen open-modal"></a>
-				<a href="#" class="fas fa-phone"></a>
-				</div>
-			</div>
-
-
-
-			<div class="box">
-				<img src="VG.jpg" alt="">
-				<h3>Dr.VIKRAM GHANEKAR</h3>
-				<span>Surgeon Oncology</span>
-				<div class="share">
-					<a href="#" class="fab fa-facebook-f"></a>
-					<a href="#" class="fab fa-instagram"></a>
-					<a href="#" class="fas fa-pen open-modal"></a>
-					<a href="#" class="fas fa-phone"></a>
-				</div>
-			</div> {% endcomment %}
-
-			<!-- Modal Structure -->
-{% comment %} <div id="appointmentModal" class="modal">
-    <div class="modal-content">
-        <span class="close">&times;</span>
-        <h2>Book an Appointment</h2>
-        <form>
-            <label for="name">Name:</label>
-            <input type="text" id="name" name="name" required>
-
-            <label for="email">Email:</label>
-            <input type="email" id="email" name="email" required>
-
-            <label for="date">Appointment Date:</label>
-            <input type="date" id="date" name="date" required>
-
-            <label for="time">Appointment Time:</label>
-            <input type="time" id="time" name="time" required>
-
-            <label for="message">Message:</label>
-            <textarea id="message" name="message" rows="4"></textarea>
-
-            <button type="submit">Book Appointment</button>
-        </form>
-    </div>
-	</div> {% endcomment %}
-
-		{% comment %} <div class="box">
-				<img src="MP.jpg" alt="">
-				<h3>Dr.MRUNAL PARAB.</h3>
-				<span>Oncologist</span>
-				<div class="share">
-					<a href="#" class="fab fa-facebook-f"></a>
-					<a href="#" class="fab fa-instagram"></a>
-					<a href="#" class="fas fa-phone"></a>
-				</div>
-			</div>
-
-			<div class="box">
-				<img src="gw.jpg" alt="">
-				<h3>Dr.GOPICHANDRA WAGHMARE</h3>
-				<span>Orthopedist</span>
-				<div class="share">
-					<a href="#" class="fab fa-facebook-f"></a>
-					<a href="#" class="fab fa-instagram"></a>
-					<a href="#" class="fas fa-phone"></a>
-				</div>
-			</div> {% endcomment %}
-
-		</div>
-	   {% comment %} <button id="load-more" class="load-more">Load More<span class="fas fa-chevron-right"></span></button> {% endcomment %}
-
-		<!--<a href="#" class="btn"> Load More... <span class="fas fa-chevron-right"></span></a>-->
-		  {% comment %} <div class="box hidden">
-		  	<div class="box-container">
-			<div class="box">
-				<img src="MP.jpg" alt="">
-				<h3>Dr.MRUNAL PARAB.</h3>
-				<span>Oncologist</span>
-				<div class="share">
-					<a href="#" class="fab fa-facebook-f"></a>
-					<a href="#" class="fab fa-instagram"></a>
-					<a href="#" class="fas fa-pen open-modal"></a>
-					<a href="#" class="fas fa-phone"></a>
-				</div>
-			</div>
-
-			<div class="box">
-				<img src="gw.jpg" alt="">
-				<h3>Dr.GOPICHANDRA WAGHMARE</h3>
-				<span>Orthopedist</span>
-				<div class="share">
-					<a href="#" class="fab fa-facebook-f"></a>
-					<a href="#" class="fab fa-instagram"></a>
-					<a href="#" class="fas fa-pen open-modal"></a>
-					<a href="#" class="fas fa-phone"></a>
-				</div>
-			</div>
-			</div>
-		</div> {% endcomment %}
+		
 	</section>
 </section>
-<!--signup and login-->
-<section class="Login" id="Login">
-		{% comment %} <h1 class="heading">First <span>Login</span></h1> {% endcomment %}
-
-
-		<div id="signupModal" class="modal">
+<!--appointment booking-->
+<div class="modal fade" id="appointment_modal" tabindex="-1">
+    <div class="modal-dialog modal-lg modal-dialog-scrollable">
         <div class="modal-content">
-            <span class="close">&times;</span>
-            <h2>Sign Up</h2>
-            <form id="signupForm">
-                <label for="username">Username:</label>
-                <input type="text" id="username" name="username" required>
+            <div class="modal-header">
+                <h1 class="modal-title">Book Appointment</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form action="" method="POST" data-doctor-id="{{ doctor.id }}">
+                    {% csrf_token %}
+                    <div class="mb-3">
+                        <label for="patient-name">Patient Name</label>
+                        <input type="text" name="patient-name" id="patient-name" class="form-control" value="{{ request.user.full_name }}" readonly>
+                    </div>
+                    <div class="mb-3">
+                        <label for="date">Select Date</label>
+                        <input 
+                            type="date" 
+                            name="date" 
+                            id="date"
+                            min="{{ min_date|date:'Y-m-d' }}"
+                            value="{{ selected_date|date:'Y-m-d' }}"
+                            required
+                            class="form-control"
+                        >
+                    </div>
 
-                <label for="email">Email:</label>
-                <input type="email" id="email" name="email" required>
+                    <label for="mode">Mode</label>
+                    <div class="mb-3" id="mode">
+                        <div class="form-check form-check-inline">
+                            <input type="radio" name="mode" id="offline" class="form-check-input" value="offline" required>
+                            <label for="offline" class="form-check-label">Offline</label>
+                        </div>
+                        <div class="form-check form-check-inline">
+                            <input type="radio" name="mode" id="online" class="form-check-input" value="online" required>
+                            <label for="online" class="form-check-label">Online</label>
+                        </div>
+                    </div>
 
-                <label for="password">Password:</label>
-                <input type="password" id="password" name="password" required>
+                    <div class="mb-3">
+                        <label for="slots-grid">Select Available Slots</label>
+                        <div id="slots-grid" class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+                            <p class="text-muted">Please select a date and mode to view available slots</p>
+                        </div>
+                    </div>
 
-                <label for="role">Sign Up as:</label>
-                <select id="role" name="role" required>
-                    <option value="patient">Patient</option>
-                    <option value="doctor">Doctor</option>
-                    <option value="admin">Admin</option>
-                </select>
-
-                <button type="submit">Sign Up</button>
-            </form>
+                    <div class="mb-3">
+                        <label for="notes">Notes</label>
+                        <textarea name="notes" id="notes" class="form-control"></textarea>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Book Appointment</button>
+                </form>
+            </div>
         </div>
     </div>
-
-    <!-- Login Modal -->
-    <div id="loginModal" class="modal">
-        <div class="modal-content">
-            <span class="close">&times;</span>
-            <h2>Login</h2>
-            <form id="loginForm">
-                <label for="loginEmail">Email:</label>
-                <input type="text" id="loginEmail" name="loginEmail" required>
-
-                <label for="loginPassword">Password:</label>
-                <input type="password" id="loginPassword" name="loginPassword" required>
-
-                <button type="submit">Login</button>
-            </form>
-        </div>
-    </div>
-
-    {% comment %} <button id="signupBtn">Sign Up</button>
-    <button id="loginBtn">Login</button> {% endcomment %}
-    <script src="script.js"></script>
-</section>
-
-
-
+</div>
+<script>
+	document.addEventListener("DOMContentLoaded", function() {
+		const appointmentModal = document.getElementById("appointment_modal");
+		const dateInput = document.getElementById("date");
+		const modeInputs = document.querySelectorAll("input[name='mode']");
+		const slotsGrid = document.getElementById("slots-grid");
+		let currentDoctorId = null;
+	
+		// Update doctor ID when modal opens
+		appointmentModal.addEventListener('show.bs.modal', function(event) {
+			const button = event.relatedTarget;
+			currentDoctorId = button.getAttribute('data-doctor-id');
+			const form = appointmentModal.querySelector('form');
+			form.setAttribute('data-doctor-id', currentDoctorId);
+		});
+	
+		function fetchTimeSlots() {
+			const selectedDate = dateInput.value;
+			const selectedMode = document.querySelector("input[name='mode']:checked")?.value;
+	
+			if (!selectedDate || !selectedMode || !currentDoctorId) return;
+	
+			// Clear previous slots
+			slotsGrid.innerHTML = "<p class='text-muted'>Loading available slots...</p>";
+	
+			fetch(`/meds/get-time-slots/${currentDoctorId}/?date=${selectedDate}&mode=${selectedMode}`)
+				.then(response => response.json())
+				.then(data => {
+					slotsGrid.innerHTML = ""; // Clear loading message
+	
+					if (!data.slots || data.slots.length === 0) {
+						slotsGrid.innerHTML = "<p class='text-danger'>No available slots for the selected date and mode.</p>";
+						return;
+					}
+	
+					data.slots.forEach(slot => {
+						const button = document.createElement("button");
+						button.type = "button";
+						button.classList.add("btn", "btn-outline-primary", "m-2");
+						button.textContent = `${slot.start} - ${slot.end}`;
+						
+						// Create hidden input for selected slot
+						const timeInput = document.createElement("input");
+						timeInput.type = "hidden";
+						timeInput.name = "selected_slot";
+						timeInput.value = `${slot.start}-${slot.end}`;
+	
+						button.addEventListener("click", function(e) {
+							e.preventDefault();
+							// Remove selection from other buttons
+							document.querySelectorAll("#slots-grid button").forEach(btn => {
+								btn.classList.remove("btn-primary");
+								btn.classList.add("btn-outline-primary");
+							});
+							// Add selection to clicked button
+							button.classList.remove("btn-outline-primary");
+							button.classList.add("btn-primary");
+							// Update hidden input
+							document.querySelector("input[name='selected_slot']")?.remove();
+							appointmentModal.querySelector('form').appendChild(timeInput);
+						});
+	
+						slotsGrid.appendChild(button);
+					});
+				})
+				.catch(error => {
+					console.error("Error fetching time slots:", error);
+					slotsGrid.innerHTML = "<p class='text-danger'>Error loading available slots. Please try again.</p>";
+				});
+		}
+	
+		dateInput.addEventListener("change", fetchTimeSlots);
+		modeInputs.forEach(input => input.addEventListener("change", fetchTimeSlots));
+	});
+	</script>
+		
 
 
 
