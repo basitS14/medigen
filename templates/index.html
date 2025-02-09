@@ -222,10 +222,15 @@
 			const button = event.relatedTarget;
 			currentDoctorId = button.getAttribute('data-doctor-id');
 			const form = appointmentModal.querySelector('form');
-			// Update both the data attribute and the form action
 			form.setAttribute('data-doctor-id', currentDoctorId);
 			form.action = `/meds/book-appointment/${currentDoctorId}/`;
+			
+			// Reset form and fetch new slots
+			dateInput.value = '';
+			modeInputs.forEach(input => input.checked = false);
+			slotsGrid.innerHTML = "<p class='text-muted'>Please select a date and mode to view available slots</p>";
 		});
+	
 		function fetchTimeSlots() {
 			const selectedDate = dateInput.value;
 			const selectedMode = document.querySelector("input[name='mode']:checked")?.value;

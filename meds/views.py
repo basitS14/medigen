@@ -299,8 +299,9 @@ def logout(request):
 
 # In views.py, modify the get_time_slots view:
 
-def get_time_slots(request , doctor_id):
-    # doctor_id = request.GET.get("doctor_id")
+from django.db.models import Q
+
+def get_time_slots(request, doctor_id):
     selected_date = request.GET.get("date")
     mode = request.GET.get("mode")
 
@@ -308,18 +309,14 @@ def get_time_slots(request , doctor_id):
         return JsonResponse({"error": "Missing parameters"}, status=400)
 
     try:
-        # Get day of week and keep it capitalized
+        # Get day of the week
         day_of_week = datetime.strptime(selected_date, "%Y-%m-%d").strftime("%A")
-        
+
         doctor = get_object_or_404(Doctors, id=doctor_id)
         
         slots = []
         if mode == "offline":
-            availability = Availability.objects.filter(
-                doctor=doctor, 
-                day_of_week=day_of_week
-            ).first()
-            
+            availability = Availability.objects.filter(doctor=doctor, day_of_week=day_of_week).first()
             if availability:
                 slots = generate_time_slots(
                     start_time=availability.available_from,
@@ -328,17 +325,9 @@ def get_time_slots(request , doctor_id):
                     break_end=availability.break_to,
                     max_patients=availability.max_appointments
                 )
-                
         elif mode == "online":
-            online_availability = OnlineAvailability.objects.filter(
-                doctor=doctor, 
-                day_of_week=day_of_week
-            ).first()
-            
-            online_partime = OnlineAvailabilityPartime.objects.filter(
-                doctor=doctor, 
-                day_of_week=day_of_week
-            ).first()
+            online_availability = OnlineAvailability.objects.filter(doctor=doctor, day_of_week=day_of_week).first()
+            online_partime = OnlineAvailabilityPartime.objects.filter(doctor=doctor, day_of_week=day_of_week).first()
 
             if online_availability:
                 slots = generate_time_slots(
@@ -355,16 +344,25 @@ def get_time_slots(request , doctor_id):
                     max_patients=online_partime.max_appointments
                 )
 
-        # Convert time objects to strings for JSON serialization
-        formatted_slots = []
-        for slot in slots:
-            formatted_slots.append({
-                'start': slot['start'].strftime('%H:%M'),
-                'end': slot['end'].strftime('%H:%M')
-            })
+        # **Filter Out Already Booked Slots**
+        booked_slots = Appointment.objects.filter(
+            doctor=doctor,
+            date=selected_date
+        ).values_list('start_time', 'end_time')
 
-        return JsonResponse({"slots": formatted_slots})
-        
+        # Convert booked slots to a set of tuples for quick lookup
+        booked_slots_set = {(slot[0].strftime('%H:%M'), slot[1].strftime('%H:%M')) for slot in booked_slots}
+
+        # Remove booked slots from available slots
+        available_slots = []
+        for slot in slots:
+            slot_start = slot['start'].strftime('%H:%M')
+            slot_end = slot['end'].strftime('%H:%M')
+            if (slot_start, slot_end) not in booked_slots_set:
+                available_slots.append({'start': slot_start, 'end': slot_end})
+
+        return JsonResponse({"slots": available_slots})
+
     except Exception as e:
         return JsonResponse({"error": str(e)}, status=500)
 
