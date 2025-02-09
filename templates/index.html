@@ -161,7 +161,7 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                <form action="" method="POST" data-doctor-id="{{ doctor.id }}">
+                <form action="" method="POST" data-doctor-id="">
                     {% csrf_token %}
                     <div class="mb-3">
                         <label for="patient-name">Patient Name</label>
@@ -222,9 +222,10 @@
 			const button = event.relatedTarget;
 			currentDoctorId = button.getAttribute('data-doctor-id');
 			const form = appointmentModal.querySelector('form');
+			// Update both the data attribute and the form action
 			form.setAttribute('data-doctor-id', currentDoctorId);
+			form.action = `/meds/book-appointment/${currentDoctorId}/`;
 		});
-	
 		function fetchTimeSlots() {
 			const selectedDate = dateInput.value;
 			const selectedMode = document.querySelector("input[name='mode']:checked")?.value;

@@ -376,7 +376,7 @@ def book_appointment(request, doctor_id):
         notes = request.POST.get('notes')
 
         doctor = get_object_or_404(Doctors, id=doctor_id)
-        
+        username = request.user
         # Handle slot selection (split start and end time)
         if selected_slot:
             slot_start, slot_end = selected_slot.split('-')
@@ -385,11 +385,12 @@ def book_appointment(request, doctor_id):
             # Here we'll just store the start and end time for simplicity
             appointment = Appointment.objects.create(
                 doctor=doctor,
-                patient_name=patient_name,
-                appointment_date=date,
+                patient=patient_name,
+                date=date,
                 start_time=slot_start,
                 end_time=slot_end,
-                notes=notes
+                notes=notes,
+                username=username
             )
         
         return redirect('meds:p_profile') # Redirect to appointment listing page after booking
