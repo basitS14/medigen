@@ -3,6 +3,8 @@ from django.db import models
 from .manager import CustomUserManager
 import datetime as dt
 from datetime import datetime, timedelta, time
+import uuid
+
 
 GENDER = [
     ("Male" , "Male"),
@@ -39,6 +41,18 @@ class Doctors(models.Model):
     experience = models.TextField(max_length=5 , default=0)
     photo = models.ImageField(upload_to='profile_photos/')
   
+
+    def __str__(self):
+        return f"Dr.{self.user.full_name}"
+
+class DoctorRequests(models.Model):
+    user = models.OneToOneField(CustomUser, on_delete=models.CASCADE)
+    degree = models.CharField(max_length=50)
+    specialization = models.CharField(max_length=50)
+    address = models.TextField()
+    experience = models.TextField(max_length=5 , default=0)
+    photo = models.ImageField(upload_to='profile_photos/')
+    is_approved = models.BooleanField(default=False)
 
     def __str__(self):
         return f"Dr.{self.user.full_name}"
@@ -118,10 +132,16 @@ class Appointment(models.Model):
         choices=[('offline', 'Offline'), ('online', 'Online')],
         default='offline'
     )
+    channel_name = models.UUIDField(default=uuid.uuid4, unique=True),
     
+    def save(self, *args, **kwargs):
+        if not self.channel_name:
+            self.channel_name = f"appointment_{uuid.uuid4()}"
+        super().save(*args, **kwargs)
+
     class Meta:
         ordering = ['date', 'start_time']
 
     def __str__(self):
-        return f"{self.patient} with {self.doctor} on {self.date} at {self.start_time} booked by {self.username.full_name}"
+        return f"{self.patient} with {self.doctor} on {self.date} at {self.start_time} booked by {self.username.full_name} [{self.appointment_mode}]"
 

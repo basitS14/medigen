@@ -78,6 +78,69 @@
             <div class="col-md-8">
                 <div class="card mb-3">
                     <div class="card-body">
+                        <div id="callNotification" class="notification-popup" style="display: none; position: fixed; bottom: 20px; right: 20px; background: white; padding: 20px; border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); z-index: 1000;">
+                            <h4>Incoming Call</h4>
+                            <p id="callerName"></p>
+                            <div class="mt-3">
+                                <button id="acceptCall" class="btn btn-success me-2">Accept</button>
+                                <button id="rejectCall" class="btn btn-danger">Reject</button>
+                            </div>
+                        </div>
+                        <script>
+                            // WebSocket connection setup
+                            const ws = new WebSocket(`ws://${window.location.host}/ws/notifications/`);
+                            let currentCallAppointmentId = null;
+                        
+                            ws.onopen = () => {
+                                console.log('WebSocket Connected');
+                            };
+                        
+                            ws.onmessage = (e) => {
+                                const data = JSON.parse(e.data);
+                                console.log('Received message:', data);
+                        
+                                if (data.type === 'call_notification') {
+                                    // Show notification popup
+                                    currentCallAppointmentId = data.appointment_id;
+                                    document.getElementById('callerName').textContent = `${data.caller_name} is calling...`;
+                                    document.getElementById('callNotification').style.display = 'block';
+                                    
+                                    // Play notification sound
+                                    playNotificationSound();
+                                }
+                            };
+                        
+                            // Handle accept call button
+                            document.getElementById('acceptCall').addEventListener('click', () => {
+                                if (currentCallAppointmentId) {
+                                    // Redirect to video call page
+                                    window.location.href = `/meds/video-call/${currentCallAppointmentId}/`;
+                                }
+                                document.getElementById('callNotification').style.display = 'none';
+                            });
+                        
+                            // Handle reject call button
+                            document.getElementById('rejectCall').addEventListener('click', () => {
+                                if (currentCallAppointmentId) {
+                                    ws.send(JSON.stringify({
+                                        type: 'call_rejected',
+                                        appointment_id: currentCallAppointmentId
+                                    }));
+                                }
+                                document.getElementById('callNotification').style.display = 'none';
+                            });
+                        
+                            // Function to play notification sound
+                            function playNotificationSound() {
+                                const audio = new Audio('/static/notification.mp3');  // You'll need to add this audio file
+                                audio.play().catch(error => console.log('Error playing sound:', error));
+                            }
+                        
+                            // Cleanup on page unload
+                            window.addEventListener('beforeunload', () => {
+                                ws.close();
+                            });
+                        </script>                        
                         <h5 class="mb-3">Profile Details</h5>
                         <div class="row">
                             <div class="col-sm-4"><strong>Full Name</strong></div>
@@ -128,6 +191,17 @@
                                     <strong>Date:</strong> {{ appointment.date }}<br>
                                     <strong>Time:</strong> {{ appointment.start_time }} to {{appointment.end_time}}<br>
                                     {% comment %} <strong>Status:</strong> {{ appointment.get_status_display }} {% endcomment %}
+                                    {% if appointment.appointment_mode == "online" %}
+                                    <a 
+                                    href="{% url 'meds:video-call' appointment.id %}"
+                                    class="btn btn-primary"
+                                    data-appointment-id="{{ appointment.id }}"
+                                    data-start-time="{{ appointment.start_time|time:'H:i' }}" 
+                                    data-end-time="{{ appointment.end_time|time:'H:i' }}"
+                                        >
+                                        Start Call
+                                    </a>
+                                {% endif %}
                                 </li>
                             {% endfor %}
                             </ul>

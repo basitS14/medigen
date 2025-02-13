@@ -1,6 +1,6 @@
 from django import forms
 from django.core.exceptions import ValidationError
-from .models import CustomUser , Doctors
+from .models import CustomUser , Doctors , DoctorRequests
 
 class UserRegistrationForm(forms.ModelForm):
     class Meta:
@@ -25,8 +25,8 @@ class DoctorRegistrationForm(forms.ModelForm):
     )
 
     class Meta:
-        model = Doctors
-        fields = ['degree', 'specialization', 'address', 'photo' , 'experience']
+        model = DoctorRequests
+        fields = ['degree', 'specialization', 'address', 'photo' , 'experience' , 'is_approved']
 
     def clean_photo(self):
         photo = self.cleaned_data.get('photo')

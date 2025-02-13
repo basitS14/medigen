@@ -16,6 +16,7 @@ urlpatterns = [
     path('test/' , views.test , name="test"),
     path('book-appointment/<int:doctor_id>/', views.book_appointment, name='book_appointment'),
     path("get-time-slots/<int:doctor_id>/", views.get_time_slots, name="get_time_slots"),
+    path('video-call/<int:appointment_id>/', views.video_call, name='video-call'),
 
 
 

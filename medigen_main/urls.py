@@ -15,6 +15,7 @@ urlpatterns = [
     path("signup/" , views.sign_up , name="signup"),
     path("meds/" , include("meds.urls")),
     path("models/" , include("models.urls")),
+    path('agora/', include("agora.urls") , name="agora"),
     path('__reload__' , include('django_browser_reload.urls'))
 
     

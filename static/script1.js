@@ -2,6 +2,44 @@ document.addEventListener('DOMContentLoaded', function() {
     const roleSelect = document.getElementById("role");
     const doctorField = document.getElementById("doctorFields");
     const signUpForm = document.querySelector("#signup_modal form");
+    const button = document.getElementById("startCallBtn");
+
+    if (button) {
+        // Get appointment start and end times from button attributes
+        const startTimeStr = button.getAttribute("data-start-time");
+        const endTimeStr = button.getAttribute("data-end-time");
+
+        if (startTimeStr && endTimeStr) {
+            // Convert times to Date objects
+            const now = new Date();
+            const startTime = new Date();
+            const endTime = new Date();
+
+            const [startHour, startMinute] = startTimeStr.split(":").map(Number);
+            const [endHour, endMinute] = endTimeStr.split(":").map(Number);
+
+            startTime.setHours(startHour, startMinute, 0);
+            endTime.setHours(endHour, endMinute, 0);
+
+            // Extend the end time by 1 hour
+            endTime.setHours(endTime.getHours() + 1);
+
+            // Enable button only if the current time is within the appointment range
+            if (now >= startTime && now <= endTime) {
+                button.removeAttribute("disabled");
+            }
+
+            // Periodically check and update the button state
+            setInterval(() => {
+                const now = new Date();
+                if (now >= startTime && now <= endTime) {
+                    button.removeAttribute("disabled");
+                } else {
+                    button.setAttribute("disabled", "true");
+                }
+            }, 60000); // Check every minute
+        }
+    }
 
     // Show/hide doctor fields based on role selection
     roleSelect.addEventListener("change", function() {

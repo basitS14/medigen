@@ -13,11 +13,18 @@ from django.contrib.auth import logout as auth_logout
 from datetime import datetime, time
 from django.contrib.auth.decorators import login_required
 
+import os
+from dotenv import load_dotenv
+
 from django.http import JsonResponse
 
 from datetime import datetime, timedelta, time
 import json
 
+import time
+from agora_token_builder import RtcTokenBuilder
+import random
+load_dotenv()
 
 # Helper Functions 
 
@@ -132,7 +139,9 @@ def register(request):
                 if doctor_form.is_valid():
                     doctor = doctor_form.save(commit=False)
                     doctor.user = user
+                    doctor.is_approved = False
                     doctor.save()
+                    messages.info( request, "Your request is sent for approval")
                     auth_login(request=request, user=user)
                     return redirect(reverse("home"))
                 else:
@@ -153,6 +162,7 @@ def register(request):
             })
     
     return render(request, 'index.html')
+
 
 def doc_availability_offline(request):
     if request.method == 'POST':
@@ -286,7 +296,8 @@ def p_profile(request):
     
     context = {
         'user': user,
-        'appointments': appointments
+        'appointments': appointments,
+        'now':timezone.now(),
     }
     return render(request, 'p_profile.html', context)
 
@@ -297,9 +308,7 @@ def logout(request):
 
 
 
-# In views.py, modify the get_time_slots view:
 
-from django.db.models import Q
 
 def get_time_slots(request, doctor_id):
     selected_date = request.GET.get("date")
@@ -372,6 +381,7 @@ def book_appointment(request, doctor_id):
         date = request.POST.get('date')
         selected_slot = request.POST.get('selected_slot')
         notes = request.POST.get('notes')
+        mode = request.POST.get('mode')
 
         doctor = get_object_or_404(Doctors, id=doctor_id)
         username = request.user
@@ -388,7 +398,9 @@ def book_appointment(request, doctor_id):
                 start_time=slot_start,
                 end_time=slot_end,
                 notes=notes,
-                username=username
+                username=username,
+                appointment_mode=mode,
+                
             )
         
         return redirect('meds:p_profile') # Redirect to appointment listing page after booking
@@ -397,6 +409,53 @@ def book_appointment(request, doctor_id):
         return render(request, 'index.html' )
 
     return render(request, 'index.html')
+
+@login_required
+def video_call(request, appointment_id):
+    appointment = get_object_or_404(Appointment, id=appointment_id)
+    
+    # Check if user is either the doctor or patient
+    if request.user != appointment.username and request.user != appointment.doctor.user:
+        return HttpResponse("Unauthorized", status=403)
+    
+    # Check if appointment is for today
+    today = timezone.now().date()
+    if appointment.date != today:
+        return HttpResponse("This appointment is not scheduled for today", status=403)
+
+    # Agora credentials
+    app_id = os.getenv('AGORA_APP_ID')
+    app_certificate = os.getenv('AGORA_APP_CERTIFICATE')
+    
+    # Generate channel name based on appointment ID
+    channel_name = f'appointment_{appointment.id}'
+    
+    # Get the other user
+    other_user = appointment.doctor.user if request.user == appointment.username else appointment.username
+    
+    # Generate token
+    expiration_time = 3600  # Token expires in 1 hour
+    current_timestamp = int(time.time())
+    privilege_expired_ts = current_timestamp + expiration_time
+    
+    token = RtcTokenBuilder.buildTokenWithUid(
+        app_id, 
+        app_certificate,
+        channel_name,
+        request.user.id,  # Use user ID as the UID
+        1,  # Role: 1 for publisher/host
+        privilege_expired_ts
+    )
+    
+    context = {
+        'appointment': appointment,
+        'other_user': other_user,
+        'agora_app_id': app_id,
+        'token': token,
+        'channel_name': channel_name,
+    }
+    
+    return render(request, 'video_call.html', context)
 
 def test(request):
     return render(request , 'book_appointment.html')

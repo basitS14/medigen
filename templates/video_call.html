@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Video Call</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        .video-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin: 20px;
+            height: 70vh;
+        }
+        .video-box {
+            background: #f0f0f0;
+            border-radius: 8px;
+            overflow: hidden;
+            position: relative;
+        }
+        #local-player {
+            height: 100%;
+            width: 100%;
+        }
+        #remote-player {
+            height: 100%;
+            width: 100%;
+        }
+        .controls {
+            text-align: center;
+            padding: 20px;
+        }
+        .user-name {
+            position: absolute;
+            bottom: 10px;
+            left: 10px;
+            color: white;
+            background: rgba(0,0,0,0.5);
+            padding: 5px 10px;
+            border-radius: 4px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="video-container">
+            <div class="video-box">
+                <div id="local-player"></div>
+                <div class="user-name">You</div>
+            </div>
+            <div class="video-box">
+                <div id="remote-player"></div>
+                <div class="user-name">{{ other_user.full_name }}</div>
+            </div>
+        </div>
+        <div class="controls">
+            <button id="join-btn" class="btn btn-primary">Join Call</button>
+            <button id="leave-btn" class="btn btn-danger" style="display: none;">End Call</button>
+            <button id="audio-btn" class="btn btn-info" style="display: none;">Mute Audio</button>
+            <button id="video-btn" class="btn btn-info" style="display: none;">Turn Off Video</button>
+        </div>
+    </div>
+
+    <!-- Import Agora SDK -->
+    <script src="https://download.agora.io/sdk/release/AgoraRTC_N.js"></script>
+    
+    <script>
+        const APP_ID = '{{ agora_app_id }}';
+        const TOKEN = '{{ token }}';
+        const CHANNEL = '{{ channel_name }}';
+        const UID = {{ request.user.id }};
+        
+        let agoraClient = null;
+        let localTrackState = {
+            videoTrackEnabled: true,
+            audioTrackEnabled: true
+        };
+        let localTracks = {
+            audioTrack: null,
+            videoTrack: null
+        };
+        let remoteUsers = {};
+
+        async function initializeAgora() {
+            agoraClient = AgoraRTC.createClient({ mode: "rtc", codec: "vp8" });
+            
+            // Listen for remote users joining
+            agoraClient.on("user-published", handleUserPublished);
+            agoraClient.on("user-unpublished", handleUserUnpublished);
+            
+            try {
+                // Join the channel
+                await agoraClient.join(APP_ID, CHANNEL, TOKEN, UID);
+                
+                // Create local audio and video tracks
+                localTracks.audioTrack = await AgoraRTC.createMicrophoneAudioTrack();
+                localTracks.videoTrack = await AgoraRTC.createCameraVideoTrack();
+                
+                // Play local video track
+                localTracks.videoTrack.play("local-player");
+                
+                // Publish local tracks
+                await agoraClient.publish(Object.values(localTracks));
+                
+                // Show control buttons
+                document.getElementById('join-btn').style.display = 'none';
+                document.getElementById('leave-btn').style.display = 'inline-block';
+                document.getElementById('audio-btn').style.display = 'inline-block';
+                document.getElementById('video-btn').style.display = 'inline-block';
+                
+            } catch (error) {
+                console.error(error);
+            }
+        }
+
+        async function handleUserPublished(user, mediaType) {
+            await agoraClient.subscribe(user, mediaType);
+            
+            if (mediaType === 'video') {
+                const remotePlayer = document.getElementById("remote-player");
+                user.videoTrack.play(remotePlayer);
+            }
+            if (mediaType === 'audio') {
+                user.audioTrack.play();
+            }
+        }
+
+        function handleUserUnpublished(user) {
+            const remotePlayer = document.getElementById("remote-player");
+            remotePlayer.innerHTML = '';
+        }
+
+        async function leaveCall() {
+            // Stop and close local tracks
+            for (let trackName in localTracks) {
+                let track = localTracks[trackName];
+                if (track) {
+                    track.stop();
+                    track.close();
+                    localTracks[trackName] = null;
+                }
+            }
+            
+            // Leave the channel
+            await agoraClient.leave();
+            
+            // Reset UI
+            document.getElementById('join-btn').style.display = 'inline-block';
+            document.getElementById('leave-btn').style.display = 'none';
+            document.getElementById('audio-btn').style.display = 'none';
+            document.getElementById('video-btn').style.display = 'none';
+            document.getElementById("local-player").innerHTML = '';
+            document.getElementById("remote-player").innerHTML = '';
+        }
+
+        // Button Event Handlers
+        document.getElementById('join-btn').addEventListener('click', initializeAgora);
+        document.getElementById('leave-btn').addEventListener('click', leaveCall);
+        
+        document.getElementById('audio-btn').addEventListener('click', async () => {
+            if (localTracks.audioTrack) {
+                if (localTrackState.audioTrackEnabled) {
+                    await localTracks.audioTrack.setEnabled(false);
+                    localTrackState.audioTrackEnabled = false;
+                    document.getElementById('audio-btn').textContent = 'Unmute Audio';
+                } else {
+                    await localTracks.audioTrack.setEnabled(true);
+                    localTrackState.audioTrackEnabled = true;
+                    document.getElementById('audio-btn').textContent = 'Mute Audio';
+                }
+            }
+        });
+
+        document.getElementById('video-btn').addEventListener('click', async () => {
+            if (localTracks.videoTrack) {
+                if (localTrackState.videoTrackEnabled) {
+                    await localTracks.videoTrack.setEnabled(false);
+                    localTrackState.videoTrackEnabled = false;
+                    document.getElementById('video-btn').textContent = 'Turn On Video';
+                } else {
+                    await localTracks.videoTrack.setEnabled(true);
+                    localTrackState.videoTrackEnabled = true;
+                    document.getElementById('video-btn').textContent = 'Turn Off Video';
+                }
+            }
+        });
+
+        // Clean up when leaving
+        window.onbeforeunload = leaveCall;
+    </script>
+</body>
+</html>

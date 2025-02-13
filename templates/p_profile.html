@@ -111,6 +111,78 @@
                                     <strong>Doctor:</strong>Dr. {{ appointment.doctor.user.full_name }}<br>
                                     <strong>Date:</strong> {{ appointment.date }}<br>
                                     <strong>Time:</strong> {{ appointment.start_time }} to {{appointment.end_time}}<br>
+                                    <strong>Mode:</strong> {{appointment.appointment_mode}}<br>
+                                    {% comment %} {% if appointment.appointment_mode == "online" %}
+                                        <button 
+                                            id="startCallBtn"
+                                            class="btn btn-primary"
+                                            data-start-time="{{ appointment.start_time|time:'H:i' }}" 
+                                            data-end-time="{{ appointment.end_time|time:'H:i' }}"
+                                            disabled>
+                                            Start Call
+                                        </button>
+                                    {% endif %} {% endcomment %}
+                                    {% if appointment.appointment_mode == "online" %}
+                                    <a 
+                                    href="{% url 'meds:video-call' appointment.id %}"
+                                    class="btn btn-primary"
+                                    data-appointment-id="{{ appointment.id }}"
+                                    data-start-time="{{ appointment.start_time|time:'H:i' }}" 
+                                    data-end-time="{{ appointment.end_time|time:'H:i' }}"
+                                        >
+                                        Start Call
+                                    </a>
+                                    {% comment %} <script>
+                                        // Initialize WebSocket connection when needed
+                                        let ws = null;
+                                        
+                                        function initializeWebSocket() {
+                                            if (!ws || ws.readyState === WebSocket.CLOSED) {
+                                                ws = new WebSocket(`ws://${window.location.host}/ws/notifications/`);
+                                                
+                                                ws.onopen = () => {
+                                                    console.log('WebSocket Connected');
+                                                };
+                                    
+                                                ws.onmessage = (e) => {
+                                                    const data = JSON.parse(e.data);
+                                                    console.log('Received message:', data);
+                                    
+                                                    if (data.type === 'call_rejected') {
+                                                        alert('Call was rejected or doctor is unavailable');
+                                                    }
+                                                };
+                                            }
+                                        }
+                                    
+                                        // Function to handle starting a call
+                                        function initiateCall(appointmentId) {
+                                            initializeWebSocket();
+                                            
+                                            // Send call request through WebSocket
+                                            ws.send(JSON.stringify({
+                                                type: 'call_request',
+                                                appointment_id: appointmentId,
+                                            }));
+                                            
+                                            // Redirect to video call page
+                                            window.location.href = `/meds/video-call/${appointmentId}/`;
+                                        }
+                                    
+                                        // Add click handlers to all call buttons
+                                        document.addEventListener('DOMContentLoaded', function() {
+                                            const callButtons = document.querySelectorAll('[data-appointment-id]');
+                                            callButtons.forEach(button => {
+                                                button.addEventListener('click', function(e) {
+                                                    e.preventDefault();
+                                                    const appointmentId = this.dataset.appointmentId;
+                                                    initiateCall(appointmentId);
+                                                });
+                                            });
+                                        });
+                                    </script> {% endcomment %}
+                                {% endif %}
+
                                 </li>
                             {% endfor %}
                             </ul>
