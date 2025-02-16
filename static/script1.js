@@ -2,59 +2,17 @@ document.addEventListener('DOMContentLoaded', function() {
     const roleSelect = document.getElementById("role");
     const doctorField = document.getElementById("doctorFields");
     const signUpForm = document.querySelector("#signup_modal form");
-    const button = document.getElementById("startCallBtn");
-
-    if (button) {
-        // Get appointment start and end times from button attributes
-        const startTimeStr = button.getAttribute("data-start-time");
-        const endTimeStr = button.getAttribute("data-end-time");
-
-        if (startTimeStr && endTimeStr) {
-            // Convert times to Date objects
-            const now = new Date();
-            const startTime = new Date();
-            const endTime = new Date();
-
-            const [startHour, startMinute] = startTimeStr.split(":").map(Number);
-            const [endHour, endMinute] = endTimeStr.split(":").map(Number);
-
-            startTime.setHours(startHour, startMinute, 0);
-            endTime.setHours(endHour, endMinute, 0);
-
-            // Extend the end time by 1 hour
-            endTime.setHours(endTime.getHours() + 1);
-
-            // Enable button only if the current time is within the appointment range
-            if (now >= startTime && now <= endTime) {
-                button.removeAttribute("disabled");
-            }
-
-            // Periodically check and update the button state
-            setInterval(() => {
-                const now = new Date();
-                if (now >= startTime && now <= endTime) {
-                    button.removeAttribute("disabled");
-                } else {
-                    button.setAttribute("disabled", "true");
-                }
-            }, 60000); // Check every minute
-        }
-    }
 
     // Show/hide doctor fields based on role selection
-    roleSelect.addEventListener("change", function() {
-        doctorField.style.display = this.value === "2" ? "block" : "none";
-    });
+    if (roleSelect) {
+        roleSelect.addEventListener("change", function() {
+            doctorField.style.display = this.value === "2" ? "block" : "none";
+        });
+    }
 
-    // Form validation function
+    // Form validation helpers
     function showErrorMessage(field, message) {
-        // Remove any existing error messages
-        const existingError = field.nextElementSibling;
-        if (existingError && existingError.classList.contains('error-message')) {
-            existingError.remove();
-        }
-
-        // Create and insert new error message
+        clearErrorMessage(field);
         const errorElement = document.createElement('div');
         errorElement.className = 'error-message';
         errorElement.style.color = "red";
@@ -74,78 +32,72 @@ document.addEventListener('DOMContentLoaded', function() {
         return re.test(phone.value.trim());
     }
 
+    // Main form validation
     function validateForm(e) {
-        // Clear previous error messages
+        e.preventDefault(); // Always prevent default initially
+        
+        // Clear all previous error messages
         document.querySelectorAll('.error-message').forEach(el => el.remove());
 
         let isValid = true;
+        const fields = {
+            fullName: document.getElementById("full_name"),
+            phone: document.getElementById("phone"),
+            email: document.getElementById("email"),
+            dob: document.getElementById("dob"),
+            password: document.getElementById("password"),
+            role: document.getElementById("role")
+        };
 
-        const fullName = document.getElementById("full_name");
-        const phone = document.getElementById("phone");
-        const email = document.getElementById("email");
-        const dob = document.getElementById("dob");
-        const password = document.getElementById("password");
-        const role = document.getElementById("role");
-
-        // Name validation
-        if (fullName.value.trim() === "") {
-            showErrorMessage(fullName, "Name is required.");
+        // Basic field validation
+        if (!fields.fullName.value.trim()) {
+            showErrorMessage(fields.fullName, "Name is required.");
             isValid = false;
         }
 
-        // Phone number validation
-        if (!validatePhone(phone)) {
-            showErrorMessage(phone, "Phone number is not valid.");
+        if (!validatePhone(fields.phone)) {
+            showErrorMessage(fields.phone, "Please enter a valid Indian phone number.");
             isValid = false;
         }
 
-        // Email validation
         const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-        if (!emailRegex.test(email.value.trim())) {
-            showErrorMessage(email, "Please enter a valid email address.");
+        if (!emailRegex.test(fields.email.value.trim())) {
+            showErrorMessage(fields.email, "Please enter a valid email address.");
             isValid = false;
         }
 
-        // Date of birth validation
-        if (dob.value === "") {
-            showErrorMessage(dob, "Date of birth is required.");
+        if (!fields.dob.value) {
+            showErrorMessage(fields.dob, "Date of birth is required.");
             isValid = false;
         }
 
-        // Password validation
-        // if (password.value.length < 8) {
-        //     showErrorMessage(password, "Password must be at least 8 characters long.");
-        //     isValid = false;
-        // }
-
-        // Doctor-specific field validation
-        if (role.value === "2") {
-            const degree = document.getElementById("degree");
-            const specialization = document.getElementById("specialization");
-            const experience = document.getElementById("experience");
-            const address = document.getElementById("address");
-
-            if (degree.value.trim() === "") {
-                showErrorMessage(degree, "Degree is required for doctors.");
-                isValid = false;
-            }
-            if (specialization.value.trim() === "") {
-                showErrorMessage(specialization, "Specialization is required for doctors.");
-                isValid = false;
-            }
-            if (experience.value.trim() === "") {
-                showErrorMessage(experience, "Experience is required for doctors.");
-                isValid = false;
-            }
-            if (address.value.trim() === "") {
-                showErrorMessage(address, "Address is required for doctors.");
-                isValid = false;
-            }
+        if (fields.password.value.length < 8) {
+            showErrorMessage(fields.password, "Password must be at least 8 characters long.");
+            isValid = false;
         }
 
-        // If not valid, prevent form submission and scroll to first error
-        if (!isValid) {
-            e.preventDefault();
+        // Doctor-specific validation
+        if (fields.role.value === "2") {
+            const doctorFields = {
+                degree: document.getElementById("degree"),
+                specialization: document.getElementById("specialization"),
+                experience: document.getElementById("experience"),
+                address: document.getElementById("address")
+            };
+
+            Object.entries(doctorFields).forEach(([key, field]) => {
+                if (!field.value.trim()) {
+                    showErrorMessage(field, `${key.charAt(0).toUpperCase() + key.slice(1)} is required for doctors.`);
+                    isValid = false;
+                }
+            });
+        }
+
+        if (isValid) {
+            // If validation passes, submit the form
+            signUpForm.submit();
+        } else {
+            // Scroll to first error
             const firstError = document.querySelector('.error-message');
             if (firstError) {
                 firstError.scrollIntoView({ behavior: 'smooth', block: 'center' });

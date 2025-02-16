@@ -39,11 +39,23 @@ class Doctors(models.Model):
     specialization = models.CharField(max_length=50)
     address = models.TextField()
     experience = models.TextField(max_length=5 , default=0)
-    photo = models.ImageField(upload_to='profile_photos/')
+    photo = models.ImageField(upload_to='profile_photos/' , default="media/profile_photos/user.png")
   
 
     def __str__(self):
         return f"Dr.{self.user.full_name}"
+
+class VerificationData(models.Model):
+    email = models.EmailField(unique=True)  # Changed from user ForeignKey
+    is_email_verified = models.BooleanField(default=False)
+    is_mobile_verified = models.BooleanField(default=False)
+    email_otp = models.CharField(max_length=6, null=True, blank=True)
+    mobile_otp = models.CharField(max_length=6, null=True, blank=True)
+
+    def __str__(self):
+        return f"{self.user.full_name}  - Email: {self.is_email_verified} - Mobile: {self.is_mobile_verified}"
+
+
 
 class DoctorRequests(models.Model):
     user = models.OneToOneField(CustomUser, on_delete=models.CASCADE)
@@ -51,7 +63,7 @@ class DoctorRequests(models.Model):
     specialization = models.CharField(max_length=50)
     address = models.TextField()
     experience = models.TextField(max_length=5 , default=0)
-    photo = models.ImageField(upload_to='profile_photos/')
+    photo = models.ImageField(upload_to='profile_photos/' , default="media/profile_photos/user.png")
     is_approved = models.BooleanField(default=False)
 
     def __str__(self):

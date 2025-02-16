@@ -1,14 +1,19 @@
 from django import forms
 from django.core.exceptions import ValidationError
-from .models import CustomUser , Doctors , DoctorRequests
+from .models import CustomUser, DoctorRequests
 
 class UserRegistrationForm(forms.ModelForm):
+    password = forms.CharField(widget=forms.PasswordInput)
+
+
     class Meta:
         model = CustomUser
-        fields = ['full_name' ,'email' , 'phone' , 'gender'  , 'dob' , 'password']
+        fields = ['full_name', 'email', 'phone', 'gender', 'dob', 'password']
+  
+
     def clean_email(self):
         email = self.cleaned_data.get("email")
-        if CustomUser.objects.filter(email = email).exists():
+        if CustomUser.objects.filter(email=email).exists():
             raise ValidationError("This email already exists")
         return email
 
@@ -16,20 +21,9 @@ class UserRegistrationForm(forms.ModelForm):
         phone = self.cleaned_data.get("phone")
         if CustomUser.objects.filter(phone=phone).exists():
             raise ValidationError("This phone number already exists")
-        return phone     
+        return phone
 
 class DoctorRegistrationForm(forms.ModelForm):
-    photo = forms.ImageField(
-        required=True,
-        error_messages={'required': "A profile photo is required for doctor registration."}
-    )
-
     class Meta:
         model = DoctorRequests
-        fields = ['degree', 'specialization', 'address', 'photo' , 'experience' , 'is_approved']
-
-    def clean_photo(self):
-        photo = self.cleaned_data.get('photo')
-        if not photo:
-            raise forms.ValidationError("A profile photo is required for doctor registration.")
-        return photo
+        fields = ['degree', 'specialization', 'address', 'experience', 'photo']

@@ -13,6 +13,8 @@ https://docs.djangoproject.com/en/5.1/ref/settings/
 from pathlib import Path
 import os
 from decouple import config
+from dotenv import load_dotenv
+load_dotenv()
 
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -153,3 +155,14 @@ CHANNEL_LAYERS = {
         },
     },
 }
+
+
+# Email Settings
+
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+
+EMAIL_HOST = 'smtp.gmail.com'  # e.g., 'smtp.gmail.com', 'smtp.office365.com'
+EMAIL_PORT = 587  # or 465 for SSL, or other ports depending on your server
+EMAIL_HOST_USER = os.getenv("GMAIL_ADDRESS")
+EMAIL_HOST_PASSWORD = os.getenv("GMAIL_PASSWORD")
+EMAIL_USE_TLS = True  # or EMAIL_USE_SSL = True if your server requires it (usually port 465)

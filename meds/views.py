@@ -4,14 +4,18 @@ from django.urls import reverse
 from django.contrib import messages
 from django.utils import timezone
 
-from .models import Doctors, CustomUser , Availability , Appointment , OnlineAvailability , OnlineAvailabilityPartime
+from .models import Doctors, CustomUser , Availability , Appointment , OnlineAvailability , OnlineAvailabilityPartime , DoctorRequests , VerificationData
 from .forms import UserRegistrationForm , DoctorRegistrationForm
+from django import forms
 
 from django.contrib.auth import   authenticate
 from django.contrib.auth import login as auth_login
 from django.contrib.auth import logout as auth_logout
 from datetime import datetime, time
 from django.contrib.auth.decorators import login_required
+
+from django.core.files.storage import default_storage
+from django.core.files.base import ContentFile
 
 import os
 from dotenv import load_dotenv
@@ -24,9 +28,23 @@ import json
 import time
 from agora_token_builder import RtcTokenBuilder
 import random
+from django.core.mail import send_mail
+import pyotp
+
 load_dotenv()
 
 # Helper Functions 
+
+def handle_uploaded_file(f):
+    # Helper function to handle file upload
+    from django.core.files.storage import default_storage
+    import os
+    
+    file_name = f'temp/{f.name}'
+    with default_storage.open(file_name, 'wb+') as destination:
+        for chunk in f.chunks():
+            destination.write(chunk)
+    return file_name
 
 def generate_time_slots(start_time, end_time, break_start, break_end, max_patients):
     """Generate time slots between start_time and end_time"""
@@ -111,15 +129,35 @@ def check_doctor_availabilty(doctor_id):
             )
     return offline_slots, online_slots
 
+def generate_otp(email):
+    otp = pyotp.TOTP(pyotp.random_base32(), interval=300).now()
+    verification_data, created = VerificationData.objects.get_or_create(email=email)
+    verification_data.email_otp = otp
+    verification_data.save()
+    return otp
+
+# def verify_otp(otp, user_otp):
+#     return otp == user_otp
+
+
+
 # Views start from here
 
 def meds(request):
     return HttpResponse("You are on home page")
 
+
+from django.shortcuts import render, redirect
+from django.contrib import messages
+from django.urls import reverse
+from django.contrib.auth import login as auth_login
+from django.utils import timezone
+from datetime import timedelta
+
 def register(request):
     if request.method == 'POST':
         user_data = {
-            "full_name": request.POST.get('fullName'),  
+            "full_name": request.POST.get('full_name'),  
             "email": request.POST.get('email'),
             "phone": request.POST.get('phone'),
             "gender": request.POST.get('gender'),
@@ -132,29 +170,53 @@ def register(request):
         if user_form.is_valid():
             user = user_form.save(commit=False)
             user.set_password(user_data['password'])
+            user.is_active = False  # Set user as inactive until email is verified
             user.save()
+            
+            # Generate and store OTP
+            otp = generate_otp(user.email)
+            request.session['otp'] = otp
+            request.session['user_id'] = user.id
+            # Store current time as timestamp
+            request.session['registration_timestamp'] = timezone.now().timestamp()
             
             if role == '2':  # Doctor
                 doctor_form = DoctorRegistrationForm(request.POST, request.FILES)
                 if doctor_form.is_valid():
-                    doctor = doctor_form.save(commit=False)
-                    doctor.user = user
-                    doctor.is_approved = False
-                    doctor.save()
-                    messages.info( request, "Your request is sent for approval")
-                    auth_login(request=request, user=user)
-                    return redirect(reverse("home"))
+                    request.session['doctor_data'] = {
+                        'degree': request.POST.get('degree'),
+                        'specialization': request.POST.get('specialization'),
+                        'address': request.POST.get('address'),
+                        'experience': request.POST.get('experience'),
+                    }
+                    if 'photo' in request.FILES:
+                        request.session['has_photo'] = True
+                        request.session['photo_name'] = request.FILES['photo'].name
+                    
+                    request.session['is_doctor'] = True
                 else:
                     user.delete()
                     return render(request, 'index.html', {
-                        'user_form': user_form, 
+                        'user_form': user_form,
                         'doctor_form': doctor_form,
                         'form_errors': doctor_form.errors
                     })
             else:
-                auth_login(request=request, user=user)
-                return redirect(reverse('meds:profile'))
-
+                request.session['is_doctor'] = False
+            
+            # # Send OTP email
+            # generate_otp(user.email)
+            
+            send_mail(
+                "Email Verification OTP",
+                f"Your OTP for MediGen registration is: {otp}",
+                os.getenv("GMAIL_ADDRESS"),
+                [user.email],
+                fail_silently=False,
+            )
+            print("Mail Sent")
+            
+            return redirect(reverse('meds:verify_otp', kwargs={'user_id': user.id}))
         else:
             return render(request, 'index.html', {
                 'user_form': user_form,
@@ -162,6 +224,114 @@ def register(request):
             })
     
     return render(request, 'index.html')
+
+def verify_otp(request, user_id):
+    # Check if verification window has expired (30 minutes)
+    registration_timestamp = request.session.get('registration_timestamp')
+    if registration_timestamp:
+        # Convert timestamp to timezone-aware datetime
+        registration_datetime = timezone.datetime.fromtimestamp(
+            registration_timestamp, 
+            tz=timezone.get_current_timezone()
+        )
+        elapsed_time = timezone.now() - registration_datetime
+        
+        if elapsed_time > timedelta(minutes=30):
+            # Delete unverified user and clean up
+            try:
+                user = CustomUser.objects.get(id=user_id)
+                user.delete()
+            except CustomUser.DoesNotExist:
+                pass
+            print("Verification window expired. Please register again.")
+            messages.error(request, "Verification window expired. Please register again.")
+            return redirect('meds:register')
+
+    if request.method == 'POST':
+        entered_otp = request.POST.get('otp')
+        stored_otp = request.session.get('otp')
+
+        print("inside request")
+        if entered_otp == stored_otp:
+            try:
+                print("saving user")
+                user = CustomUser.objects.get(id=user_id)
+                user.is_active = True
+                user.email_verified = True
+                user.save()
+                print("user saved")
+
+                is_doctor = request.session.get('is_doctor')
+                if is_doctor:
+                    doctor_data = request.session.get('doctor_data', {})
+                    print("inside doctor verification")
+                    # Create doctor request
+                    doctor = DoctorRequests.objects.create(
+                        user=user,
+                        degree=doctor_data.get('degree'),
+                        specialization=doctor_data.get('specialization'),
+                        address=doctor_data.get('address'),
+                        experience=doctor_data.get('experience'),
+                        is_approved=False
+                    )
+                    
+                    # Handle photo if it exists
+                    if request.session.get('has_photo') and 'photo' in request.FILES:
+                        doctor.photo = request.FILES['photo']
+                        doctor.save()
+                    print("doctor saved")
+                    messages.success(request, "Doctor registration request submitted.")
+                else:
+                    messages.success(request, "Registration successful!")
+
+                # Clean up session
+                session_keys = ['user_id', 'otp', 'is_doctor', 'doctor_data', 
+                              'has_photo', 'photo_name', 'registration_timestamp']
+                for key in session_keys:
+                    if key in request.session:
+                        del request.session[key]
+                print("deleted sessions keys")
+                return redirect('meds:login')
+            except CustomUser.DoesNotExist:
+                messages.error(request, "User not found.")
+                return redirect('meds:register')
+        else:
+            print("Invalid OTP")
+            messages.error(request, "Invalid OTP.")
+
+    return render(request, 'verification.html' , context={'user_id':user_id})
+
+def resend_otp(request):
+    if request.method == 'POST':
+        user_id = request.session.get('user_id')
+        if user_id:
+            try:
+                user = CustomUser.objects.get(id=user_id)
+                
+                # Check if within 30-minute window
+                registration_timestamp = request.session.get('registration_timestamp')
+                if registration_timestamp:
+                    registration_datetime = timezone.datetime.fromtimestamp(
+                        registration_timestamp,
+                        tz=timezone.get_current_timezone()
+                    )
+                    elapsed_time = timezone.now() - registration_datetime
+                    if elapsed_time > timedelta(minutes=30):
+                        user.delete()
+                        messages.error(request, "Verification window expired. Please register again.")
+                        return redirect('meds:register')
+                
+                # Generate and send new OTP
+                otp = generate_otp(user.email)
+                request.session['otp'] = otp
+                messages.success(request, "New OTP sent.")
+                return redirect(reverse('meds:verify_otp', kwargs={'user_id': user_id}))
+            except CustomUser.DoesNotExist:
+                messages.error(request, "User not found.")
+        else:
+            messages.error(request, "Session expired, please register again.")
+        
+    return redirect('meds:register')
 
 
 def doc_availability_offline(request):
@@ -262,13 +432,27 @@ def login(request):
 
     return render(request, 'index.html')
 
+
+
+
+@login_required
 def profile(request):
     user = request.user
     doctor = None
     availability = None
     appointments = None
     
-    if hasattr(user, 'doctors'):
+    if user.is_superuser:
+        pending_doctors = DoctorRequests.objects.filter(is_approved=False)
+        doctors = Doctors.objects.all()
+
+        context = {
+            "pending_doctors":pending_doctors,
+            "doctors":doctors
+        }
+        return render(request , "admin_panel.html" ,context = context )
+
+    elif hasattr(user, 'doctors'):
         # Doctor profile
         doctor = user.doctors
         availability = doctor.availabilities.all()
@@ -307,7 +491,57 @@ def logout(request):
     return redirect('home')  # Redirect to home page after logout
 
 
+@login_required
+def approve_doctor(request, doctor_id):
+    if not request.user.is_superuser:
+        messages.error(request, "Unauthorized action.")
+        return redirect('meds:profile')
 
+    doctor_request = DoctorRequests.objects.get(id=doctor_id)
+    doctor_request.is_approved = True
+    doctor_request.save()
+
+    # Create a Doctors profile
+    Doctors.objects.create(
+        user=doctor_request.user,
+        degree=doctor_request.degree,
+        specialization=doctor_request.specialization,
+        address=doctor_request.address,
+        experience=doctor_request.experience,
+        photo= doctor_request.photo
+    )
+
+    messages.success(request, f"Doctor {doctor_request.user.full_name} has been approved.")
+    return redirect('meds:profile')
+
+
+@login_required
+def reject_doctor(request, doctor_id):
+    if not request.user.is_superuser:
+        messages.error(request, "Unauthorized action.")
+        return redirect('meds:profile')
+
+    doctor_request = DoctorRequests.objects.get(id=doctor_id)
+    user = doctor_request.user
+    doctor_request.delete()
+
+    messages.warning(request, "Doctor request has been rejected.")
+    return redirect('meds:profile')
+
+def request_document_verification(request , doctor_id):
+    docMail = DoctorRequests.objects.get(id=doctor_id).user.email
+
+
+
+    send_mail(
+    "Request for document verification",
+    "Please verify your documents",
+    os.getenv("GMAIL_ADDRESS"),
+    [docMail],
+    fail_silently=False,
+    )
+
+    return redirect("meds:profile" )
 
 
 def get_time_slots(request, doctor_id):

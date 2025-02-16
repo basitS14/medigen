@@ -131,26 +131,31 @@
 <!--doctor section-->
 
 <section class="Doctors" id="Doctors">
-	<h1 class="heading">our <span>Doctors</span></h1>
-		<div class="box-container">
-			{% for doctor in doctors  %}
-			<div class="box">
-				<img src="{{doctor.photo.url}}" alt="">
-				<a href="{% url "doc_profile" doctor.id%}"><h3>{{doctor.user.full_name}}</h3></a>
-				<span>{{doctor.specialization}}</span>
-				<div class="share">
-					<a href="mailto:{{doctor.user.email}}" class="fa fa-envelope"></a>
-					{% comment %} <a href="{% url 'meds:book_appointment' doctor.id %}" data-bs-toggle="modal" data-bs-target="#appointment_modal" class="fas fa-pen"></a> {% endcomment %}
-					<a href="#" data-bs-toggle="modal" data-bs-target="#appointment_modal" data-doctor-id="{{doctor.id}}" class="fas fa-pen"></a>
+    <h1 class="heading">our <span>Doctors</span></h1>
+    <div class="container">
+        <div class="row">
+            {% for doctor in doctors %}
+            <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+                <div class="box">
+                    <img src="{{doctor.photo.url}}" alt="">
+                    <a href="{% url 'doc_profile' doctor.id %}">
+                        <h3>{{doctor.user.full_name}}</h3>
+                    </a>
+                    <span>{{doctor.specialization}}</span>
+                    <div class="share d-flex justify-content-center">
+                        <a href="mailto:{{doctor.user.email}}" class="fa fa-envelope"></a>
+                        <a href="#" data-bs-toggle="modal" data-bs-target="#appointment_modal" 
+                           data-doctor-id="{{doctor.id}}" class="fas fa-pen"></a>
+                        <a href="tel:{{doctor.phone}}" class="fas fa-phone"></a>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>
 
-					
-					<a href="tel:{{doctor.phone}}" class="fas fa-phone"></a>
-				</div>
-			</div>
-			{% endfor %}
 
-		
-	</section>
 </section>
 <!--appointment booking-->
 <div class="modal fade" id="appointment_modal" tabindex="-1">

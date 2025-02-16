@@ -754,3 +754,102 @@ button:hover {
         font-size: 1.5rem;
     }
 }
+
+/* New Styles */
+
+.modal {
+    z-index: 1050 !important; /* Increase z-index to be higher than sections */
+}
+
+/* Adjust section z-indices to be lower than modal */
+.home, .About {
+    position: relative;
+    z-index: 1;
+}
+
+/* Content container fixes */
+.content {
+    position: relative;
+    z-index: 1;
+}
+
+/* Header fixes */
+.header {
+    z-index: 1040; /* Keep header below modals but above other content */
+}
+
+/* Modal backdrop fixes */
+.modal-backdrop {
+    z-index: 1049 !important; /* Just below modal but above other content */
+}
+
+/* Modal content fixes */
+.modal-content {
+    position: relative;
+    z-index: 1051; /* Ensure modal content stays on top */
+    background-color: #fff;
+    margin: 5% auto; /* Reduced from 10% to 5% to show more content */
+    max-height: 90vh; /* Maximum height of 90% of viewport height */
+    overflow-y: auto; /* Enable scrolling if content is too long */
+}
+
+/* Ensure modal dialog is properly positioned */
+.modal-dialog {
+    position: relative;
+    margin: 1.75rem auto;
+    max-width: 500px;
+}
+
+/* new .Doctors */
+
+.Doctors .box {
+    text-align: center;
+    background: #fff;
+    border-radius: .5rem;
+    border: var(--border);
+    box-shadow: var(--box-shadow);
+    padding: 2rem;
+    overflow: hidden;
+}
+
+.Doctors .box img {
+    height: 20rem;
+    width: 100%;
+    object-fit: cover;
+    border: var(--border);
+    margin-top: 1rem;
+    margin-bottom: 1rem;
+}
+
+.Doctors .box h3 {
+    color: var(--black);
+    font-size: 2.5rem;
+}
+
+.Doctors .box span {
+    color: var(--green);
+    font-size: 1.5rem;
+}
+
+.Doctors .share {
+    padding: 1rem;
+    display: flex;
+    gap: 1rem;
+}
+
+.Doctors .share a {
+    height: 4rem;
+    width: 4rem;
+    line-height: 3.8rem;
+    font-size: 2rem;
+    color: var(--green);
+    border-radius: .5rem;
+    border: var(--border);
+    text-align: center;
+}
+
+.Doctors .share a:hover {
+    background: var(--green);
+    color: #fff;
+    box-shadow: var(--box-shadow);
+}

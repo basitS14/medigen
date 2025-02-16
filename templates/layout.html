@@ -114,11 +114,11 @@
                             {% csrf_token %}
                             <div class="mb-3">
                               <label for="email" class="form-label">Email address</label>
-                              <input type="email" class="form-control" id="email" name="loginEmail">
+                              <input type="email" class="form-control" id="loginEmail" name="loginEmail">
                             </div>
                             <div class="mb-3">
                               <label for="password" class="form-label">Password</label>
-                              <input type="password" class="form-control" id="password" name="loginPassword">
+                              <input type="password" class="form-control" id="loginPassword" name="loginPassword" autocomplete="current-password">
                             </div>
                             <button type="submit" class="btn btn-default">Sign In</button>
     
@@ -163,8 +163,8 @@
                             <form action="{% url "meds:register" %}" method="POST" enctype="multipart/form-data">
                                 {% csrf_token %}
                                <div class="mb-3">
-                                    <label for="fullName">Name</label>
-                                    <input type="text" id="fullName" class="form-control" name="fullName" >
+                                    <label for="full_name">Name</label>
+                                    <input type="text" id="full_name" class="form-control" name="full_name" >
                                     <p class="error-message"></p>
                                </div>
                                <div class="row mb-3">
@@ -198,13 +198,13 @@
                                <div class="row mb-3">
                                 <div class="col">
                                     <label for="password">Password</label>
-                                    <input type="password" id="password" class="form-control" name="password">
+                                    <input type="password" id="password" class="form-control" name="password" autocomplete="current-password">
                                     <p class="error-message"></p>
                                 </div>
                                 <div class="col">
                                     <label for="role">Sign Up as</label>
                                     <select class="form-select" name="role" id="role" >
-                                        <option value="1">Patient</option>
+                                        <option value="1" selected>Patient</option>
                                         <option value="2">Doctor</option>
 
                                     </select>
@@ -264,6 +264,132 @@
                
                 </div>
               </div>
+
+              {% comment %} OTP Verification
+              <div class="modal fade" id="otp_verification_modal" tabindex="-1">
+                <div class="modal-dialog">
+                  <div class="modal-content">
+                    <div class="modal-header">
+                      <h5 class="modal-title">Verify Your Email</h5>
+                      <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                      <p>We've sent a verification code to your email. Please enter it below to complete registration.</p>
+                      <form id="otp-verification-form">
+                        <div class="mb-3">
+                          <label for="otp" class="form-label">Enter OTP</label>
+                          <input type="text" class="form-control" id="otp" name="otp" maxlength="6" required>
+                          <div class="invalid-feedback">Invalid OTP</div>
+                        </div>
+                        <button type="submit" class="btn btn-primary">Verify</button>
+                        <button type="button" class="btn btn-link" id="resend-otp">Resend OTP</button>
+                      </form>
+                    </div>
+                  </div>
+                </div>
+              </div>
+               {% endcomment %}
+              {% comment %} <script>
+              document.addEventListener('DOMContentLoaded', function() {
+                // Store form data temporarily
+                let pendingRegistrationData = null;
+                
+                // Handle registration form submission
+                const registrationForm = document.querySelector('form[action*="register"]');
+                registrationForm.addEventListener('submit', function(e) {
+                  e.preventDefault();
+                  
+                  // Store the form data
+                  pendingRegistrationData = new FormData(this);
+                  
+                  // Show the OTP verification modal
+                  const otpModal = new bootstrap.Modal(document.getElementById('otp_verification_modal'));
+                  otpModal.show();
+                  
+                  // Send registration data to generate OTP
+                  fetch('{% url "meds:register" %}', {
+                    method: 'POST',
+                    body: pendingRegistrationData
+                  })
+                  .then(response => response.json())
+                  .then(data => {
+                    if (data.status === 'error') {
+                      // Handle validation errors
+                      const signupModal = new bootstrap.Modal(document.getElementById('signup_modal'));
+                      signupModal.show();
+                      // Display errors on the form
+                      Object.keys(data.errors).forEach(field => {
+                        const errorElement = document.querySelector(`#${field} + .error-message`);
+                        if (errorElement) {
+                          errorElement.textContent = data.errors[field][0];
+                        }
+                      });
+                    }
+                  })
+                  .catch(error => {
+                    console.error('Error:', error);
+                  });
+                });
+                
+                // Handle OTP verification form submission
+                const otpForm = document.getElementById('otp-verification-form');
+                otpForm.addEventListener('submit', function(e) {
+                  e.preventDefault();
+                  
+                  const otp = document.getElementById('otp').value;
+                  if (!pendingRegistrationData) return;
+                  
+                  // Add OTP to the registration data
+                  pendingRegistrationData.append('otp', otp);
+                  
+                  // Submit the complete registration with OTP
+                  fetch('{% url "meds:verify_otp" %}', {
+                    method: 'POST',
+                    body: pendingRegistrationData
+                  })
+                  .then(response => response.json())
+                  .then(data => {
+                    if (data.status === 'success') {
+                      // Close the modal and redirect
+                      bootstrap.Modal.getInstance(document.getElementById('otp_verification_modal')).hide();
+                      window.location.href = data.redirect_url;
+                    } else {
+                      // Show error message
+                      document.getElementById('otp').classList.add('is-invalid');
+                    }
+                  })
+                  .catch(error => {
+                    console.error('Error:', error);
+                  });
+                });
+                
+                // Handle resend OTP
+                document.getElementById('resend-otp').addEventListener('click', function() {
+                  if (!pendingRegistrationData) return;
+                  
+                  fetch('{% url "meds:resend_otp" %}', {
+                    method: 'POST',
+                    body: pendingRegistrationData
+                  })
+                  .then(response => response.json())
+                  .then(data => {
+                    if (data.status === 'success') {
+                      // Show success message
+                      const notification = document.createElement('div');
+                      notification.className = 'alert alert-success alert-dismissible fade show';
+                      notification.innerHTML = `
+                        New OTP sent to your email
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                      `;
+                      document.getElementById('notification-container').appendChild(notification);
+                    }
+                  })
+                  .catch(error => {
+                    console.error('Error:', error);
+                  });
+                });
+              });
+              </script>  {% endcomment %}
     </header>
             
     {% block content %}
