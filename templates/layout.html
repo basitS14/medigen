@@ -11,8 +11,7 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-    {% comment %} <script src={% static "script1.js" %}></script> {% endcomment %}
-	{% comment %} <link rel="stylesheet" href="{% static 'style.css' %}"> {% endcomment %}
+   
 	<link rel="stylesheet" href="{% static 'style.css' %}">
     <script src="{% static "script1.js" %}"></script>
 
@@ -20,87 +19,132 @@
 <body>
     <header class="header mb-4">
 
-        {% comment %} <a href="#" class="logo"><i class="fa-solid fa-heart-pulse" style="color: #63E6BE;"></i>MediGen.</a> {% endcomment %}
-    
-        {% comment %} <nav class="navbar">
-            <a href="{% url "home" %}">Home</a>
-            <a href="#Services">Services</a>
-            <a href="#Models">Models</a>
-            <a href="#About">About</a>
-            <a href="#Doctors">Doctors</a>
-         {% if user.is_authenticated %}
-                <a href="{% url 'meds:profile' %}" class='btn btn-outline-primary'>{{ user.full_name }}</a>
-                <a href="{% url 'meds:logout' %}" class='btn btn-outline-danger'>Logout</a>
-            {% else %} 
-                <a id="login" class='btn btn-outline-primary' data-bs-toggle="modal" data-bs-target="#login_modal">Register</a>
-                <a href="{% url 'meds:profile' %}" class='btn btn-outline-primary'>Profile</a>
-         {% endif %}
-        </nav> {% endcomment %}
+     
         <div id="notification-container" class="position-fixed top-0 end-0 p-3" style="z-index: 1050;">
             <!-- Notifications will be dynamically added here -->
         </div>
+        <!-- In the header section, below your notification-container div, add this script -->
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Function to show a toast
+        function showToast(message, type) {
+            // Create toast container if it doesn't exist
+            let toastContainer = document.getElementById('notification-container');
+            
+            // Create a unique ID for this toast
+            const toastId = 'toast-' + Date.now();
+            
+            // Set the background color based on message type
+            let backgroundColor = '';
+            let iconClass = '';
+            
+            if (type === 'success') {
+                backgroundColor = 'bg-success';
+                iconClass = 'fa-check-circle';
+            } else if (type === 'error') {
+                backgroundColor = 'bg-danger';
+                iconClass = 'fa-exclamation-circle';
+            } else if (type === 'warning') {
+                backgroundColor = 'bg-warning';
+                iconClass = 'fa-exclamation-triangle';
+            } else if (type === 'info') {
+                backgroundColor = 'bg-info';
+                iconClass = 'fa-info-circle';
+            }
+            
+            // Create the toast HTML
+            const toastHTML = `
+                <div id="${toastId}" class="toast" role="alert" aria-live="assertive" aria-atomic="true" data-bs-delay="5000">
+                    <div class="toast-header ${backgroundColor} text-white">
+                        <i class="fas ${iconClass} me-2"></i>
+                        <strong class="me-auto">${type.charAt(0).toUpperCase() + type.slice(1)}</strong>
+                        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="toast" aria-label="Close"></button>
+                    </div>
+                    <div class="toast-body">
+                        ${message}
+                    </div>
+                </div>
+            `;
+            
+            // Add the toast to the container
+            toastContainer.innerHTML += toastHTML;
+            
+            // Initialize and show the toast
+            const toastElement = document.getElementById(toastId);
+            const toast = new bootstrap.Toast(toastElement);
+            toast.show();
+            
+            // Remove toast from DOM after it's hidden
+            toastElement.addEventListener('hidden.bs.toast', function() {
+                toastElement.remove();
+            });
+        }
+        
+        // Process Django messages
+        {% if messages %}
+            {% for message in messages %}
+                showToast("{{ message }}", "{{ message.tags }}");
+            {% endfor %}
+        {% endif %}
+    });
+</script>
+
+<!-- Keep your notification-container div as is -->
+<div id="notification-container" class="position-fixed top-0 end-0 p-3" style="z-index: 1050;">
+    <!-- Toasts will be dynamically added here -->
+</div>
 
         <nav class="navbar navbar-expand-lg">
             <div class="container-fluid">
-              <a class="navbar-brand logo" href="#" ><i class="fa-solid fa-heart-pulse"></i>Medigen</a>
+              <a class="navbar-brand logo" href="{% url "home" %}" ><i class="fa-solid fa-heart-pulse"></i>Medigen</a>
               <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
               </button>
               <div class="collapse navbar-collapse" id="navbarSupportedContent">
                 <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                   <li class="nav-item">
-                    <a class="nav-link active" aria-current="page" href="#">Home</a>
+                    <a class="nav-link active" aria-current="page" href="{% url "home" %}">Home</a>
                   </li>
                   <li class="nav-item">
-                    <a class="nav-link active" href="#">Services</a>
+                    <a class="nav-link active" href="#Services">Services</a>
                   </li>
                   <li class="nav-item">
-                    <a class="nav-link active" href="#">Models</a>
+                    <a class="nav-link active" href="#Models">Models</a>
                   </li>
                   <li class="nav-item">
-                    <a class="nav-link active" href="#">About</a>
+                    <a class="nav-link active" href="#About">About</a>
                   </li>
                   <li class="nav-item">
-                    <a class="nav-link active" href="#">Doctors</a>
+                    <a class="nav-link active" href="#Doctors">Doctors</a>
                   </li>
                  
                 </ul>
                 {% if user.is_authenticated %}
-                <a href="{% url 'meds:profile' %}" class='btn btn-outline-primary '>{{ user.full_name }}</a>
-                <a href="{% url 'meds:logout' %}" class='btn btn-outline-danger'>Logout</a>
+                <a href="{% url 'meds:profile' %}" class="btn rounded-circle p-2 d-flex align-items-center justify-content-center" 
+                style="width: 40px; height: 40px;" 
+                data-bs-toggle="tooltip" title="{{ user.full_name }}">
+                <i class="fas fa-user"></i>
+                </a>
+                <a href="{% url 'meds:logout' %}" class='btn btn-default'>Logout</a>
                 {% else %} 
-                <a id="login" class='btn btn-outline-primary' data-bs-toggle="modal" data-bs-target="#login_modal">Register</a>
-                <a href="{% url 'meds:profile' %}" class='btn btn-outline-primary'>Profile</a>
+                <a id="login" class="btn rounded-circle p-2 d-flex align-items-center justify-content-center" 
+                data-bs-toggle="modal" data-bs-target="#login_modal" style="width: 40px; height: 40px;" >
+                <i class="fas fa-user"></i>
+                </a>
+                {% comment %} <a href="{% url 'meds:profile' %}" class='btn btn-outline-primary'>Profile</a> {% endcomment %}
                 {% endif %}
               </div>
             </div>
           </nav>
-                    {% comment %} <ul>
-                        {% if user.is_authenticated %}
-                        <li class="nav-item">
-                        <a href="{% url 'meds:profile' %}" class='btn btn-outline-primary' class="nav-link active">{{ user.full_name }}</a>
-                        </li>
-                        <li class="nav-item">
-                            <a href="{% url 'meds:logout' %}" class='btn btn-outline-danger'>Logout</a>
-                        </li>
-                        {% else %} 
-                        <li class="nav-item">
-                            <a id="login" class='btn btn-outline-primary' data-bs-toggle="modal" data-bs-target="#login_modal">Register</a>
-
-                        </li>
-                        <li class="nav-item">
-                            <a href="{% url 'meds:profile' %}" class='btn btn-outline-primary'>Profile</a>
-
-                        </li>
-                         {% endif %}
-                    </ul> {% endcomment %}
+                   
 
                 </div>
             </div>
         </nav> 
             
-            {% comment %} <a href="#" class = 'btn btn-outline-primary' id = "loginBtn">Login</a> {% endcomment %}
-            {% comment %} <a href="#Contact">Contact</a> {% endcomment %}
+
+        
+       
             {% comment %} Login Modal {% endcomment %}
             <div class="modal fade" id="login_modal" tabindex="-1" >
                 <div class="modal-dialog">
@@ -128,27 +172,27 @@
                     <div class="mb-3">
                      <p class="blockquote">Don't have an account? <a class="" role="button" data-bs-target="#signup_modal" data-bs-toggle="modal" data-bs-dismiss="modal" >Create an account</a></p>
                     </div>
-                    {% if messages %}
+                    {% comment %} {% if messages %}
                     {% for message in messages %}
                         <div class="alert alert-danger alert-dismissible fade show" role="alert">
                             {{ message }}
                             <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                         </div>
                     {% endfor %}
-                    {% endif %}
+                    {% endif %} {% endcomment %}
 
                    </div>
                   </div>
                 </div>
               </div>
-
+{% comment %} 
               <script>
                 {% if messages %}
                     // Trigger modal to open if error message exists
                     var loginModal = new bootstrap.Modal(document.getElementById('login_modal'));
                     loginModal.show();
                 {% endif %}
-            </script>
+            </script> {% endcomment %}
             
               {% comment %} Register Modal {% endcomment %}
 
@@ -265,131 +309,7 @@
                 </div>
               </div>
 
-              {% comment %} OTP Verification
-              <div class="modal fade" id="otp_verification_modal" tabindex="-1">
-                <div class="modal-dialog">
-                  <div class="modal-content">
-                    <div class="modal-header">
-                      <h5 class="modal-title">Verify Your Email</h5>
-                      <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                    </div>
-                    <div class="modal-body">
-                      <p>We've sent a verification code to your email. Please enter it below to complete registration.</p>
-                      <form id="otp-verification-form">
-                        <div class="mb-3">
-                          <label for="otp" class="form-label">Enter OTP</label>
-                          <input type="text" class="form-control" id="otp" name="otp" maxlength="6" required>
-                          <div class="invalid-feedback">Invalid OTP</div>
-                        </div>
-                        <button type="submit" class="btn btn-primary">Verify</button>
-                        <button type="button" class="btn btn-link" id="resend-otp">Resend OTP</button>
-                      </form>
-                    </div>
-                  </div>
-                </div>
-              </div>
-               {% endcomment %}
-              {% comment %} <script>
-              document.addEventListener('DOMContentLoaded', function() {
-                // Store form data temporarily
-                let pendingRegistrationData = null;
-                
-                // Handle registration form submission
-                const registrationForm = document.querySelector('form[action*="register"]');
-                registrationForm.addEventListener('submit', function(e) {
-                  e.preventDefault();
-                  
-                  // Store the form data
-                  pendingRegistrationData = new FormData(this);
-                  
-                  // Show the OTP verification modal
-                  const otpModal = new bootstrap.Modal(document.getElementById('otp_verification_modal'));
-                  otpModal.show();
-                  
-                  // Send registration data to generate OTP
-                  fetch('{% url "meds:register" %}', {
-                    method: 'POST',
-                    body: pendingRegistrationData
-                  })
-                  .then(response => response.json())
-                  .then(data => {
-                    if (data.status === 'error') {
-                      // Handle validation errors
-                      const signupModal = new bootstrap.Modal(document.getElementById('signup_modal'));
-                      signupModal.show();
-                      // Display errors on the form
-                      Object.keys(data.errors).forEach(field => {
-                        const errorElement = document.querySelector(`#${field} + .error-message`);
-                        if (errorElement) {
-                          errorElement.textContent = data.errors[field][0];
-                        }
-                      });
-                    }
-                  })
-                  .catch(error => {
-                    console.error('Error:', error);
-                  });
-                });
-                
-                // Handle OTP verification form submission
-                const otpForm = document.getElementById('otp-verification-form');
-                otpForm.addEventListener('submit', function(e) {
-                  e.preventDefault();
-                  
-                  const otp = document.getElementById('otp').value;
-                  if (!pendingRegistrationData) return;
-                  
-                  // Add OTP to the registration data
-                  pendingRegistrationData.append('otp', otp);
-                  
-                  // Submit the complete registration with OTP
-                  fetch('{% url "meds:verify_otp" %}', {
-                    method: 'POST',
-                    body: pendingRegistrationData
-                  })
-                  .then(response => response.json())
-                  .then(data => {
-                    if (data.status === 'success') {
-                      // Close the modal and redirect
-                      bootstrap.Modal.getInstance(document.getElementById('otp_verification_modal')).hide();
-                      window.location.href = data.redirect_url;
-                    } else {
-                      // Show error message
-                      document.getElementById('otp').classList.add('is-invalid');
-                    }
-                  })
-                  .catch(error => {
-                    console.error('Error:', error);
-                  });
-                });
-                
-                // Handle resend OTP
-                document.getElementById('resend-otp').addEventListener('click', function() {
-                  if (!pendingRegistrationData) return;
-                  
-                  fetch('{% url "meds:resend_otp" %}', {
-                    method: 'POST',
-                    body: pendingRegistrationData
-                  })
-                  .then(response => response.json())
-                  .then(data => {
-                    if (data.status === 'success') {
-                      // Show success message
-                      const notification = document.createElement('div');
-                      notification.className = 'alert alert-success alert-dismissible fade show';
-                      notification.innerHTML = `
-                        New OTP sent to your email
-                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                      `;
-                      document.getElementById('notification-container').appendChild(notification);
-                    }
-                  })
-                  .catch(error => {
-                    console.error('Error:', error);
-                  });
-                });
-              });
-              </script>  {% endcomment %}
+   
     </header>
             
     {% block content %}

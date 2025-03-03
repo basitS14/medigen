@@ -22,6 +22,12 @@ urlpatterns = [
     path('request_document_verification/<int:doctor_id>/' , views.request_document_verification , name="request_document_verification"),
     path('verify-otp/<int:user_id>', views.verify_otp, name='verify_otp'),
     path('resend-otp/', views.resend_otp, name='resend_otp'),
+    path('update-profile/',views.update_profile , name='update_profile'),
+    path('update-doctor-profile/', views.update_doctor_profile, name='update_doctor_profile'),
+    path('change_email/',views.change_email , name="change_email"),
+    path('verify-email-change/', views.verify_email_change, name='verify_email_change'),
+    path('resend-email-change-otp/', views.resend_email_change_otp, name='resend_email_change_otp'),
+    path('bmi-calculator/' , views.caluculate_bmi , name='bmi-calculator'),
     path('__reload__' , include('django_browser_reload.urls')),
 
 ]

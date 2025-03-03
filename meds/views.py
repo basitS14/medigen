@@ -4,7 +4,7 @@ from django.urls import reverse
 from django.contrib import messages
 from django.utils import timezone
 
-from .models import Doctors, CustomUser , Availability , Appointment , OnlineAvailability , OnlineAvailabilityPartime , DoctorRequests , VerificationData
+from .models import Doctors, CustomUser , Availability , Appointment , OnlineAvailability , OnlineAvailabilityPartime , DoctorRequests , VerificationData , BMI
 from .forms import UserRegistrationForm , DoctorRegistrationForm
 from django import forms
 
@@ -136,23 +136,11 @@ def generate_otp(email):
     verification_data.save()
     return otp
 
-# def verify_otp(otp, user_otp):
-#     return otp == user_otp
-
-
-
-# Views start from here
 
 def meds(request):
     return HttpResponse("You are on home page")
 
 
-from django.shortcuts import render, redirect
-from django.contrib import messages
-from django.urls import reverse
-from django.contrib.auth import login as auth_login
-from django.utils import timezone
-from datetime import timedelta
 
 def register(request):
     if request.method == 'POST':
@@ -429,6 +417,7 @@ def login(request):
             return redirect(reverse('meds:profile'))  # Make sure 'home' is defined in your urls.py
         else:
             messages.error(request, "Invalid email or password.")
+            
 
     return render(request, 'index.html')
 
@@ -467,21 +456,26 @@ def profile(request):
         return render(request, 'profile.html', context)
     else:
         # Patient profile
+        bmi = BMI.objects.filter(username=user).order_by('-id').first()
+
         appointments = user.patient_appointments.all().order_by('date', 'start_time')
         context = {
             'user': user,
-            'appointments': appointments
+            'appointments': appointments,
+            'bmi':bmi
         }
         return render(request, 'p_profile.html', context)
 
 def p_profile(request):
     user = request.user
     appointments = user.patient_appointments.all().order_by('date', 'start_time')
+    bmi = BMI.objects.filter(username=user).order_by('-id').first()
     
     context = {
         'user': user,
         'appointments': appointments,
         'now':timezone.now(),
+        'bmi':bmi
     }
     return render(request, 'p_profile.html', context)
 
@@ -609,6 +603,7 @@ def get_time_slots(request, doctor_id):
     except Exception as e:
         return JsonResponse({"error": str(e)}, status=500)
 
+@login_required
 def book_appointment(request, doctor_id):
     if request.method == "POST":
         patient_name = request.POST.get('patient-name')
@@ -640,9 +635,19 @@ def book_appointment(request, doctor_id):
         return redirect('meds:p_profile') # Redirect to appointment listing page after booking
     else:
         # You can pass additional context like doctor details if needed
-        return render(request, 'index.html' )
+        doctor = get_object_or_404(Doctors, id=doctor_id)
+        min_date = datetime.now().date()
+        selected_date = min_date
+        
+        context = {
+            'doctor': doctor,
+            'doctor_id': doctor_id,  # Make sure to include this
+            'min_date': min_date,
+            'selected_date': selected_date,
+        }
+        return render(request, 'book_appointment.html' , context=context )
 
-    return render(request, 'index.html')
+    return render(request, 'book_appointment.html')
 
 @login_required
 def video_call(request, appointment_id):
@@ -691,8 +696,235 @@ def video_call(request, appointment_id):
     
     return render(request, 'video_call.html', context)
 
+@login_required
+def update_profile(request):
+    # if not request.user.is_authenticated:
+    #     return redirect('login')
+    
+    user = request.user  # Get the logged-in user
+    
+    if request.method == "POST":
+        full_name = request.POST.get("full_name", user.full_name)
+        phone = request.POST.get("phone", user.phone)
+        gender = request.POST.get("gender", user.gender)
+        dob = request.POST.get("dob", user.dob)
+        
+        # Update fields only if they are changed
+        user.full_name = full_name if full_name else user.full_name
+        user.phone = phone if phone else user.phone
+        user.gender = gender if gender else user.gender
+        
+        if dob:
+            user.dob = dob  # Convert to date format if necessary
+        
+        user.save()
+        messages.success(request, "Profile updated successfully!")
+        return redirect("meds:profile")  # Redirect to profile page
+    
+    return render(request, "p_profile.html", {"user": user})
+
+@login_required
+def update_doctor_profile(request):
+    # Get the doctor object for the current user
+    # try:
+    #     doctor = Doctors.objects.get(user=request.user)
+    # except Doctors.DoesNotExist:
+    #     messages.error(request, "Doctor profile not found.")
+    #     return redirect('meds:profile')  
+    
+    # Get user object
+    user = request.user
+    
+    # Update user fields
+    user.full_name = request.POST.get('full_name')
+    user.phone = request.POST.get('phone')
+    user.gender = request.POST.get('gender')
+    
+    # Handle date of birth
+    dob = request.POST.get('dob')
+    if dob:
+        user.dob = dob
+    
+    # Save user updates
+    user.save()
+    
+    # Update doctor fields
+    doctor.degree = request.POST.get('degree')
+    doctor.specialization = request.POST.get('specialization')
+    doctor.experience = request.POST.get('experience')
+    doctor.address = request.POST.get('address')
+    
+    # Handle photo upload
+    if 'photo' in request.FILES:
+        doctor.photo = request.FILES['photo']
+    
+    # Save doctor updates
+    doctor.save()
+    
+    messages.success(request, "Profile updated successfully!")
+    
+    # Redirect to the profile page or dashboard
+    return redirect(reverse('meds:profile'))  # Or whatever URL pattern you use for the doctor profile page
+
+def change_email(request):
+    if request.method == 'POST':
+        new_email = request.POST.get('new_email')
+        password = request.POST.get('password')
+        user = request.user
+        
+        # Verify password
+        if not user.check_password(password):
+            messages.error(request, "Incorrect password. Please try again.")
+            return redirect('meds:profile')
+        
+        # Check if email is already in use
+        if CustomUser.objects.filter(email=new_email).exists():
+            messages.error(request, "This email is already registered. Please use a different email.")
+            return redirect('meds:profile')
+        
+        # Store information in session for OTP verification
+        request.session['new_email'] = new_email
+        request.session['user_id'] = user.id
+        request.session['email_change_timestamp'] = timezone.now().timestamp()
+        
+        # Generate and send OTP
+        otp = generate_otp(new_email)
+        request.session['email_change_otp'] = otp
+        
+        # Send verification email
+        send_mail(
+            "Email Change Verification OTP",
+            f"Your OTP for MediGen email change is: {otp}\nThis OTP is valid for 30 minutes.",
+            os.getenv("GMAIL_ADDRESS"),
+            [new_email],
+            fail_silently=False,
+        )
+        
+        # Redirect to verification page
+        return redirect(reverse('meds:verify_email_change'))
+    
+    return redirect('meds:profile')
+
+def verify_email_change(request):
+    # Check if verification window has expired (30 minutes)
+    change_timestamp = request.session.get('email_change_timestamp')
+    if not change_timestamp:
+        messages.error(request, "Session expired. Please try changing your email again.")
+        return redirect('meds:profile')
+    
+    # Convert timestamp to timezone-aware datetime
+    change_datetime = timezone.datetime.fromtimestamp(
+        change_timestamp, 
+        tz=timezone.get_current_timezone()
+    )
+    elapsed_time = timezone.now() - change_datetime
+    
+    if elapsed_time > timedelta(minutes=30):
+        # Clean up session data
+        for key in ['new_email', 'email_change_otp', 'email_change_timestamp']:
+            if key in request.session:
+                del request.session[key]
+        
+        messages.error(request, "Verification window expired. Please try changing your email again.")
+        return redirect('meds:profile')
+    
+    if request.method == 'POST':
+        entered_otp = request.POST.get('otp')
+        stored_otp = request.session.get('email_change_otp')
+        new_email = request.session.get('new_email')
+        
+        if entered_otp == stored_otp:
+            # Update user email
+            user = request.user
+            user.email = new_email
+            user.save()
+            
+            # Clean up session data
+            for key in ['new_email', 'email_change_otp', 'email_change_timestamp']:
+                if key in request.session:
+                    del request.session[key]
+            
+            messages.success(request, "Your email has been successfully updated.")
+            return redirect('meds:profile')
+        else:
+            messages.error(request, "Invalid OTP. Please try again.")
+    
+    return render(request, 'email_verification.html', {
+        'new_email': request.session.get('new_email')
+    })
+
+def resend_email_change_otp(request):
+    if request.method == 'POST':
+        new_email = request.session.get('new_email')
+        
+        if not new_email:
+            messages.error(request, "Session expired. Please try changing your email again.")
+            return redirect('meds:profile')
+        
+        # Check if within 30-minute window
+        change_timestamp = request.session.get('email_change_timestamp')
+        if change_timestamp:
+            change_datetime = timezone.datetime.fromtimestamp(
+                change_timestamp,
+                tz=timezone.get_current_timezone()
+            )
+            elapsed_time = timezone.now() - change_datetime
+            
+            if elapsed_time > timedelta(minutes=30):
+                # Clean up session data
+                for key in ['new_email', 'email_change_otp', 'email_change_timestamp']:
+                    if key in request.session:
+                        del request.session[key]
+                
+                messages.error(request, "Verification window expired. Please try changing your email again.")
+                return redirect('meds:profile')
+        
+        # Generate and send new OTP
+        otp = generate_otp(new_email)
+        request.session['email_change_otp'] = otp
+        
+        # Send verification email
+        send_mail(
+            "Email Change Verification OTP (Resent)",
+            f"Your OTP for MediGen email change is: {otp}\nThis OTP is valid for 30 minutes.",
+            os.getenv("GMAIL_ADDRESS"),
+            [new_email],
+            fail_silently=False,
+        )
+        
+        messages.success(request, "New verification code sent.")
+        return redirect(reverse('meds:verify_email_change'))
+    
+    return redirect('meds:profile')
+
+def caluculate_bmi(request):
+    if request.method == "POST":
+        weight = float(request.POST.get('weight'))
+        height = float(request.POST.get('height'))
+
+        height_in_meters = height / 100  # Convert cm to meters
+        bmi = weight / (height_in_meters ** 2)
+
+        user = request.user
+
+        bmi_calc = BMI.objects.create(
+            username=user,
+            height=height,
+            weight=weight,
+            bmi=float("{:.2f}".format(bmi))
+        )
+        bmi_calc.save()
+                      
+    else:
+        messages.error(request , "Invalid Inputs")
+
+    
+    return redirect('meds:profile')
+
+
+
 def test(request):
-    return render(request , 'book_appointment.html')
+    return render(request , 'doctor_profile.html')
 
 
 

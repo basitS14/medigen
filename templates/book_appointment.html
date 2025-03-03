@@ -1,52 +1,145 @@
-{% extends "layout.html" %}
+{% extends 'layout.html' %}
 
 {% block content %}
-
-<main>
-    <div class="shadow container-fluid container-sm rounded-lg bg-body p-5 mb-5">
-        <h1 class="text-center">
-            Book Appointment
-        </h1>
-        <form action="">
-            <div class="mb-3">
-                <label for="patient-name">Patient Name</label>
-                <input type="text" name="patient-name" id="patient-name" class="form-control">
-            </div>
-            <div class="mb-3">
-                <label for="date">Select Date</label>
-                <input 
-                            type="date" 
-                            name="date" 
-                            id="date"
-                            min="{{ min_date|date:'Y-m-d' }}"
-                            value="{{ selected_date|date:'Y-m-d' }}"
-                            class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                            required
-                        >
-            </div>
-            <div class="mb-3">
-                <label for="slots-grid">Select Date</label>
-                <div id="slots-grid" class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-                    {% include 'partials/time_slots.html' %}
-                </div>
-            </div>
-            <label for="mode">Mode</label>
-            <div class="mb-3" id="mode">
-                <div class="form-check form-check-inline">
-                    <input type="radio" name="offline" id="offline" class="form-check-input" value="offline">
-                    <label for="offline">Offline</label>
-                </div>
-                <div class="form-check form-check-inline">
-                    <input type="radio" name="online" id="online" class="form-check-input" value="online">
-                    <label for="online">Online</label>
-                </div>
-            </div>
-            <div class="mb-3">
-                <label for="notes">Notes</label>
-                <textarea name="notes" id="notes" class="form-control"></textarea>
-            </div>
-        </form>
-    </div>
+<div class="container py-4">
+    <h1 class="mb-4">Book Appointment with {{ doctor.name }}</h1>
     
-</main>
-{% endblock  %}
+    <form action="" method="POST" id="appointment_form">
+        {% csrf_token %}
+        <div class="mb-3">
+            <label for="patient-name">Patient Name</label>
+            <input type="text" name="patient-name" id="patient-name" class="form-control" value="{{ request.user.full_name }}" readonly>
+        </div>
+        <div class="mb-3">
+            <label for="date">Select Date</label>
+            <input 
+                type="date" 
+                name="date" 
+                id="date"
+                min="{{ min_date|date:'Y-m-d' }}"
+                value="{{ selected_date|date:'Y-m-d' }}"
+                required
+                class="form-control"
+            >
+        </div>
+
+        <label for="mode">Mode</label>
+        <div class="mb-3" id="mode">
+            <div class="form-check form-check-inline">
+                <input type="radio" name="mode" id="offline" class="form-check-input" value="offline" required>
+                <label for="offline" class="form-check-label">Offline</label>
+            </div>
+            <div class="form-check form-check-inline">
+                <input type="radio" name="mode" id="online" class="form-check-input" value="online" required>
+                <label for="online" class="form-check-label">Online</label>
+            </div>
+        </div>
+
+        <div class="mb-3">
+            <label for="slots-grid">Select Available Slots</label>
+            <div id="slots-grid" class="row g-2">
+                <p class="text-muted">Please select a date and mode to view available slots</p>
+            </div>
+        </div>
+
+        <div class="mb-3">
+            <label for="notes">Notes</label>
+            <textarea name="notes" id="notes" class="form-control"></textarea>
+        </div>
+        <button type="submit" class="btn btn-primary">Book Appointment</button>
+        <a href="{% url 'home' %}" class="btn btn-secondary">Cancel</a>
+    </form>
+</div>
+
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+    const dateInput = document.getElementById("date");
+    const modeInputs = document.querySelectorAll("input[name='mode']");
+    const slotsGrid = document.getElementById("slots-grid");
+    const appointmentForm = document.getElementById("appointment_form");
+    const doctorId = button.getAttribute('data-doctor-id'); // Get doctor_id from context
+    
+    console.log("Doctor ID:", doctorId); // Debug output
+    
+    function fetchTimeSlots() {
+        const selectedDate = dateInput.value;
+        const selectedMode = document.querySelector("input[name='mode']:checked")?.value;
+
+        console.log("Fetching slots for:", selectedDate, selectedMode, doctorId); // Debug output
+
+        if (!selectedDate || !selectedMode || !doctorId) {
+            console.log("Missing required parameters"); // Debug output
+            return;
+        }
+
+        // Clear previous slots
+        slotsGrid.innerHTML = "<p class='text-muted'>Loading available slots...</p>";
+
+        fetch(`/meds/get-time-slots/${doctorId}/?date=${selectedDate}&mode=${selectedMode}`)
+            .then(response => {
+                console.log("Response status:", response.status); // Debug output
+                return response.json();
+            })
+            .then(data => {
+                console.log("Received data:", data); // Debug output
+                slotsGrid.innerHTML = ""; // Clear loading message
+
+                if (!data.slots || data.slots.length === 0) {
+                    slotsGrid.innerHTML = "<p class='text-danger'>No available slots for the selected date and mode.</p>";
+                    return;
+                }
+
+                data.slots.forEach(slot => {
+                    const slotCol = document.createElement("div");
+                    slotCol.className = "col-6 col-md-4 col-lg-3";
+                    
+                    const button = document.createElement("button");
+                    button.type = "button";
+                    button.className = "btn btn-outline-primary w-100";
+                    button.textContent = `${slot.start} - ${slot.end}`;
+                    
+                    button.addEventListener("click", function(e) {
+                        e.preventDefault();
+                        // Remove selection from other buttons
+                        document.querySelectorAll("#slots-grid button").forEach(btn => {
+                            btn.classList.remove("btn-primary");
+                            btn.classList.add("btn-outline-primary");
+                        });
+                        // Add selection to clicked button
+                        button.classList.remove("btn-outline-primary");
+                        button.classList.add("btn-primary");
+                        
+                        // Update or create hidden input
+                        let timeInput = document.querySelector("input[name='selected_slot']");
+                        if (!timeInput) {
+                            timeInput = document.createElement("input");
+                            timeInput.type = "hidden";
+                            timeInput.name = "selected_slot";
+                            appointmentForm.appendChild(timeInput);
+                        }
+                        timeInput.value = `${slot.start}-${slot.end}`;
+                    });
+                    
+                    slotCol.appendChild(button);
+                    slotsGrid.appendChild(slotCol);
+                });
+            })
+            .catch(error => {
+                console.error("Error fetching time slots:", error);
+                slotsGrid.innerHTML = "<p class='text-danger'>Error loading available slots. Please try again.</p>";
+            });
+    }
+
+    // Initialize events
+    dateInput.addEventListener("change", fetchTimeSlots);
+    modeInputs.forEach(input => {
+        input.addEventListener("change", fetchTimeSlots);
+    });
+    
+    // If both date and mode are already selected on page load, fetch slots
+    if (dateInput.value && document.querySelector("input[name='mode']:checked")) {
+        fetchTimeSlots();
+    }
+});
+</script>
+{% endblock %}

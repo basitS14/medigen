@@ -157,3 +157,14 @@ class Appointment(models.Model):
     def __str__(self):
         return f"{self.patient} with {self.doctor} on {self.date} at {self.start_time} booked by {self.username.full_name} [{self.appointment_mode}]"
 
+
+class BMI(models.Model):
+    username = models.ForeignKey(CustomUser, on_delete=models.CASCADE , related_name="username")
+    weight = models.TextField()
+    height = models.TextField()
+    bmi = models.TextField()
+
+    def __str__(self):
+        return f"{self.username} - {self.bmi}"
+        
+

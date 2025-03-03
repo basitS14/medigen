@@ -14,6 +14,9 @@ from pathlib import Path
 import os
 from decouple import config
 from dotenv import load_dotenv
+
+from django.contrib.messages import constants as messages
+
 load_dotenv()
 
 
@@ -166,3 +169,11 @@ EMAIL_PORT = 587  # or 465 for SSL, or other ports depending on your server
 EMAIL_HOST_USER = os.getenv("GMAIL_ADDRESS")
 EMAIL_HOST_PASSWORD = os.getenv("GMAIL_PASSWORD")
 EMAIL_USE_TLS = True  # or EMAIL_USE_SSL = True if your server requires it (usually port 465)
+
+MESSAGE_TAGS = {
+    messages.DEBUG: 'info',
+    messages.INFO: 'info',
+    messages.SUCCESS: 'success',
+    messages.WARNING: 'warning',
+    messages.ERROR: 'error',
+}

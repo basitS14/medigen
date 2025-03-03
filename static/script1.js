@@ -111,4 +111,6 @@ document.addEventListener('DOMContentLoaded', function() {
     if (signUpForm) {
         signUpForm.addEventListener("submit", validateForm);
     }
+
+
 });

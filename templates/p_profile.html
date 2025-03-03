@@ -1,203 +1,248 @@
+{% extends "layout.html" %}
 {% load static %}
-<!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="utf-8">
-<title>MediGen Profile Page</title>
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<link href="https://cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/css/bootstrap.min.css" rel="stylesheet">
-<style type="text/css">
-    body {
-        margin-top: 20px;
-        color: #1a202c;
-        text-align: left;
-        background-color: #f8f9fa;
-    }
-    .main-body {
-        padding: 15px;
-    }
-    .card {
-        box-shadow: 0 1px 3px 0 rgba(0,0,0,.1), 0 1px 2px 0 rgba(0,0,0,.06);
-        background-color: #fff;
-        border: none;
-        border-radius: .25rem;
-    }
-    .card-body {
-        padding: 1.5rem;
-    }
-    .profile-header {
-        text-align: center;
-        background-color: #00796b; /* Teal color */
-        color: white;
-        padding: 15px;
-        border-radius: .25rem .25rem 0 0;
-    }
-    .btn-custom {
-        background-color: #00796b;
-        color: white;
-    }
-    .btn-custom:hover {
-        background-color: #005b4f;
-        color: white;
-    }
-    .list-group-item {
-        border: none;
-        padding: 10px 0;
-    }
-</style>
-</head>
-<body>
-<section>
+
+{% block content %}
+<section class="profile-section">
+    <div class="container">
         
-<div class="container">
-    <div class="main-body">
-        <div class="row gutters-sm">
-            <div class="col-md-4 mb-3">
-                <div class="card">
-                    <div class="profile-header">
-                        <h4 class="mt-2">{{ user.full_name }}</h4>
-           
+        <div class="row g-4">
+            <div class="col-lg-4">
+                <div class="card shadow-sm h-100">
+                    <div class="card-header text-center text-white" style="background: linear-gradient(135deg, #00796b, #004d40);">
+                        <div class="py-3">
+                            <img src="{% static 'photos/user.png' %}" alt="Profile Picture" class="rounded-circle img-thumbnail mb-3" style="width: 120px; height: 120px; object-fit: cover;">
+                            <h4 class="mb-1">{{ user.full_name }}</h4>
+                            <p class="mb-0"><i class="fas fa-user me-2"></i>Patient</p>
+                        </div>
                     </div>
                     <div class="card-body">
                         <ul class="list-group list-group-flush">
-                            <li class="list-group-item"><strong>Phone:</strong> {{ user.phone }}</li>
-                            <li class="list-group-item"><strong>Email:</strong> <a href="mailto:{{ user.email }}">{{ user.email }}</a></li>
+                            <li class="list-group-item">
+                                <i class="fas fa-phone-alt me-2 text-muted"></i>
+                                <strong>Phone:</strong>
+                                <span class="float-end text-secondary">{{ user.phone }}</span>
+                            </li>
+                            <li class="list-group-item">
+                                <i class="fas fa-envelope me-2 text-muted"></i>
+                                <strong>Email:</strong>
+                                <span class="float-end text-secondary">
+                                    <a href="mailto:{{ user.email }}" class="text-decoration-none">{{ user.email }}</a>
+                                </span>
+                            </li>
+                            <li class="list-group-item">
+                                <i class="fas fa-venus-mars me-2 text-muted"></i>
+                                <strong>Gender:</strong>
+                                <span class="float-end text-secondary">{{ user.gender }}</span>
+                            </li>
+                            <li class="list-group-item">
+                                <i class="fas fa-calendar-alt me-2 text-muted"></i>
+                                <strong>Date of Birth:</strong>
+                                <span class="float-end text-secondary">{{ user.dob }}</span>
+                            </li>
                         </ul>
-                        <div class="text-center mt-3">
-                            {% comment %} <a class="btn btn-custom" href="#">Edit Profile</a> {% endcomment %}
+                        <div class="d-grid gap-2 mt-4">
+                            <button  class="btn w-100 text-white" style="background-color: #00796b;" data-bs-toggle="modal" data-bs-target="#editProfileModal">
+                                <i class="fas fa-user-edit me-2"></i>Edit Profile
+                            </button>
+                            <button  class="btn w-100 text-white" style="background-color: #00796b;" data-bs-toggle="modal" data-bs-target="#bmiCalculatorModal">
+                                <i class="fas fa-notes-medical me-2"></i>Calculate BMI
+                            </button>
                         </div>
-
                     </div>
+    
                 </div>
             </div>
-            <div class="col-md-8">
-                <div class="card mb-3">
+            
+            <div class="col-lg-8">
+                <div class="card shadow-sm mb-4">
                     <div class="card-body">
-                        <h5 class="mb-3">Profile Details</h5>
-                        <div class="row">
-                            <div class="col-sm-4"><strong>Full Name</strong></div>
-                            <div class="col-sm-8 text-secondary">{{ user.full_name }}</div>
+                        <h5 class="mb-4 fw-bold" style="position: relative; padding-bottom: 10px;">
+                            Health Dashboard
+                            <span style="position: absolute; bottom: 0; left: 0; width: 50px; height: 3px; background-color: #00796b;"></span>
+                        </h5>
+                        <div class="row g-3 text-center">
+                            <div class="col">
+                                <div class="p-3 border rounded bg-light">
+                                    <i class="fas fa-calendar-check text-primary mb-2" style="font-size: 24px;"></i>
+                                    <h6>Total Appointments</h6>
+                                    <h4>{{ appointments|length }}</h4>
+                                </div>
+                            </div>
+                            {% comment %} <div class="col-md-4">
+                                <div class="p-3 border rounded bg-light">
+                                    <i class="fas fa-heartbeat text-danger mb-2" style="font-size: 24px;"></i>
+                                    <h6>Health Score</h6>
+                                    <h4>85<small>/100</small></h4>
+                                </div>
+                            </div> {% endcomment %}
+                            <div class="col">
+                                <div class="p-3 border rounded bg-light">
+                                    <i class="fas fa-heartbeat text-danger mb-2" style="font-size: 24px;"></i>
+                                    <h6>BMI</h6>
+                                    {% if bmi %}
+                                    <h4>{{bmi.bmi}}</h4>
+                                    {% else %}
+                                    <h4>NA</h4>
+                                    {% endif %}
+                                </div>
+                            </div>
                         </div>
-                        <hr> 
-                        <div class="row">
-                            <div class="col-sm-4"><strong>Phone no.</strong></div>
-                            <div class="col-sm-8 text-secondary">{{ user.phone }}</div>
-                        </div>
-                        <hr>     
-                        <div class="row">
-                            <div class="col-sm-4"><strong>Email</strong></div>
-                            <div class="col-sm-8 text-secondary">{{ user.email }}</div>
-                        </div>
-                        <hr>       
-                        <div class="row">
-                            <div class="col-sm-4"><strong>Gender</strong></div>
-                            <div class="col-sm-8 text-secondary">{{ user.gender }}</div>
-                        </div>
-                        <hr>            
-                        <div class="row">
-                            <div class="col-sm-4"><strong>D.O.B</strong></div>
-                            <div class="col-sm-8 text-secondary">{{ user.dob }}</div>
-                        </div>
-                        <hr>
                     </div>
                 </div>
-                <div class="card mb-3">
+                
+                <div class="card shadow-sm">
                     <div class="card-body">
-                        <h5 class="mb-3">Your Appointments</h5>
+                        <h5 class="mb-4 fw-bold" style="position: relative; padding-bottom: 10px;">
+                            Your Appointments
+                            <span style="position: absolute; bottom: 0; left: 0; width: 50px; height: 3px; background-color: #00796b;"></span>
+                        </h5>
+                        
                         {% if appointments %}
-                            <ul class="list-group">
-                            {% for appointment in appointments %}
-                                <li class="list-group-item">
-                                    <strong>Doctor:</strong>Dr. {{ appointment.doctor.user.full_name }}<br>
-                                    <strong>Date:</strong> {{ appointment.date }}<br>
-                                    <strong>Time:</strong> {{ appointment.start_time }} to {{appointment.end_time}}<br>
-                                    <strong>Mode:</strong> {{appointment.appointment_mode}}<br>
-                                    {% comment %} {% if appointment.appointment_mode == "online" %}
-                                        <button 
-                                            id="startCallBtn"
-                                            class="btn btn-primary"
-                                            data-start-time="{{ appointment.start_time|time:'H:i' }}" 
-                                            data-end-time="{{ appointment.end_time|time:'H:i' }}"
-                                            disabled>
-                                            Start Call
-                                        </button>
-                                    {% endif %} {% endcomment %}
-                                    {% if appointment.appointment_mode == "online" %}
-                                    <a 
-                                    href="{% url 'meds:video-call' appointment.id %}"
-                                    class="btn btn-primary"
-                                    data-appointment-id="{{ appointment.id }}"
-                                    data-start-time="{{ appointment.start_time|time:'H:i' }}" 
-                                    data-end-time="{{ appointment.end_time|time:'H:i' }}"
-                                        >
-                                        Start Call
-                                    </a>
-                                    {% comment %} <script>
-                                        // Initialize WebSocket connection when needed
-                                        let ws = null;
-                                        
-                                        function initializeWebSocket() {
-                                            if (!ws || ws.readyState === WebSocket.CLOSED) {
-                                                ws = new WebSocket(`ws://${window.location.host}/ws/notifications/`);
-                                                
-                                                ws.onopen = () => {
-                                                    console.log('WebSocket Connected');
-                                                };
-                                    
-                                                ws.onmessage = (e) => {
-                                                    const data = JSON.parse(e.data);
-                                                    console.log('Received message:', data);
-                                    
-                                                    if (data.type === 'call_rejected') {
-                                                        alert('Call was rejected or doctor is unavailable');
-                                                    }
-                                                };
-                                            }
-                                        }
-                                    
-                                        // Function to handle starting a call
-                                        function initiateCall(appointmentId) {
-                                            initializeWebSocket();
-                                            
-                                            // Send call request through WebSocket
-                                            ws.send(JSON.stringify({
-                                                type: 'call_request',
-                                                appointment_id: appointmentId,
-                                            }));
-                                            
-                                            // Redirect to video call page
-                                            window.location.href = `/meds/video-call/${appointmentId}/`;
-                                        }
-                                    
-                                        // Add click handlers to all call buttons
-                                        document.addEventListener('DOMContentLoaded', function() {
-                                            const callButtons = document.querySelectorAll('[data-appointment-id]');
-                                            callButtons.forEach(button => {
-                                                button.addEventListener('click', function(e) {
-                                                    e.preventDefault();
-                                                    const appointmentId = this.dataset.appointmentId;
-                                                    initiateCall(appointmentId);
-                                                });
-                                            });
-                                        });
-                                    </script> {% endcomment %}
-                                {% endif %}
-
-                                </li>
-                            {% endfor %}
-                            </ul>
+                            <div class="appointments-container">
+                                {% for appointment in appointments %}
+                                    <div class="card mb-3 border-0 shadow-sm" style="border-left: 5px solid #00796b !important;">
+                                        <div class="card-body">
+                                            <div class="row align-items-center">
+                                                <div class="col-md-2 text-center mb-3 mb-md-0">
+                                                    <div style="color: #00796b; font-weight: 600;">
+                                                        <span style="font-size: 1.5rem;">{{ appointment.date|date:"d" }}</span><br>
+                                                        <span>{{ appointment.date|date:"M" }}</span>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-7 mb-3 mb-md-0">
+                                                    <h6 class="mb-1">Dr. {{ appointment.doctor.user.full_name }}</h6>
+                                                    <p class="mb-1 text-muted">
+                                                        <i class="far fa-clock me-1"></i> {{ appointment.start_time }} to {{ appointment.end_time }}
+                                                    </p>
+                                                    <p class="mb-0">
+                                                        <span class="badge {% if appointment.appointment_mode == 'online' %}bg-info{% else %}bg-success{% endif %}">
+                                                            {% if appointment.appointment_mode == 'online' %}
+                                                                <i class="fas fa-video me-1"></i> Online
+                                                            {% else %}
+                                                                <i class="fas fa-hospital me-1"></i> In-Person
+                                                            {% endif %}
+                                                        </span>
+                                                    </p>
+                                                </div>
+                                                <div class="col-md-3 text-md-end">
+                                                    {% if appointment.appointment_mode == "online" %}
+                                                        <a href="{% url 'meds:video-call' appointment.id %}" 
+                                                           class="btn text-white"
+                                                           style="background-color: #00796b;"
+                                                           data-appointment-id="{{ appointment.id }}"
+                                                           data-start-time="{{ appointment.start_time|time:'H:i' }}" 
+                                                           data-end-time="{{ appointment.end_time|time:'H:i' }}">
+                                                            <i class="fas fa-video me-1"></i> Start Call
+                                                        </a>
+                                                    {% else %}
+                                                        <button class="btn btn-outline-secondary" disabled>
+                                                            <i class="fas fa-map-marker-alt me-1"></i> In-Person
+                                                        </button>
+                                                    {% endif %}
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                {% endfor %}
+                            </div>
                         {% else %}
-                            <p>You have no appointments scheduled.</p>
+                            <div class="text-center py-5 bg-light rounded">
+                                <i class="fas fa-calendar-times mb-3" style="font-size: 48px; color: #6c757d;"></i>
+                                <h5>No Appointments Scheduled</h5>
+                                <p class="text-muted mb-4">You don't have any upcoming appointments. Book a consultation with one of our specialists.</p>
+                                <a href="#Doctors" class="btn text-white" style="background-color: #00796b;">
+                                    <i class="fas fa-calendar-plus me-2"></i>Book Appointment
+                                </a>
+                            </div>
                         {% endif %}
                     </div>
                 </div>
             </div>
         </div>
     </div>
+</section>
+
+<!-- Edit Profile Modal -->
+<div class="modal fade" id="editProfileModal" tabindex="-1" aria-labelledby="editProfileModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header" style="background-color: #00796b; color: white;">
+                <h5 class="modal-title" id="editProfileModalLabel">Edit Profile</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form action="{% url 'meds:update_profile' %}" method="POST">
+                    {% csrf_token %}
+                    <div class="mb-3">
+                        <label for="fullName" class="form-label">Full Name</label>
+                        <input type="text" class="form-control" id="fullName" name="full_name" value="{{ user.full_name }}">
+                    </div>
+                    <div class="mb-3">
+                        <label for="phone" class="form-label">Phone Number</label>
+                        <input type="tel" class="form-control" id="phone" name="phone" value="{{ user.phone }}">
+                    </div>
+                    <div class="mb-3">
+                        <label for="gender" class="form-label">Gender</label>
+                        <select class="form-select" id="gender" name="gender">
+                            <option value="Not Specified" {% if user.gender == "Not Specified" %}selected{% endif %}>Not Specified</option>
+                            <option value="Male" {% if user.gender == "Male" %}selected{% endif %}>Male</option>
+                            <option value="Female" {% if user.gender == "Female" %}selected{% endif %}>Female</option>
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label for="dob" class="form-label">Date of Birth</label>
+                        <input type="date" class="form-control" id="dob" name="dob" value="{{ user.dob|date:'Y-m-d' }}">
+                    </div>
+                    <div class="text-end">
+                        <button type="button" class="btn btn-default" data-bs-dismiss="modal">Cancel</button>
+                        <button type="submit" class="btn btn-default" >Save Changes</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
 </div>
 
-    </section>
-<script src="https://code.jquery.com/jquery-1.10.2.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/js/bootstrap.bundle.min.js"></script>
-</body>
-</html>
+<!-- BMI Calculator -->
+<div class="modal fade" id="bmiCalculatorModal" tabindex="-1" aria-labelledby="bmiCalculatorModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header" style="background-color: #00796b; color: white;">
+                <h5 class="modal-title" id="bmiCalculatorModalLabel">BMI Calculator</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form id="bmiCalculatorForm" action={% url "meds:bmi-calculator" %} method="POST">
+                    {% csrf_token %}
+                    <div class="mb-3">
+                        <label for="weight" class="form-label">Weight (kg)</label>
+                        <input type="number" class="form-control" id="weight" name="weight" placeholder="Enter weight in kg" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="height" class="form-label">Height (cm)</label>
+                        <input type="number" class="form-control" id="height" name="height" placeholder="Enter height in cm" required>
+                    </div>
+                    {% comment %} <div class="mb-3">
+                        <label for="bmiResult" class="form-label">BMI</label>
+                        <input type="text" class="form-control" id="bmiResult" readonly>
+                    </div> {% endcomment %}
+                    <div class="text-end">
+                        <button type="button" class="btn btn-default" data-bs-dismiss="modal">Cancel</button>
+                        <button type="submit" class="btn btn-default" >Calculate BMI</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+{% endblock %}
+
+{% comment %} {% block extra_js %}
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Any additional JavaScript needed for the profile page
+    });
+</script>
+{% endblock %} {% endcomment %}

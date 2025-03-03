@@ -135,18 +135,19 @@
     <div class="container">
         <div class="row">
             {% for doctor in doctors %}
-            <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+            <div class="col-lg-3 col-md-4 col-sm-6 col-12 mb-3">
                 <div class="box">
                     <img src="{{doctor.photo.url}}" alt="">
-                    <a href="{% url 'doc_profile' doctor.id %}">
+                    <a href="{% url 'doc_profile' doctor.id %}" class="text-decoration-none">
                         <h3>{{doctor.user.full_name}}</h3>
                     </a>
                     <span>{{doctor.specialization}}</span>
                     <div class="share d-flex justify-content-center">
                         <a href="mailto:{{doctor.user.email}}" class="fa fa-envelope"></a>
-                        <a href="#" data-bs-toggle="modal" data-bs-target="#appointment_modal" 
-                           data-doctor-id="{{doctor.id}}" class="fas fa-pen"></a>
-                        <a href="tel:{{doctor.phone}}" class="fas fa-phone"></a>
+						 <a href="#" data-bs-toggle="modal" data-bs-target="#appointment_modal" 
+                           data-doctor-id="{{doctor.id}}" class="fas fa-pen"></a> 
+						   {% comment %} <a href="{% url 'meds:book_appointment' doctor.id %}" class="fas fa-pen" data-doctor-id="{{doctor.id}}" ></a> {% endcomment %}
+						   <a href="tel:{{doctor.phone}}" class="fas fa-phone"></a>
                     </div>
                 </div>
             </div>

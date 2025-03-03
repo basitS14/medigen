@@ -28,8 +28,8 @@
                         <td>{{ doctor.experience }} years</td>
                         <td>{{ doctor.address }}</td>
                         <td>
-                            <a href="{% url 'meds:approve_doctor' doctor.id %}" class="btn btn-success btn-sm">Approve</a>
-                            <a href="{% url 'meds:reject_doctor' doctor.id %}" class="btn btn-danger btn-sm">Reject</a>
+                            <a href="{% url 'meds:approve_doctor' doctor.id %}" class="btn btn-success btn-sm " style="color:white;border-color:#198754">Approve</a>
+                            <a href="{% url 'meds:reject_doctor' doctor.id %}" class="btn btn-danger btn-sm" style="color:white; border-color:#DC3545">Reject</a>
                         </td>
                     </tr>
 
@@ -55,10 +55,10 @@
                                     </div>
                                 </div>
                                 <div class="modal-footer">
-                                    <a href="{% url 'meds:request_document_verification' doctor.id %}" class="btn btn-warning">
+                                    <a href="{% url 'meds:request_document_verification' doctor.id %}" class="btn btn-default">
                                         Request Document Verification
                                     </a>
-                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                    <button type="button" class="btn btn-warning" data-bs-dismiss="modal">Close</button>
                                 </div>
                             </div>
                         </div>
