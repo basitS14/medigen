@@ -36,13 +36,35 @@ def test(request):
 
 
 def know_more(request):
-    return render(request , 'know_more.html')
+    doctors = Doctors.objects.all()
+    availability = Availability.objects.all()
+    
+    context = {
+        'doctors': doctors,
+        'availability': availability
+    }
+    return render(request, 'know_more.html', context=context)
 
 def learn_more(request):
-    return render(request , 'learn.more.html')
+   
+    return render(request , 'learn.more.html' )
 
 def expert_doctors(request):
-    return render(request , 'EDL.html')
+    doctors = Doctors.objects.all()
+    availability = Availability.objects.all()
+    
+
+    context = {
+        'doctors' : doctors,
+        'availability':availability
+    }
+    return render(request , 'EDL.html' , context=context)
+
+def online_consultation(request):
+    return render(request , 'online-consultation.html')
+
+def check_disease(request):
+    return render(request , 'check-your-disease.html')
 
 def sign_up(request):
     return render(request , "login_modal.html")

@@ -1,5 +1,3 @@
-
-
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@100;200;300;400;500;600;700;800;900&display=swap');
 
 :root{
@@ -1178,3 +1176,132 @@ button:hover {
 .btn-close-white {
     filter: invert(1) grayscale(100%) brightness(200%);
 }
+
+/* Introduction Section for EDL Page */
+.intro-section {
+    background: white;
+    text-align: center;
+    padding: 100px 20px 60px;
+}
+
+.intro-section .container {
+    max-width: 1000px;
+    margin: auto;
+}
+
+.intro-section h1 {
+    font-size: 3rem;
+    font-weight: bold;
+    text-align: center;
+    color: #222;
+    margin-bottom: 20px;
+    text-transform: uppercase;
+}
+
+.intro-section p {
+    font-size: 1.4rem;
+    color: #555;
+    line-height: 1.8;
+    margin-bottom: 20px;
+}
+
+/* Why Choose Our Expert Doctors Section */
+.why-choose {
+    background: #e9f5f0;
+    padding: 60px 20px;
+    text-align: center;
+}
+
+.why-choose .container {
+    max-width: 1000px;
+    margin: auto;
+}
+
+.why-choose h2 {
+    font-size: 2.5rem;
+    font-weight: bold;
+    color: #222;
+    margin-bottom: 30px;
+}
+
+.why-choose ul {
+    list-style: none;
+    padding: 0;
+    text-align: left;
+}
+
+.why-choose ul li {
+    font-size: 1.5rem;
+    font-weight: 500;
+    color: #333;
+    padding: 15px;
+    background: white;
+    margin: 15px 0;
+    border-radius: 12px;
+    box-shadow: 0 5px 10px rgba(0, 0, 0, 0.15);
+    transition: transform 0.3s ease-in-out;
+}
+
+.why-choose ul li:hover {
+    transform: translateX(10px);
+    background: #dff0e4;
+}
+
+/* Responsive Design for EDL Page */
+@media (max-width: 1024px) {
+    .intro-section h1, 
+    .why-choose h2 {
+        font-size: 2.2rem;
+    }
+
+    .intro-section p {
+        font-size: 1.2rem;
+    }
+
+    .why-choose ul li {
+        font-size: 1.3rem;
+        padding: 12px;
+    }
+}
+
+@media (max-width: 768px) {
+    .intro-section h1, 
+    .why-choose h2 {
+        font-size: 2rem;
+    }
+
+    .intro-section p {
+        font-size: 1.1rem;
+    }
+
+    .why-choose ul li {
+        font-size: 1.2rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .intro-section {
+        padding: 80px 10px 40px;
+    }
+
+    .why-choose {
+        padding: 40px 15px;
+    }
+
+    .intro-section h1, 
+    .why-choose h2 {
+        font-size: 1.8rem;
+    }
+
+    .intro-section p {
+        font-size: 1rem;
+    }
+
+    .why-choose ul li {
+        font-size: 1rem;
+        padding: 10px;
+    }
+}
+
+/* Fix for Sticky Header */
+

@@ -1,62 +1,252 @@
-body {
-    margin: 0;
-    padding: 0;
+.know-more-section {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 60px;
+    background: #e8f5e9;
 }
 
+.content {
+    max-width: 50%;
+}
 
-.overlay-text {
-    position: absolute;
-    top: 27%;
-    right: 3%; /* Adjust left position as needed */
-    transform: translateY(-50%); /* Vertically center the text */
-   
-    text-align: left; /* Align text to the left */
+.heading {
     
-    z-index: 2; /* Ensure text is above the image */
+    font-size: 36px;  /* Increase size */
+    color: #222;  /* Dark color for better visibility */
+    font-weight: bold;
+    text-transform: uppercase;  /* Make it all caps */
+    text-align: left;
+    margin-bottom: 20px;
 }
-.overlay-text  {
-    color: #16a085; /* Change text color to green */
-    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.388); /* Add shadow to the text */
-    font-size:  1.27rem; /* Increase the font size */
-    line-height: 1.2; /* Adjust line height to increase spacing */
-    font-family: "Poppins", sans-serif;
 
+.heading span {
+    color: #00796b;
 }
-.image-container2 {
-    position: relative;
+
+.description {
+    font-size: 18px;
+    color: #444;
+    margin: 15px 0;
+}
+
+.bttn {
+    display: inline-block;
+    padding: 12px 20px;
+    background: #00796b;
+    color: #fff;
+    text-decoration: none;
+    border-radius: 5px;
+    margin-top: 15px;
+}
+
+.btn:hover {
+    background: #004d40;
+}
+
+.image-container img {
+    width: 500px;
+    height: auto;
+    border-radius: 10px;
+}
+
+/* Services Section */
+.services-section {
+    text-align: center;
+    padding: 100px 20px;
+    background-color: #f9f9f9;
+}
+
+.services-section h2 {
+    font-size: 2rem;
+    margin-bottom: 20px;
+    color: #333;
+}
+
+.services-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 20px;
+    max-width: 1200px;
+    margin: auto;
+}
+
+.service-box {
+    background: white;
+    padding: 20px;
+    width: 250px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    transition: transform 0.3s ease-in-out;
+}
+
+.service-box i {
+    font-size: 30px;
+    color: #63E6BE;
+}
+
+.service-box h3 {
+    font-size: 1.7rem;
+    margin: 10px 0;
+    color: #333;
+}
+
+.service-box p {
+    font-size: 1.2rem;
+    color: #666;
+    margin-bottom: 15px;
+}
+
+.service-box:hover {
+    transform: translateY(-5px);
+}
+
+/* Button Styling */
+.bttn {
+    display: inline-block;
+    padding: 10px 15px;
+    background-color: #00796b;
+    color: white;
+    border-radius: 5px;
+    text-decoration: none;
+    transition: background 0.3s;
+}
+
+.bttn:hover {
+    background-color: #45c9a5;
+}
+
+/* Expert Doctors Section */
+.Doctors {
+    text-align: center;
+    padding: 50px 20px;
+    background-color: #ffffff;
+}
+
+.Doctors h2 {
+    font-size: 4rem;
+    margin-bottom: 20px;
+    color: #333;
+}
+
+.Doctors p {
+    font-size: 2.5rem;
+    color: #666;
+    margin-bottom: 30px;
+}
+
+.doctor-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 20px;
+    max-width: 1200px;
+    margin: auto;
+}
+
+.doctor-box {
+    background: #f9f9f9;
+    padding: 20px;
+    width: 250px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    transition: transform 0.3s ease-in-out;
+}
+
+.doctor-box img {
     width: 100%;
-    height: auto; /* Adjust height based on the content */
+    height: 200px;
+    object-fit: cover;
+    border-radius: 10px;
+    margin-bottom: 15px;
 }
 
-.image-container2 img {
-    width: 1396px;
-    height: auto; /* Maintain aspect ratio */
-    display: block;
+.doctor-box h3 {
+    font-size: 1.6rem;
+    color: #333;
+    margin-bottom: 5px;
 }
 
-.overlay2 {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 1396px;
-    height: 100%;
-    background: rgba(0, 0, 0, 0.422); /* Very transparent green color */
-    z-index: 1; /* Ensure overlay is on top of the image */
+.doctor-box span {
+    font-size: 1.3rem;
+    color: #63E6BE;
+    font-weight: bold;
 }
 
-.overlay-text2 {
-    position: absolute;
-    top: 40%;
-    right: 5%; /* Adjust the left position as needed */
-    transform: translateY(-50%); /* Vertically center the text */
-    text-align: left; /* Align text to the left */
-    z-index: 2; /* Ensure text is above the image */
-    color: white; /* Change text color to white */
-     /* Add shadow to the text */
-    font-size: 1.5rem; /* Increase the font size */
-    line-height: 1.2; /* Adjust line height to increase spacing */
-    font-style: serif;
+.doctor-box p {
+    font-size: 1.5rem;
+    color: #666;
+    margin-bottom: 15px;
 }
 
+.doctor-box:hover {
+    transform: translateY(-5px);
+}
 
+/* Our Models Section */
+.our-models {
+    text-align: center;
+    padding: 50px 20px;
+    background-color: #f9f9f9;
+}
 
+.our-models h2 {
+    font-size: 2rem;
+    margin-bottom: 20px;
+    color: #333;
+}
+
+.our-models p {
+    font-size: 1rem;
+    color: #666;
+    margin-bottom: 30px;
+}
+
+.model-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 20px;
+    max-width: 800px;
+    margin: auto;
+}
+
+.model-box {
+    background: white;
+    padding: 20px;
+    width: 300px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    transition: transform 0.3s ease-in-out;
+}
+
+.model-box i {
+    font-size: 40px;
+    color: #63E6BE;
+}
+
+.model-box h3 {
+    font-size: 1.5rem;
+    color: #333;
+    margin-bottom: 5px;
+}
+
+.model-box h4 {
+    font-size: 1.2rem;
+    color: #555;
+    margin-bottom: 10px;
+}
+
+.model-box p {
+    font-size: 1rem;
+    color: #666;
+    margin-bottom: 15px;
+}
+
+.model-box:hover {
+    transform: translateY(-5px);
+}

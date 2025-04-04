@@ -1,0 +1,49 @@
+{% extends "layout.html" %}
+{% load static %}
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'check-disease.css' %}">
+{% endblock %}
+
+{% block content %}
+<section class="disease-section">
+    <div class="container">
+        <h1 class="heading">Check Your <span>Disease</span></h1>
+        <p>Our AI-powered models predict potential diseases based on symptoms and medical data. 
+            Choose a prediction model below.</p>
+    </div>
+</section>
+
+<!-- Disease Prediction Models (Aligned in 1 Row) -->
+<section class="model-section">
+    <div class="container">
+        <h2>How Our <span>AI Models</span> Predict Diseases ?</h2>
+
+        <div class="model-container">
+            <!-- General Disease Prediction -->
+            <div class="model-box">
+                <h3>Model 1: General Disease Prediction</h3>
+                <p>This model predicts common diseases based on user symptoms. Using Natural Language Processing (NLP), it identifies patterns and provides an estimated diagnosis.</p>
+                <ul>
+                    <li><b>Input:</b> Enter symptoms like fever, cough, headache, etc.</li>
+                    <li><b>Analysis:</b> The AI processes the symptoms and matches them with medical data.</li>
+                    <li><b>Output:</b> It suggests possible conditions and recommends consulting a specialist.</li>
+                </ul>
+                <a href="{% url "models:multi_disease" %}" class="btn bttn">Try General Disease Prediction</a>
+            </div>
+
+            <!-- Skin Disease Prediction -->
+            <div class="model-box">
+                <h3>Model 2: Skin Disease Prediction</h3>
+                <p>This model analyzes skin images to identify conditions such as eczema, psoriasis, and other skin disorders. It uses deep learning to provide accurate results.</p>
+                <ul>
+                    <li><b>Input:</b> Upload a clear image of the affected skin area.</li>
+                    <li><b>Analysis:</b> The AI compares your image with a large dataset of known skin conditions.</li>
+                    <li><b>Output:</b> It provides a possible diagnosis and suggests further medical consultation.</li>
+                </ul>
+                <a href="{% url "models:skin_disease" %}" class="btn bttn">Try Skin Disease Prediction</a>
+            </div>
+        </div>
+    </div>
+</section>
+
+{% endblock %}

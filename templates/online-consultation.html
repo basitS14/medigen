@@ -1,0 +1,42 @@
+{% extends "layout.html" %}
+{% load static %}
+
+{% block extra_css %}
+	<link rel="stylesheet" href="{% static 'online-consultation.css' %}">
+
+{% endblock %}
+
+{% block content %}
+  <!-- Online Consultation Steps -->
+  <section class="consultation">
+    <h1 class="heading">How to <span>Consult Online</span></h1>
+    
+    <div class="steps-container">
+        <div class="step">
+            <i class="fas fa-user-plus"></i>
+            <h2>Step 1</h2>
+            <p>Register or Log in to your MediGen account.</p>
+        </div>
+        <div class="step">
+            <i class="fas fa-search"></i>
+            <h2>Step 2</h2>
+            <p>Search for a specialist doctor based on your need.</p>
+        </div>
+        <div class="step">
+            <i class="fas fa-calendar-alt"></i>
+            <h2>Step 3</h2>
+            <p>Book an appointment at your preferred time.</p>
+        </div>
+        <div class="step">
+            <i class="fas fa-video"></i>
+            <h2>Step 4</h2>
+            <p>Join the video consultation at the scheduled time.</p>
+        </div>
+        <div class="step">
+            <i class="fas fa-file-prescription"></i>
+            <h2>Step 5</h2>
+            <p>Receive a digital prescription and follow-up advice.</p>
+        </div>
+    </div>
+</section>
+{% endblock %}

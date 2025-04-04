@@ -1,69 +1,53 @@
-{% load static %}
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-    <link rel="stylesheet" href="{% static "EDL.css" %}">
-</head>
-<body>
-    <nav class="navbar">
-        <h1 class="navbar-title">Expert Doctors</h1>
-    </nav>
-    
-    <div class="content">
-        <div class="text-content">
-            <h1 class="title"> We always ensure best treatment for your health.</h1>
-            <p>At Medigen, we are committed to providing exceptional medical care tailored to your unique health needs. Our innovative platform leverages advanced predictive analytics to assess potential diseases, empowering patients with accurate insights into their health. With our user-friendly system, you can easily book appointments with top healthcare professionals, ensuring that you receive the best possible treatment. Your well-being is our top priority, and we strive to support you every step of the way on your journey to optimal health.</p>
-        </div>
-        <div class="image-slider">
-            <div class="slides">
-                <div class="slide"><img src="{% static "photos/ED4.jfif" %}" alt="Image 1"></div>
-                <div class="slide"><img src="{% static "photos/ED2.jpg" %}" alt="Image 2"></div>
-                <div class="slide"><img src="{% static "photos/ED3.jfif" %}" alt="Image 3"></div>
+{% extends "layout.html" %}
+
+{% block content %}
+ <!-- Introduction to Expert Doctors -->
+ <section class="intro-section">
+	<div class="container">
+		<h1 class="heading">Meet Our <span>Expert Doctors</span></h1>
+		<p>At MediGen, we take pride in connecting you with highly skilled doctors who specialize in various medical fields. Our doctors are certified professionals with extensive experience, ensuring that you receive the best care possible.</p>
+	</div>
+</section>
+
+<!-- Why Choose Our Doctors? -->
+<section class="why-choose">
+	<div class="container">
+		<h2>Why Choose Our <span>Expert Doctors?</span></h2>
+		<ul>
+			<li><b>Experienced Professionals:</b> Our doctors have years of practice in their respective fields.</li>
+			<li><b>Personalized Care:</b> We focus on patient-specific treatment plans.</li>
+			<li><b>Advanced Medical Technologies:</b> Our doctors use the latest technology for accurate diagnoses and treatments.</li>
+			<li><b>Wide Range of Specializations:</b> From dermatology to oncology, we have specialists for all medical needs.</li>
+		</ul>
+	</div>
+</section>
+
+<!--doctor section-->
+
+<section class="Doctors" id="Doctors">
+    <h1 class="heading">our <span>Doctors</span></h1>
+    <div class="container">
+        <div class="row">
+            {% for doctor in doctors %}
+            <div class="col-lg-3 col-md-4 col-sm-6 col-12 mb-3">
+                <div class="box">
+                    <img src="{{doctor.photo.url}}" alt="">
+                    <a href="{% url 'doc_profile' doctor.id %}" class="text-decoration-none">
+                        <h3>{{doctor.user.full_name}}</h3>
+                    </a>
+                    <span>{{doctor.specialization}}</span>
+                    <div class="share d-flex justify-content-center">
+                        <a href="mailto:{{doctor.user.email}}" class="fa fa-envelope"></a>
+						 <a href="#" data-bs-toggle="modal" data-bs-target="#appointment_modal" 
+                           data-doctor-id="{{doctor.id}}" class="fas fa-pen"></a> 
+						   {% comment %} <a href="{% url 'meds:book_appointment' doctor.id %}" class="fas fa-pen" data-doctor-id="{{doctor.id}}" ></a> {% endcomment %}
+						   <a href="tel:{{doctor.phone}}" class="fas fa-phone"></a>
+                    </div>
+                </div>
             </div>
-            <button class="prev" onclick="changeSlide(-1)">&#10094;</button>
-            <button class="next" onclick="changeSlide(1)">&#10095;</button>
+            {% endfor %}
         </div>
     </div>
+</section>
 
-    <div class="image-container">
-        <img src="{% static "photos/m5.jpg" %}" alt="Descriptive Alt Text">
-        <div class="overlay-text">
-            <h2>
-<pre>Different types of Department
-   we have for your healthcare.</pre>
-            </h2>
-        </div>
-    </div>
-    <div class="box-container">
-        <div class="box">
-            <h3>Dermatology</h3>
-            <p>Dermatology is the medical specialty focused on the diagnosis and treatment of skin, hair, and nail disorders. Dermatologists address a wide range of conditions, from common issues like acne, eczema, and psoriasis to more serious diseases such as skin cancer. </p>
-        </div>
-        <div class="box">
-            <h3>Oncology</h3>
-            <p>Oncology is the branch of medicine that specializes in the diagnosis, treatment, and management of cancer. Oncologists are trained to understand the complexities of various cancer types, including their development, progression, and response to treatment.</p>
-        </div>
-    </div>
-    <div class="box-container">
-        <div class="box">
-            <h3>Pediatrics</h3>
-            <p>Pediatrics is the branch of medicine dedicated to the health and medical care of infants, children, and adolescents. Pediatricians specialize in diagnosing and treating a wide range of childhood illnesses, from common conditions like colds and allergies to more serious diseases and developmental issues. </p>
-        </div>
-        <div class="box">
-            <h3> Gynecology </h3>
-            <p>
-                Gynecology is the branch of medicine that specializes in the health care of women, particularly concerning the female reproductive system. Gynecologists are trained to diagnose and treat a variety of conditions, including menstrual disorders, hormonal imbalances, and reproductive health issues. </p>
-        </div>
-    </div>
-    
-   
-
-    <script src="{% static "EDL.js" %}"></script>
-</body>
-</html>
-
-</body>
-</html>
+{% endblock %}

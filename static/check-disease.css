@@ -1,0 +1,151 @@
+/* Disease Section */
+
+
+/* Aligning Models Horizontally */
+
+/* Disease Section */
+/* Disease Section */
+.disease-section {
+    text-align: center;  /* Center aligns all text inside */
+    display: flex;
+    justify-content: center;  /* Centers the content horizontally */
+    align-items: center;  /* Centers the content vertically */
+    flex-direction: column;  /* Ensures everything is stacked properly */
+    height: 250px;  /* Adjust height if needed */
+    background-color: #f9f9f9;
+}
+
+
+.disease-section .heading {
+    text-align: center;
+    font-size: 4rem;}
+
+.disease-section .heading span {
+        color: #00796b;
+}
+
+
+.disease-section .container {
+    max-width: 900px;
+    width: 100%;
+    text-align: center;  /* Ensures content is centered */
+}
+
+.disease-section h1 {
+    font-size: 3.5rem;
+    font-weight: bold;
+    color: #222;
+    margin-bottom: 10px;
+    text-transform: uppercase;
+}
+
+.disease-section .container p {
+    font-size: 3rem;
+
+}
+
+
+/* Aligning Models Horizontally */
+.model-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 20px;
+    max-width: 1000px;
+    margin: auto;
+}
+
+/* Individual Model Box */
+.model-box {
+    background: white;
+    padding: 20px;
+    width: 450px;  /* Adjusted for better alignment */
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    transition: transform 0.3s ease-in-out;
+}
+
+.model-box:hover {
+    transform: translateY(-5px);
+}
+
+/* Model Section */
+.model-section .container{
+    text-align: center;
+    font-size: 3.5rem;
+}
+.model-section h2 span {
+    color: #00796b;  /* Highlighted color for "AI Models" */
+}
+
+
+/* Model Titles */
+
+
+/* Model Description */
+.model-box h3 {
+    font-size: 2rem;  /* Increased size */
+    color: black;
+    margin-bottom: 15px;
+    transition: color 0.3s ease-in-out;
+}
+
+.model-box p {
+    font-size: 1.2rem;  /* Increased size */
+    color: #555;
+    margin-bottom: 15px;
+    transition: color 0.3s ease-in-out;
+}
+.model-box:hover {
+    transform: translateY(-5px); /* Lifts box slightly */
+}
+
+.model-box:hover h3,
+.model-box:hover p {
+    color: #00796b;  /* Text changes to green */
+}
+/* Model Details List */
+
+.model-box ul {
+    text-align: left;
+    list-style: none;
+    padding-left: 0;
+}
+
+.model-box ul li {
+    font-size: 1.7rem;
+    color: #555;
+    padding: 8px 0;
+    background: #f9f9f9;
+    margin: 5px 0;
+    border-radius: 5px;
+    padding-left: 15px;
+}
+
+/* Button Styling */
+.bttn {
+    display: inline-block;
+    padding: 10px 15px;
+    background-color: #00796b;
+    color: white;
+    border-radius: 5px;
+    text-decoration: none;
+    transition: background 0.3s;
+}
+
+.bttn:hover {
+    background-color: #45c9a5;
+}
+
+/* Responsive Design */
+@media (max-width: 1024px) {
+    .model-box {
+        width: 100%;
+    }
+
+    .model-container {
+        flex-direction: column;
+        align-items: center;
+    }
+}

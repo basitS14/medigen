@@ -574,13 +574,13 @@ def get_time_slots(request, doctor_id):
                     break_end=online_availability.break_to,
                     max_patients=online_availability.max_appointments
                 )
-            elif online_partime:
-                slots = generate_time_slots_partime(
+            if online_partime:
+                partime_slots = generate_time_slots_partime(
                     start_time=online_partime.available_from,
                     end_time=online_partime.available_to,
                     max_patients=online_partime.max_appointments
                 )
-
+            slots.extend(partime_slots)
         # **Filter Out Already Booked Slots**
         booked_slots = Appointment.objects.filter(
             doctor=doctor,
@@ -726,11 +726,11 @@ def update_profile(request):
 @login_required
 def update_doctor_profile(request):
     # Get the doctor object for the current user
-    # try:
-    #     doctor = Doctors.objects.get(user=request.user)
-    # except Doctors.DoesNotExist:
-    #     messages.error(request, "Doctor profile not found.")
-    #     return redirect('meds:profile')  
+    try:
+        doctor = Doctors.objects.get(user=request.user)
+    except Doctors.DoesNotExist:
+        messages.error(request, "Doctor profile not found.")
+        return redirect('meds:profile')  
     
     # Get user object
     user = request.user

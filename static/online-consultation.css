@@ -1,0 +1,74 @@
+/* online-consultation.html*/
+
+/* General Styles */
+/* Steps Container */
+
+.consultation .steps-container {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr); /* 3 steps in first row */
+    gap: 20px;
+    justify-content: center;
+    align-items: center;
+    max-width: 900px;
+    margin: auto;
+}
+
+/* Individual Step Box */
+.step {
+    background: #fff;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    transition: transform 0.3s ease-in-out;
+}
+
+/* Center the last two steps below */
+.step:nth-child(4),
+.step:nth-child(5) {
+    grid-column: span 1; /* Make last two steps occupy one column each */
+    justify-self: center;
+}
+
+.step i {
+    font-size: 4rem;
+    color: #27ae60;
+    margin-bottom: 10px;
+}
+
+.step h2 {
+    font-size: 3rem;
+    color: black;
+    margin-bottom: 10px;
+}
+
+.step p {
+    font-size: 2rem;
+    color: #666;
+}
+
+.step:hover {
+    transform: scale(1.05);
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .steps-container {
+        grid-template-columns: repeat(2, 1fr); /* 2 steps per row for tablets */
+    }
+
+    .step:nth-child(3) {
+        grid-column: span 2; /* Center the third step in its own row */
+    }
+
+    .step:nth-child(4),
+    .step:nth-child(5) {
+        grid-column: span 1;
+    }
+}
+
+@media (max-width: 480px) {
+    .steps-container {
+        grid-template-columns: repeat(1, 1fr); /* Stack steps in a single column on mobile */
+    }
+}

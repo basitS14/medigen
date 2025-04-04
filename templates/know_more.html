@@ -1,69 +1,138 @@
+{% extends "layout.html" %}
+
 {% load static %}
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-    <link rel="stylesheet" href="{% static "know_more.css" %}">
-</head>
-<!DOCTYPE html>
-<html lang="en">
-<head>
-   
 
-   
-    <body>
-        
-        <div class="image-container" >
-            <img src="{% static "photos/abtcopy.jpg" %}" style="width: 1396px;" height="300px">
-            <div class="overlay-text">
-               
-                    <p><pre><h1>"MediGen, where health is our prime mission,
-    Guiding you with care and precision."</h1>
-                                </pre> </p>
-                    </div>
-                
-            </div>
-        </div>
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'know_more.css' %}">
 
-        <div class="video-container" style="background-color:#16a0846a; width: 1396px; height: 600px;">
-            <video id="myVideo" width="100%" height="100%" muted autoplay loop style="box-shadow: 0 4px 20px rgba(0, 0, 0, 0.884); ";>
-                <source src="{% static "videos/VN20240918_203641.mp4" %}" >
-                Your browser does not support the video tag.
-            </video>
-        </div>
-        <div class="image-container2">
-            <img src="{% static "photos/3rdcopy.jpg" %}" alt="Descriptive Alt Text">
-            <div class="overlay2"></div>
-            <div class="overlay-text2">
-                
-                <p><pre>
+{% endblock %}
 
-<h1></h1>                   
-At MediGen, we believe that technology can 
-transform healthcare for the better. By 
-harnessing the power of AI, we aim to make
-medical processes faster and more efficient,
-allowing doctors to spend more time caring 
-for patients. 
+{% block content %}
+<!-- Know More Header -->
 
-Our solutions are designed to be user-friendly,
-ensuring that both healthcare providers and 
-patients can easily benefit from them.
-Together, we can create a healthier future for 
-everyone..</h1>  
-                    
-          </pre></p>
-               
-            </div>
-        
-            
-        </body>
-        </html>
-            
-                
-          
-        
-        
+<section class="know-more-section">
+    <div class="content">
+        <h2 class="heading">KNOW MORE ABOUT <span>MEDIGEN</span></h2>
+        <p class="description">
+            MediGen is an AI-powered healthcare platform that enhances medical decision-making,
+            providing predictive analysis, disease detection, and efficient appointment scheduling.
+            Our goal is to bridge the gap between technology and medicine for a smarter healthcare future.
+        </p>
+        <p class="description">
+            With advanced AI models, MediGen ensures personalized treatment suggestions, improved 
+            doctor-patient interactions, and reliable healthcare solutions.
+        </p>
+    </div>
+    <div class="image-container">
+        <img src="{% static "photos/medigenoverview.png" %}" alt="MediGen Overview">
+    </div>
+</section>
+
+<!-- Image Showing 5 Services -->
+
+
+<!-- Services Details -->
+
+<!-- Services Section -->
+
+<section id="services-section" class="services-section">
+
+    <h2>Our <span>Services</span></h2>
     
+    <div class="services-container">
+       
+        <div class="service-box">
+            <i class="fas fa-video"></i>
+            <h3>Online Consultation</h3>
+            <p>Consult with expert doctors online anytime, anywhere.</p>
+            <a href="online-consultation.html" class="btn bttn">Learn More <span class="fas fa-chevron-right"></span></a>
+        </div>
+
+        <div class="service-box">
+            <i class="fas fa-user-md"></i>
+            <h3>Expert Doctors</h3>
+            <p>Connect with highly qualified doctors in various specialties.</p>
+            <a href="EDL.html" class="btn bttn">Learn More <span class="fas fa-chevron-right"></span></a>
+        </div>
+
+        <div class="service-box">
+            <i class="fa fa-calendar"></i>
+            <h3>Book Appointments</h3>
+            <p>Book your doctor appointments hassle-free with our platform.</p>
+            <a href="Book-appointment.html" class="btn bttn">Learn More <span class="fas fa-chevron-right"></span></a>
+        </div>
+
+        <div class="service-box">
+            <i class="fa fa-check-circle"></i>
+            <h3>AI Disease Detection</h3>
+            <p>Use AI-based models to detect diseases early and stay healthy.</p>
+            <a href="model1.html" class="btn bttn">Learn More <span class="fas fa-chevron-right"></span></a>
+        </div>
+    </div>
+</section>
+
+   
+
+
+<!-- Doctors Information -->
+   <!-- Expert Doctors Section -->
+<section class="Doctors" id="Doctors">
+    <h2>Meet Our <span>Expert Doctors</span></h2>
+    <p>Highly qualified and experienced doctors committed to providing the best healthcare services.</p>
+    <div class="container">
+        <div class="row">
+            {% for doctor in doctors %}
+            <div class="col-lg-3 col-md-4 col-sm-6 col-12 mb-3">
+                <div class="box">
+                    <img src="{{doctor.photo.url}}" alt="">
+                    <a href="{% url 'doc_profile' doctor.id %}" class="text-decoration-none">
+                        <h3>{{doctor.user.full_name}}</h3>
+                    </a>
+                    <span>{{doctor.specialization}}</span>
+                    <div class="share d-flex justify-content-center">
+                        <a href="mailto:{{doctor.user.email}}" class="fa fa-envelope"></a>
+						 <a href="#" data-bs-toggle="modal" data-bs-target="#appointment_modal" 
+                           data-doctor-id="{{doctor.id}}" class="fas fa-pen"></a> 
+						   {% comment %} <a href="{% url 'meds:book_appointment' doctor.id %}" class="fas fa-pen" data-doctor-id="{{doctor.id}}" ></a> {% endcomment %}
+						   <a href="tel:{{doctor.phone}}" class="fas fa-phone"></a>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+
+
+<!-- Models Information -->
+<!-- Our Models Section -->
+<section id="our-models" class="our-models">
+
+    <h2>Our <span>AI Models</span></h2>
+    <p>We use advanced AI models to enhance medical diagnostics and patient care.</p>
+
+    <div class="model-container">
+        <div class="model-box">
+            <i class="fas fa-brain"></i>
+            <h3>Model 1</h3>
+            <h4>Multiple Disease Detection</h4>
+            <p>Detects multiple diseases based on symptoms and patient data.</p>
+            <a href="{% url "models:multi_disease" %}" class="btn bttn">Learn More</a>
+        </div>
+
+        <div class="model-box">
+            <i class="fas fa-brain"></i>
+            <h3>Model 2</h3>
+            <h4>Skin Disease Detection</h4>
+            <p>Uses AI to analyze skin conditions and provide accurate results.</p>
+            <a href="{% url "models:skin_disease" %}" class="btn bttn">Learn More</a>
+        </div>
+    </div>
+</section>
+
+
+
+
+
+
+{% endblock %}

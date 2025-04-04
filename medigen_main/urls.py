@@ -12,7 +12,10 @@ urlpatterns = [
     path("know_more/" ,views.know_more , name= "know_more" ),
     path("learn_more/" ,views.learn_more , name= "learn_more" ),
     path("expert_doctors/" , views.expert_doctors , name = "expert_doctors"),
+    path("online_consultation/" , views.online_consultation , name="online_consultation"),
     path("signup/" , views.sign_up , name="signup"),
+    path("check-disease/" , views.check_disease , name="check-disease"),
+
     path("meds/" , include("meds.urls")),
     path("models/" , include("models.urls")),
     path('agora/', include("agora.urls") , name="agora"),
