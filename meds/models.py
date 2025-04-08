@@ -39,7 +39,7 @@ class Doctors(models.Model):
     specialization = models.CharField(max_length=50)
     address = models.TextField()
     experience = models.TextField(max_length=5 , default=0)
-    photo = models.ImageField(upload_to='profile_photos/' , default="media/profile_photos/user.png")
+    photo = models.ImageField(upload_to='profile_photos/', default="profile_photos/user.png")
   
 
     def __str__(self):
@@ -63,7 +63,7 @@ class DoctorRequests(models.Model):
     specialization = models.CharField(max_length=50)
     address = models.TextField()
     experience = models.TextField(max_length=5 , default=0)
-    photo = models.ImageField(upload_to='profile_photos/' , default="media/profile_photos/user.png")
+    photo = models.ImageField(upload_to='profile_photos/', default="profile_photos/user.png")
     is_approved = models.BooleanField(default=False)
 
     def __str__(self):
@@ -166,5 +166,31 @@ class BMI(models.Model):
 
     def __str__(self):
         return f"{self.username} - {self.bmi}"
+
+class Prescription(models.Model):
+    patient_name = models.CharField(max_length=100)
+    patient_age = models.IntegerField()
+    patient_gender = models.CharField(max_length=10)
+    diagnosis = models.TextField()
+    doctor = models.ForeignKey(Doctors, on_delete=models.CASCADE)
+    date = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"Prescription for {self.patient_name} by Dr. {self.doctor.user.full_name}"
+
+class Medicine(models.Model):
+    prescription = models.ForeignKey(Prescription, related_name='medicines', on_delete=models.CASCADE)
+    name = models.CharField(max_length=100)
+    dosage = models.CharField(max_length=50)
+    timing = models.CharField(max_length=100)  # Store multiple timings as comma-separated values
+    quantity = models.CharField(max_length=50)
+    duration = models.CharField(max_length=50)
+    special_instructions = models.TextField(blank=True, null=True)
+
+    def __str__(self):
+        return f"{self.name} - {self.dosage}"
+
+    def get_timings_list(self):
+        return [timing.strip() for timing in self.timing.split(',')]
         
 

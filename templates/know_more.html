@@ -45,28 +45,28 @@
             <i class="fas fa-video"></i>
             <h3>Online Consultation</h3>
             <p>Consult with expert doctors online anytime, anywhere.</p>
-            <a href="online-consultation.html" class="btn bttn">Learn More <span class="fas fa-chevron-right"></span></a>
+            <a href="{% url "online_consultation" %}" class="btn bttn">Learn More <span class="fas fa-chevron-right"></span></a>
         </div>
 
         <div class="service-box">
             <i class="fas fa-user-md"></i>
             <h3>Expert Doctors</h3>
             <p>Connect with highly qualified doctors in various specialties.</p>
-            <a href="EDL.html" class="btn bttn">Learn More <span class="fas fa-chevron-right"></span></a>
+            <a href="{% url "expert_doctor" %}" class="btn bttn">Learn More <span class="fas fa-chevron-right"></span></a>
         </div>
 
         <div class="service-box">
             <i class="fa fa-calendar"></i>
             <h3>Book Appointments</h3>
             <p>Book your doctor appointments hassle-free with our platform.</p>
-            <a href="Book-appointment.html" class="btn bttn">Learn More <span class="fas fa-chevron-right"></span></a>
+            <a href="#Doctors" class="btn bttn">Learn More <span class="fas fa-chevron-right"></span></a>
         </div>
-
+        
         <div class="service-box">
             <i class="fa fa-check-circle"></i>
             <h3>AI Disease Detection</h3>
             <p>Use AI-based models to detect diseases early and stay healthy.</p>
-            <a href="model1.html" class="btn bttn">Learn More <span class="fas fa-chevron-right"></span></a>
+            <a href="{% url "check-disease" %}" class="btn bttn">Learn More <span class="fas fa-chevron-right"></span></a>
         </div>
     </div>
 </section>
@@ -86,7 +86,7 @@
                 <div class="box">
                     <img src="{{doctor.photo.url}}" alt="">
                     <a href="{% url 'doc_profile' doctor.id %}" class="text-decoration-none">
-                        <h3>{{doctor.user.full_name}}</h3>
+                        <h3>Dr. {% with name_parts=doctor.user.full_name.split %} {{ name_parts.0.0 }}. {{ name_parts|last }} {% endwith %}</h3>
                     </a>
                     <span>{{doctor.specialization}}</span>
                     <div class="share d-flex justify-content-center">

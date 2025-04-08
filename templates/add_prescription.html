@@ -1,0 +1,169 @@
+{% extends "layout.html" %}
+{% load static %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="card shadow-sm">
+        <div class="card-header bg-white">
+            <h4 class="mb-0">Add Prescription</h4>
+            <p class="text-muted mb-0">
+                Patient: {{ appointment.patient }} | Date: {{ appointment.date }} | Time: {{ appointment.start_time }}
+            </p>
+        </div>
+        <div class="card-body">
+            <form method="POST" id="prescriptionForm">
+                {% csrf_token %}
+                <input type="hidden" id="medicine_count" name="medicine_count" value="1">
+                
+                <div class="mb-4">
+                    <label class="form-label">Prescription Notes</label>
+                    <textarea name="prescription_notes" class="form-control" rows="3" placeholder="Any general notes about the prescription..."></textarea>
+                </div>
+
+                <div id="medicines_container">
+                    <!-- Medicine entries will be added here -->
+                    <div class="medicine-entry card mb-3">
+                        <div class="card-body">
+                            <div class="row g-3">
+                                <div class="col-md-6">
+                                    <label class="form-label">Medicine Name</label>
+                                    <input type="text" name="medicine_name_0" class="form-control" required>
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label">Dosage</label>
+                                    <input type="text" name="medicine_dosage_0" class="form-control" placeholder="e.g., 500mg" required>
+                                </div>
+                                <div class="col-md-4">
+                                    <label class="form-label">Timing</label>
+                                    <select name="medicine_timing_0" class="form-select medicine-timing" multiple required>
+                                        <option value="morning">Morning</option>
+                                        <option value="afternoon">Afternoon</option>
+                                        <option value="evening">Evening</option>
+                                        <option value="before_bed">Before Bed</option>
+                                        <option value="after_breakfast">After Breakfast</option>
+                                        <option value="after_lunch">After Lunch</option>
+                                        <option value="after_dinner">After Dinner</option>
+                                        <option value="before_breakfast">Before Breakfast</option>
+                                        <option value="before_lunch">Before Lunch</option>
+                                        <option value="before_dinner">Before Dinner</option>
+                                    </select>
+                                    <small class="text-muted">Hold Ctrl/Cmd to select multiple timings</small>
+                                </div>
+                                <div class="col-md-4">
+                                    <label class="form-label">Quantity per Dose</label>
+                                    <input type="text" name="medicine_quantity_0" class="form-control" placeholder="e.g., 1 tablet" required>
+                                </div>
+                                <div class="col-md-4">
+                                    <label class="form-label">Duration (days)</label>
+                                    <input type="number" name="medicine_duration_0" class="form-control" required>
+                                </div>
+                                <div class="col-12">
+                                    <label class="form-label">Special Instructions</label>
+                                    <input type="text" name="medicine_instructions_0" class="form-control" placeholder="e.g., Take after meals">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="mb-3">
+                    <button type="button" class="btn btn-outline-primary" onclick="addMedicine()">
+                        <i class="fas fa-plus"></i> Add Another Medicine
+                    </button>
+                </div>
+
+                <div class="text-end">
+                    <a href="{% url 'meds:profile' %}" class="btn btn-secondary me-2">Cancel</a>
+                    <button type="submit" class="btn text-white" style="background-color: #00796b;">Save Prescription</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script>
+    let medicineCount = 1;
+
+    function addMedicine() {
+        const container = document.getElementById('medicines_container');
+        const newEntry = document.createElement('div');
+        newEntry.className = 'medicine-entry card mb-3';
+        newEntry.innerHTML = `
+            <div class="card-body">
+                <div class="row g-3">
+                    <div class="col-md-6">
+                        <label class="form-label">Medicine Name</label>
+                        <input type="text" name="medicine_name_${medicineCount}" class="form-control" required>
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label">Dosage</label>
+                        <input type="text" name="medicine_dosage_${medicineCount}" class="form-control" placeholder="e.g., 500mg" required>
+                    </div>
+                    <div class="col-md-4">
+                        <label class="form-label">Timing</label>
+                        <select name="medicine_timing_${medicineCount}" class="form-select medicine-timing" multiple required>
+                            <option value="morning">Morning</option>
+                            <option value="afternoon">Afternoon</option>
+                            <option value="evening">Evening</option>
+                            <option value="before_bed">Before Bed</option>
+                            <option value="after_breakfast">After Breakfast</option>
+                            <option value="after_lunch">After Lunch</option>
+                            <option value="after_dinner">After Dinner</option>
+                            <option value="before_breakfast">Before Breakfast</option>
+                            <option value="before_lunch">Before Lunch</option>
+                            <option value="before_dinner">Before Dinner</option>
+                        </select>
+                        <small class="text-muted">Hold Ctrl/Cmd to select multiple timings</small>
+                    </div>
+                    <div class="col-md-4">
+                        <label class="form-label">Quantity per Dose</label>
+                        <input type="text" name="medicine_quantity_${medicineCount}" class="form-control" placeholder="e.g., 1 tablet" required>
+                    </div>
+                    <div class="col-md-4">
+                        <label class="form-label">Duration (days)</label>
+                        <input type="number" name="medicine_duration_${medicineCount}" class="form-control" required>
+                    </div>
+                    <div class="col-11">
+                        <label class="form-label">Special Instructions</label>
+                        <input type="text" name="medicine_instructions_${medicineCount}" class="form-control" placeholder="e.g., Take after meals">
+                    </div>
+                    <div class="col-1 d-flex align-items-end">
+                        <button type="button" class="btn btn-danger" onclick="this.closest('.medicine-entry').remove(); updateMedicineCount();">
+                            <i class="fas fa-trash"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        `;
+        container.appendChild(newEntry);
+        medicineCount++;
+        document.getElementById('medicine_count').value = medicineCount;
+    }
+
+    function updateMedicineCount() {
+        medicineCount = document.getElementsByClassName('medicine-entry').length;
+        document.getElementById('medicine_count').value = medicineCount;
+    }
+
+    // Initialize select2 for better multiple select experience
+    document.addEventListener('DOMContentLoaded', function() {
+        // Add select2 CSS
+        const linkElem = document.createElement('link');
+        linkElem.rel = 'stylesheet';
+        linkElem.href = 'https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css';
+        document.head.appendChild(linkElem);
+
+        // Add select2 JS
+        const scriptElem = document.createElement('script');
+        scriptElem.src = 'https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js';
+        scriptElem.onload = function() {
+            // Initialize all timing selects with select2
+            $('.medicine-timing').select2({
+                placeholder: 'Select timing(s)',
+                width: '100%'
+            });
+        };
+        document.body.appendChild(scriptElem);
+    });
+</script>
+{% endblock %} 

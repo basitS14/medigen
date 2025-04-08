@@ -53,6 +53,9 @@ INSTALLED_APPS = [
     "models",
     "agora",
     "channels",
+    'telegram_bot.apps.TelegramBotConfig',
+
+    # "storages"
 
 ]
 
@@ -105,16 +108,16 @@ WSGI_APPLICATION = "medigen_main.wsgi.application"
 #     }
 # }
 
-DATABASES = {
-    "default": {
-        "ENGINE": "django.db.backends.postgresql",
-        "NAME": "medigen",
-        "USER":os.getenv("DB_USERNAME"),
-        "PASSWORD":os.getenv("DB_PASSWORD"),
-        "HOST":os.getenv("DB_HOST"),
-        "PORT":"5432"
-    }
-}
+# DATABASES = {
+#     "default": {
+#         "ENGINE": "django.db.backends.postgresql",
+#         "NAME": "medigen",  #databse name
+#         "USER":os.getenv("DB_USERNAME"),
+#         "PASSWORD":os.getenv("DB_PASSWORD"),
+#         "HOST":os.getenv("DB_HOST"),
+#         "PORT":'5432'
+#     }
+# }
 
 
 
@@ -150,14 +153,53 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.1/howto/static-files/
 
-STATIC_URL = "/static/"
+if DEBUG:
+    STATIC_URL = '/static/'
+    STATICFILES_DIRS = [
+        os.path.join(BASE_DIR , 'static'),
+    ]
 
-STATICFILES_DIRS = [
-    os.path.join(BASE_DIR , 'static'),
-]
+    MEDIA_URL ='/media/'
+    MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+else:
 
-MEDIA_URL = '/media/'
-MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+
+    STORAGES = {
+
+    # Media file (image) management   
+    "default": {
+        "BACKEND": "storages.backends.s3.S3Storage",
+        "OPTIONS":{
+            "access_key": AWS_ACCESS_KEY_ID,
+            "secret_key": AWS_SECRET_ACCESS_KEY,
+            "bucket_name": AWS_STORAGE_BUCKET_NAME,
+            "default_acl":None,
+            "file_overwrite":False,
+            "region_name":AWS_S3_REGION_NAME,
+            "location":"media",
+            "verify":True
+
+        },
+    },
+    
+    # CSS and JS file management
+    "staticfiles": {
+        "BACKEND": "storages.backends.s3.S3Storage",
+         "OPTIONS":{
+            "access_key": AWS_ACCESS_KEY_ID,
+            "secret_key": AWS_SECRET_ACCESS_KEY,
+            "bucket_name": AWS_STORAGE_BUCKET_NAME,
+            "endpoint_url": f"https://{AWS_STORAGE_BUCKET_NAME}.s3.eu-north-1.amazonaws.com/static/",
+            "default_acl":None,
+            "file_overwrite":False,
+            "region_name":AWS_S3_REGION_NAME,
+            "verify":True
+        },
+    },
+}
+
+
+
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
@@ -191,6 +233,16 @@ MESSAGE_TAGS = {
     messages.WARNING: 'warning',
     messages.ERROR: 'error',
 }
+
+AWS_ACCESS_KEY_ID = os.getenv("AWS_ACCESS_KEY_ID")
+AWS_SECRET_ACCESS_KEY = os.getenv("AWS_SECRET_ACCESS_KEY")
+AWS_STORAGE_BUCKET_NAME = os.getenv("AWS_STORAGE_BUCKET_NAME")
+AWS_S3_SIGNATURE_NAME = os.getenv("AWS_S3_SIGNATURE_NAME")
+AWS_S3_REGION_NAME = os.getenv("AWS_S3_REGION_NAME")
+AWS_S3_FILE_OVERWRITE = False
+AWS_DEFAULT_ACL = None
+AWS_S3_VERIFY = True
+
 
 # # HTTPS settings
 # SESSION_COOKIE_SECURE = True

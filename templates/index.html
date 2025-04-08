@@ -61,6 +61,15 @@
 				<p>Yes, Now you can get to know about disease.</p>
 				<a href="{% url "check-disease" %}" class="btn"> learn more <span class="fas fa-chevron-right"></span></a>
 			</div>
+			{% comment %} <div class="box">
+				<i class="fas fa-telegram"></i>
+				<h3>Telegram Bot</h3>
+				<p>Yes, Now you can get to know about disease.</p>
+				<a href="https://t.me/medigen_bot" target="_blank" class="btn">
+					Chat with our Booking Assistant<span class="fas fa-chevron-right">
+				</a>
+
+			</div>  {% endcomment %}
 
 
 		</div>
@@ -80,7 +89,7 @@
 		<div class="box-container">
 			<div class="box2">
 				<i class="fas fa-brain"></i>
-				<h3>Model1</h3>
+				<h3>Predict Diseases</h3>
 				<h2>Multiple Diseases</h2>
 				<p>Check which type of disease do you have?</p>
 				<a href="{% url "models:multi_disease" %}" class="btn"> learn more <span class="fas fa-chevron-right"></span></a>
@@ -88,7 +97,7 @@
 
 			<div class="box2">
 				<i class="fas fa-brain"></i>
-				<h3>Model2</h3>
+				<h3>Skin Diseases</h3>
 				<h2>Dermatology</h2>
 				<p>Check your skin to what type of skin disease do you have?</p>
 				<a href={% url "models:skin_disease" %} class="btn"> learn more <span class="fas fa-chevron-right"></span></a>
@@ -117,7 +126,7 @@
       Join us on our journey to create a smarter, healthier world—one algorithm at a time.
     </p>
 
-			<a href="{% url "learn_more" %}" class="btn">Learn more<span class="fas fa-chevron-right"></span></a>
+			{% comment %} <a href="{% url "learn_more" %}" class="btn">Learn more<span class="fas fa-chevron-right"></span></a> {% endcomment %}
 
 
 		</div>
@@ -139,7 +148,7 @@
                 <div class="box">
                     <img src="{{doctor.photo.url}}" alt="">
                     <a href="{% url 'doc_profile' doctor.id %}" class="text-decoration-none">
-                        <h3>{{doctor.user.full_name}}</h3>
+                        <h3>Dr. {% with name_parts=doctor.user.full_name.split %} {{ name_parts.0.0 }}. {{ name_parts|last }} {% endwith %}</h3>
                     </a>
                     <span>{{doctor.specialization}}</span>
                     <div class="share d-flex justify-content-center">
@@ -171,7 +180,7 @@
                     {% csrf_token %}
                     <div class="mb-3">
                         <label for="patient-name">Patient Name</label>
-                        <input type="text" name="patient-name" id="patient-name" class="form-control" value="{{ request.user.full_name }}" readonly>
+                        <input type="text" name="patient-name" id="patient-name" class="form-control" required>
                     </div>
                     <div class="mb-3">
                         <label for="date">Select Date</label>

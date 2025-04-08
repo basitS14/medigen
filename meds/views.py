@@ -4,7 +4,7 @@ from django.urls import reverse
 from django.contrib import messages
 from django.utils import timezone
 
-from .models import Doctors, CustomUser , Availability , Appointment , OnlineAvailability , OnlineAvailabilityPartime , DoctorRequests , VerificationData , BMI
+from .models import Doctors, CustomUser , Availability , Appointment , OnlineAvailability , OnlineAvailabilityPartime , DoctorRequests , VerificationData , BMI, Prescription, Medicine
 from .forms import UserRegistrationForm , DoctorRegistrationForm
 from django import forms
 
@@ -445,13 +445,18 @@ def profile(request):
         # Doctor profile
         doctor = user.doctors
         availability = doctor.availabilities.all()
+        online_fulltime = doctor.online_availabilities_fulltime.all()
+        online_partime = doctor.online_availabilities_partime.all()    
         appointments = doctor.doctor_appointments.all().order_by('date', 'start_time')
         
         context = {
             'user': user,
             'doctor': doctor,
             'availability': availability,
-            'appointments': appointments
+            'appointments': appointments,
+            'online_fulltime': online_fulltime,
+            'online_partime': online_partime
+
         }
         return render(request, 'profile.html', context)
     else:
@@ -921,7 +926,60 @@ def caluculate_bmi(request):
     
     return redirect('meds:profile')
 
+@login_required
+def add_prescription(request, appointment_id):
+    appointment = get_object_or_404(Appointment, id=appointment_id)
+    
+    # Check if the logged-in user is the doctor for this appointment
+    if request.user != appointment.doctor.user:
+        messages.error(request, "Unauthorized access")
+        return redirect('meds:profile')
+    
+    if request.method == 'POST':
+        # Create prescription
+        prescription = Prescription.objects.create(
+            appointment=appointment,
+            doctor=appointment.doctor,
+            patient=appointment.username,
+            notes=request.POST.get('prescription_notes', '')
+        )
+        
+        # Get medicine data from POST
+        medicine_count = int(request.POST.get('medicine_count', 0))
+        for i in range(medicine_count):
+            Medicine.objects.create(
+                prescription=prescription,
+                name=request.POST.get(f'medicine_name_{i}'),
+                dosage=request.POST.get(f'medicine_dosage_{i}'),
+                timing=request.POST.get(f'medicine_timing_{i}'),
+                quantity_per_dose=request.POST.get(f'medicine_quantity_{i}'),
+                duration_days=request.POST.get(f'medicine_duration_{i}'),
+                special_instructions=request.POST.get(f'medicine_instructions_{i}', '')
+            )
+        
+        messages.success(request, "Prescription added successfully")
+        return redirect('meds:profile')
+    
+    return render(request, 'add_prescription.html', {'appointment': appointment})
 
+@login_required
+def view_prescription(request, appointment_id):
+    appointment = get_object_or_404(Appointment, id=appointment_id)
+    
+    # Check if the logged-in user is either the patient or the doctor
+    if request.user != appointment.username and request.user != appointment.doctor.user:
+        messages.error(request, "Unauthorized access")
+        return redirect('meds:profile')
+    
+    try:
+        prescription = appointment.prescription
+    except Prescription.DoesNotExist:
+        prescription = None
+    
+    return render(request, 'view_prescription.html', {
+        'appointment': appointment,
+        'prescription': prescription
+    })
 
 def test(request):
     return render(request , 'doctor_profile.html')

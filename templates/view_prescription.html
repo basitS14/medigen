@@ -1,0 +1,114 @@
+{% extends "layout.html" %}
+{% load static %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="card shadow-sm">
+        <div class="card-header bg-white">
+            <div class="d-flex justify-content-between align-items-center">
+                <div>
+                    <h4 class="mb-0">Prescription Details</h4>
+                    <p class="text-muted mb-0">
+                        Date: {{ appointment.date }} | Time: {{ appointment.start_time }}
+                    </p>
+                </div>
+                <a href="javascript:window.print()" class="btn btn-outline-primary">
+                    <i class="fas fa-print"></i> Print
+                </a>
+            </div>
+        </div>
+        <div class="card-body">
+            {% if prescription %}
+                <div class="row mb-4">
+                    <div class="col-md-6">
+                        <h5>Doctor</h5>
+                        <p class="mb-0">Dr. {{ prescription.doctor.user.full_name }}</p>
+                        <p class="text-muted mb-0">{{ prescription.doctor.specialization }}</p>
+                    </div>
+                    <div class="col-md-6 text-md-end">
+                        <h5>Patient</h5>
+                        <p class="mb-0">{{ prescription.patient.full_name }}</p>
+                        <p class="text-muted mb-0">ID: {{ prescription.patient.id }}</p>
+                    </div>
+                </div>
+
+                {% if prescription.notes %}
+                    <div class="alert alert-info">
+                        <h6 class="alert-heading">Doctor's Notes:</h6>
+                        {{ prescription.notes }}
+                    </div>
+                {% endif %}
+
+                <h5 class="mb-3">Prescribed Medicines</h5>
+                <div class="table-responsive">
+                    <table class="table table-bordered">
+                        <thead class="table-light">
+                            <tr>
+                                <th>Medicine</th>
+                                <th>Dosage</th>
+                                <th>Timing</th>
+                                <th>Quantity</th>
+                                <th>Duration</th>
+                                <th>Instructions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for medicine in prescription.medicines.all %}
+                                <tr>
+                                    <td>{{ medicine.name }}</td>
+                                    <td>{{ medicine.dosage }}</td>
+                                    <td>{{ medicine.get_timing_display }}</td>
+                                    <td>{{ medicine.quantity_per_dose }}</td>
+                                    <td>{{ medicine.duration_days }} days</td>
+                                    <td>{{ medicine.special_instructions|default:"-" }}</td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="mt-4">
+                    <p class="text-muted mb-0">
+                        <small>Prescribed on: {{ prescription.created_at|date:"F d, Y" }}</small>
+                    </p>
+                </div>
+            {% else %}
+                <div class="text-center py-5">
+                    <i class="fas fa-prescription text-muted" style="font-size: 48px;"></i>
+                    <h5 class="mt-3">No Prescription Available</h5>
+                    <p class="text-muted">No prescription has been added for this appointment yet.</p>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+
+<style>
+    @media print {
+        .btn-outline-primary,
+        footer,
+        nav,
+        .navbar,
+        header {
+            display: none !important;
+        }
+        .card {
+            border: none !important;
+            box-shadow: none !important;
+        }
+        body {
+            padding: 0 !important;
+            margin: 0 !important;
+        }
+        .container {
+            max-width: 100% !important;
+            width: 100% !important;
+            padding: 0 !important;
+            margin: 0 !important;
+        }
+        @page {
+            margin: 2cm;
+        }
+    }
+</style>
+{% endblock %} 

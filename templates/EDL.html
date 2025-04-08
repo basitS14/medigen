@@ -33,7 +33,7 @@
                 <div class="box">
                     <img src="{{doctor.photo.url}}" alt="">
                     <a href="{% url 'doc_profile' doctor.id %}" class="text-decoration-none">
-                        <h3>{{doctor.user.full_name}}</h3>
+                        <h3>Dr. {% with name_parts=doctor.user.full_name.split %} {{ name_parts.0.0 }}. {{ name_parts|last }} {% endwith %}</h3>
                     </a>
                     <span>{{doctor.specialization}}</span>
                     <div class="share d-flex justify-content-center">

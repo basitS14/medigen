@@ -8,7 +8,7 @@
         {% csrf_token %}
         <div class="mb-3">
             <label for="patient-name">Patient Name</label>
-            <input type="text" name="patient-name" id="patient-name" class="form-control" value="{{ request.user.full_name }}" readonly>
+            <input type="text" name="patient-name" id="patient-name" class="form-control" required>
         </div>
         <div class="mb-3">
             <label for="date">Select Date</label>

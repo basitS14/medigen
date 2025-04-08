@@ -28,6 +28,8 @@ urlpatterns = [
     path('verify-email-change/', views.verify_email_change, name='verify_email_change'),
     path('resend-email-change-otp/', views.resend_email_change_otp, name='resend_email_change_otp'),
     path('bmi-calculator/' , views.caluculate_bmi , name='bmi-calculator'),
+    path('add-prescription/<int:appointment_id>/', views.add_prescription, name='add_prescription'),
+    path('view-prescription/<int:appointment_id>/', views.view_prescription, name='view_prescription'),
     path('__reload__' , include('django_browser_reload.urls')),
 
 ]
