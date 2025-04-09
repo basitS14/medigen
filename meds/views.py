@@ -344,7 +344,7 @@ def doc_availability_offline(request):
 
             )
             availability.save()
-        messages.success(request, 'Registration successful. Please log in.')
+        messages.success(request, 'Availability Added')
         return redirect(reverse('meds:profile'))
 
             
@@ -373,7 +373,7 @@ def doc_availability_online_fulltime(request):
 
             )
             availability.save()
-        messages.success(request, 'Registration successful. Please log in.')
+        messages.success(request, 'Availability Added')
         return redirect(reverse('meds:profile'))
             
     return render(request , 'availability.html')
@@ -396,7 +396,7 @@ def doc_availability_online_partime(request):
 
             )
             availability.save()
-        messages.success(request, 'Registration successful. Please log in.')
+        messages.success(request, 'Availability Added')
         return redirect(reverse('meds:profile'))
             
     return render(request , 'availability.html')

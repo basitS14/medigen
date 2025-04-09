@@ -53,7 +53,6 @@ INSTALLED_APPS = [
     "models",
     "agora",
     "channels",
-    'telegram_bot.apps.TelegramBotConfig',
 
     # "storages"
 
@@ -108,17 +107,27 @@ WSGI_APPLICATION = "medigen_main.wsgi.application"
 #     }
 # }
 
+DATABASES = {
+    "default": {
+        "ENGINE": "django.db.backends.postgresql",
+        "NAME": "medigen",  #databse name
+        "USER":os.getenv("DB_USERNAME"),
+        "PASSWORD":os.getenv("DB_PASSWORD"),
+        "HOST":os.getenv("DB_HOST"),
+        "PORT":'5432'
+    }
+}
+
 # DATABASES = {
 #     "default": {
 #         "ENGINE": "django.db.backends.postgresql",
 #         "NAME": "medigen",  #databse name
-#         "USER":os.getenv("DB_USERNAME"),
-#         "PASSWORD":os.getenv("DB_PASSWORD"),
-#         "HOST":os.getenv("DB_HOST"),
+#         "USER":"postgres",
+#         "PASSWORD":"postgres",
+#         "HOST":"localhost",
 #         "PORT":'5432'
 #     }
 # }
-
 
 
 # Password validation
