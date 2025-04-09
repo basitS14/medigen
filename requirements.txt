@@ -105,7 +105,7 @@ pyOpenSSL==25.0.0
 pyotp==2.9.0
 python-dateutil==2.9.0
 python-decouple==3.8
-python-dotenv==1.0.1
+python-dotenv
 python-snappy==0.7.3
 python-telegram-bot==22.0
 pytz==2024.2
