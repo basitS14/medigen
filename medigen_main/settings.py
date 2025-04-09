@@ -12,7 +12,7 @@ https://docs.djangoproject.com/en/5.1/ref/settings/
 
 from pathlib import Path
 import os
-from decouple import Config, Csv
+from decouple import config, Csv
 from dotenv import load_dotenv
 
 from django.contrib.messages import constants as messages
