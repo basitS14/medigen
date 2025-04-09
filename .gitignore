@@ -6,6 +6,7 @@ __pycache__/
 # C extensions
 *.so
 
+
 medgen_cred.pem
 
 # SQL backup files
@@ -13,6 +14,13 @@ medgen_cred.pem
 *.sql.bak
 *.sql.gz
 *.sql.zip
+
+# Django static and media files
+static/
+media/
+staticfiles/
+static_root/
+media_root/
 
 # Distribution / packaging
 .Python

@@ -12,13 +12,15 @@ https://docs.djangoproject.com/en/5.1/ref/settings/
 
 from pathlib import Path
 import os
-from decouple import config
+from decouple import Config, Csv
 from dotenv import load_dotenv
 
 from django.contrib.messages import constants as messages
 
 load_dotenv()
 
+# Initialize config
+config = Config()
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
