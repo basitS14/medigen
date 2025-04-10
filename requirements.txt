@@ -14,7 +14,7 @@ scikit-learn
 pusher
 whitenoise
 # Database
-psycopg2==2.9.10
+psycopg2-binary
 redis==5.2.1
 
 gunicorn
