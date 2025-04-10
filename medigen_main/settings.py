@@ -18,6 +18,8 @@ from dotenv import load_dotenv
 from django.contrib.messages import constants as messages
 from django.conf import settings # new
 from  django.conf.urls.static import static #new
+import dj_database_url
+
 
 load_dotenv()
 
@@ -38,7 +40,9 @@ SECRET_KEY = os.getenv('DJANGO_SECRET_KEY')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
 
-ALLOWED_HOSTS = [os.getenv("PUBLIC_IP")  , os.getenv("PUBLIC_DNS")]
+ALLOWED_HOSTS = [
+    "medigen.onrender.com"
+]
 
 AUTH_USER_MODEL = 'meds.CustomUser'
 

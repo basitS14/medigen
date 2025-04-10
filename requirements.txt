@@ -12,9 +12,13 @@ pandas
 transformers
 scikit-learn
 pusher
+whitenoise
 # Database
 psycopg2==2.9.10
 redis==5.2.1
+
+gunicorn
+dj-database-url
 
 # AWS
 boto3==1.37.27
