@@ -34,9 +34,9 @@ SECRET_KEY = os.getenv('DJANGO_SECRET_KEY')
 
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = [os.getenv("PUBLIC_IP")  , os.getenv("PUBLIC_DNS")]
 
 AUTH_USER_MODEL = 'meds.CustomUser'
 
@@ -163,50 +163,50 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.1/howto/static-files/
 
+
+
 if DEBUG:
     STATIC_URL = '/static/'
     STATICFILES_DIRS = [
-        os.path.join(BASE_DIR , 'static'),
+        os.path.join(BASE_DIR, 'static'),
     ]
-
-    MEDIA_URL ='/media/'
+    MEDIA_URL = '/media/'
     MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 else:
+    STATIC_URL = f"https://{AWS_STORAGE_BUCKET_NAME}.s3.{AWS_S3_REGION_NAME}.amazonaws.com/static/"
+    MEDIA_URL = f"https://{AWS_STORAGE_BUCKET_NAME}.s3.{AWS_S3_REGION_NAME}.amazonaws.com/media/"
 
+    STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')  # <--- Add this line
+    MEDIA_ROOT = os.path.join(BASE_DIR, 'mediafiles')    # Optional: also add this if needed
 
     STORAGES = {
-
-    # Media file (image) management   
-    "default": {
-        "BACKEND": "storages.backends.s3.S3Storage",
-        "OPTIONS":{
-            "access_key": AWS_ACCESS_KEY_ID,
-            "secret_key": AWS_SECRET_ACCESS_KEY,
-            "bucket_name": AWS_STORAGE_BUCKET_NAME,
-            "default_acl":None,
-            "file_overwrite":False,
-            "region_name":AWS_S3_REGION_NAME,
-            "location":"media",
-            "verify":True
-
+        "default": {
+            "BACKEND": "storages.backends.s3.S3Storage",
+            "OPTIONS": {
+                "access_key": AWS_ACCESS_KEY_ID,
+                "secret_key": AWS_SECRET_ACCESS_KEY,
+                "bucket_name": AWS_STORAGE_BUCKET_NAME,
+                "default_acl": None,
+                "file_overwrite": False,
+                "region_name": AWS_S3_REGION_NAME,
+                "location": "media",
+                "verify": True,
+            },
         },
-    },
-    
-    # CSS and JS file management
-    "staticfiles": {
-        "BACKEND": "storages.backends.s3.S3Storage",
-         "OPTIONS":{
-            "access_key": AWS_ACCESS_KEY_ID,
-            "secret_key": AWS_SECRET_ACCESS_KEY,
-            "bucket_name": AWS_STORAGE_BUCKET_NAME,
-            "endpoint_url": f"https://{AWS_STORAGE_BUCKET_NAME}.s3.eu-north-1.amazonaws.com/static/",
-            "default_acl":None,
-            "file_overwrite":False,
-            "region_name":AWS_S3_REGION_NAME,
-            "verify":True
+        "staticfiles": {
+            "BACKEND": "storages.backends.s3.S3Storage",
+            "OPTIONS": {
+                "access_key": AWS_ACCESS_KEY_ID,
+                "secret_key": AWS_SECRET_ACCESS_KEY,
+                "bucket_name": AWS_STORAGE_BUCKET_NAME,
+                "location": "static",
+                "default_acl": None,
+                "file_overwrite": False,
+                "region_name": AWS_S3_REGION_NAME,
+                "verify": True,
+            },
         },
-    },
-}
+    }
 
 
 
