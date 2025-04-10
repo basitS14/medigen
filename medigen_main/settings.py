@@ -16,6 +16,8 @@ from decouple import config, Csv
 from dotenv import load_dotenv
 
 from django.contrib.messages import constants as messages
+from django.conf import settings # new
+from  django.conf.urls.static import static #new
 
 load_dotenv()
 
@@ -54,6 +56,7 @@ INSTALLED_APPS = [
     "models",
     "agora",
     "channels",
+    "whitenoise.runserver_nostatic"
 
     # "storages"
 
@@ -71,7 +74,8 @@ MIDDLEWARE = [
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
-    "django_browser_reload.middleware.BrowserReloadMiddleware"
+    "django_browser_reload.middleware.BrowserReloadMiddleware",
+    "whitenoise.middleware.WhiteNoiseMiddleware"
 ]
 
 ROOT_URLCONF = "medigen_main.urls"
@@ -250,7 +254,9 @@ MESSAGE_TAGS = {
     messages.WARNING: 'warning',
     messages.ERROR: 'error',
 }
-
+if settings.DEBUG:
+    urlpatterns += static(settings.MEDIA_URL, document_root = settings.MEDIA_ROOT)
+    urlpatterns += static(settings.STATIC_URL, document_root = settings.STATIC_URL)
 
 
 
