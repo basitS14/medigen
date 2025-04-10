@@ -191,8 +191,8 @@ else:
     STATIC_URL = f"https://{AWS_STORAGE_BUCKET_NAME}.s3.{AWS_S3_REGION_NAME}.amazonaws.com/static/"
     MEDIA_URL = f"https://{AWS_STORAGE_BUCKET_NAME}.s3.{AWS_S3_REGION_NAME}.amazonaws.com/media/"
 
-    STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')  # <--- Add this line
-    MEDIA_ROOT = os.path.join(BASE_DIR, 'mediafiles')    # Optional: also add this if needed
+    STATIC_ROOT = os.path.join(BASE_DIR, 'static')  # <--- Add this line
+    MEDIA_ROOT = os.path.join(BASE_DIR, 'media')    # Optional: also add this if needed
 
     STORAGES = {
         "default": {
