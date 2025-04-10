@@ -41,7 +41,7 @@ SECRET_KEY = os.getenv('DJANGO_SECRET_KEY')
 DEBUG = False
 
 ALLOWED_HOSTS = [
-    "medigen.onrender.com"
+    ".vercel.app" , ".now.sh"
 ]
 
 AUTH_USER_MODEL = 'meds.CustomUser'
