@@ -6,7 +6,12 @@ django-storages==1.14.6
 channels==4.2.0
 channels_redis==4.2.1
 daphne==4.1.2
-
+pyotp
+agora_token_builder==1.0.0
+pandas
+transformers
+scikit-learn
+pusher
 # Database
 psycopg2==2.9.10
 redis==5.2.1
